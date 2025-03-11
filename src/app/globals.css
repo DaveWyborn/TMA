@@ -1,6 +1,9 @@
+/* Import Tailwind CSS */
 @import "tailwindcss";
 
-/* ✅ Define Custom Brand Colors */
+/* ==========================
+   Custom Brand Colors
+   ========================== */
 :root {
   --primary-color: #6c04dc;
   --accent-color: #4A148C;
@@ -9,7 +12,9 @@
   --light-text: #FAFAFA;
 }
 
-/* ✅ Base Styles */
+/* ==========================
+   Base Styles
+   ========================== */
 html {
   scroll-behavior: smooth;
 }
@@ -27,7 +32,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ✅ Layout & Sections */
+/* ==========================
+   Layout & Sections
+   ========================== */
 main {
   scroll-snap-type: y mandatory;
   overflow-y: auto;
@@ -50,44 +57,168 @@ section {
   scroll-snap-type: y mandatory;
 }
 
-/* ✅ Hero Section */
+/* ==========================
+   Hero Section
+   ========================== */
 .hero-container {
-  @apply w-full h-screen flex flex-col items-center justify-center text-center p-6 relative overflow-hidden;
-}
-
-.hero-heading {
-  @apply text-2xl md:text-2xl font-semibold text-white max-w-2xl leading-snug mt-4;
-}
-
-.hero-button {
-  @apply mt-24 px-6 py-3 bg-white text-blue-600 text-lg rounded-lg shadow-md 
-         hover:bg-blue-100 hover:scale-105 transition transform duration-300;
-}
-
-/* ✅ Animated Background */
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.animated-bg {
-  background: linear-gradient(-45deg, var(--deep-purple), var(--dark-bg), var(--accent-color));
-  background-size: 300% 300%;
-  animation: gradientShift 12s ease infinite;
-}
-
-/* ✅ Service Sections */
-.service-section, .testimonials-section {
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  background: linear-gradient(-45deg, var(--deep-purple), var(--dark-bg), var(--accent-color));
+  background-size: 300% 300%;
+  animation: gradientShift 12s ease infinite;
+  padding: 2rem;
 }
 
+.hero-heading {
+  font-size: 1.75rem;
+  font-weight: 600;
+  max-width: 600px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.hero-button {
+  margin-top: 1.5rem;
+  padding: 0.75rem 2rem;
+  font-size: 1.125rem;
+  color: white;
+  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  border-radius: 0.5rem;
+  transition: background 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+
+.hero-button:hover {
+  background: #AD72F9;
+  transform: scale(1.05);
+}
+
+/* ==========================
+   Animated Background
+   ========================== */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==========================
+   Services Section
+   ========================== */
+.services-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #2D3748;
+  padding-top: 6rem;
+}
+
+.services-heading {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+.services-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .services-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.service-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #CBD5E0;
+  transition: all 0.3s ease;
+  width: 12rem; /* Set fixed width to prevent text wrapping */
+  height: auto; /* Adjust height automatically */
+  text-align: center;
+}
+
+.service-button.selected {
+  border-bottom-color: var(--primary-color);
+  color: var(--primary-color);
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+.service-button:hover {
+  border-bottom-color: #AD72F9;
+  color: #AD72F9;
+  transform: scale(1.1);
+}
+
+.service-icon {
+  transition: transform 0.3s ease;
+}
+
+.service-title {
+  font-size: 1rem;
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+.service-description {
+  max-width: 40rem;
+  text-align: left;
+  font-size: 1.125rem;
+  color: #4A5568;
+  line-height: 1.6;
+  padding: 0 1rem;
+}
+
+.get-started-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 0.5rem;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.get-started-button:hover {
+  background: #AD72F9;
+  transform: scale(1.05);
+}
+
+/* ==========================
+   Testimonials Section
+   ========================== */
 .testimonials-section {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: #e5e7eb; /* bg-gray-200 */
   padding: 2rem;
 }
@@ -95,7 +226,7 @@ section {
 .testimonials-heading {
   font-size: 2rem;
   font-weight: 600;
-  color: #4A148C;
+  color: var(--accent-color);
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -121,8 +252,9 @@ section {
   color: #555;
   margin-top: 1rem;
 }
-
-/* ✅ Contact Section - Ensure Two Columns on Desktop */
+/* ==========================
+   Contact Section
+   ========================== */
 .contact-section {
   width: 100%;
   height: 100vh;
@@ -162,66 +294,3 @@ section {
   color: white;
 }
 
-/* ✅ Services */
-.services-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100vh;
-  text-align: center;
-}
-
-.services-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 2rem;
-}
-
-@media (min-width: 768px) {
-  .services-buttons {
-    flex-direction: row;
-    justify-content: center;
-  }
-}
-
-.service-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 2px solid #CBD5E0;
-  transition: all 0.3s ease;
-  width: 12rem; /* ✅ Set fixed width to prevent text wrapping */
-  height: auto; /* ✅ Adjust height automatically */
-  text-align: center;
-}
-
-.service-button.selected {
-  border-bottom-color: #6C04DC;
-  color: #6C04DC;
-  font-weight: bold;
-  transform: scale(1.05);
-}
-
-.service-button:hover {
-  border-bottom-color: #AD72F9;
-  color: #AD72F9;
-  transform: scale(1.1);
-}
-
-.service-icon {
-  transition: transform 0.3s ease;
-}
-
-.service-title {
-  font-size: 1rem;
-  white-space: nowrap; /* ✅ Prevent text wrapping */
-}
