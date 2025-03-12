@@ -1,3 +1,5 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Square+Peg&display=swap");
 @import "tailwindcss";
 
 /* ==========================
@@ -300,4 +302,92 @@ section {
 
 .book-button:hover {
   background: #6A1B9A;
+}
+
+
+/* ==========================
+   Testimonials Section
+   ========================== */
+.testimonials-section {
+  background-color: #f5f5f5;
+  padding: 60px 20px;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+}
+
+/* ✅ Fixed Header */
+.testimonials-header {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  position: relative;
+  background-color: #f5f5f5;
+  padding: 10px 0;
+  z-index: 100;
+  color: var(--primary-color);
+}
+
+/* ✅ Testimonials Container */
+.testimonials-container {
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+  min-height: 300px; /* Ensure consistent height to prevent movement */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ✅ Testimonial Text */
+.testimonial-text {
+  font-size: 1.4em;
+  font-weight: 300;
+  margin-bottom: 15px;
+  color: var(--primary-color);
+  font-style: italic;
+}
+
+/* ✅ Author Styling */
+.testimonial-author {
+  font-size: 1.1em;
+  color: var(--primary-color);
+  font-style: italic;
+}
+
+.author-name {
+  font-family: "Square Peg", cursive;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-top: 10px;
+  color: var(--primary-color);
+}
+
+.author-job {
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 1.2em;
+  margin-bottom: 5px;
+  color: var(--primary-color);
+}
+
+/* ✅ Services List as Links */
+.testimonial-services {
+  font-size: 1em;
+  margin-top: 15px;
+}
+
+.testimonial-services a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.testimonial-services a:hover {
+  color: #313863;
+  text-decoration: underline;
 }

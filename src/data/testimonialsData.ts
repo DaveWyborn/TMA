@@ -1,20 +1,31 @@
-const testimonials = [
-  {
-    quote: "Wow, what great work.  Has supported me an many of my clients I can't thank Dave enough.!",
-    author: "Dayle, SEO Agency Owner",
-    services: ("Website Analytics", "Reporting Dashboard", "Consent Management")
-  },
-  {
-    quote: "Their expertise in GA4 and Looker Studio transformed our reporting. Couldn't be happier!",
-    author: "James Wilson, E-commerce Manager",
-    services: ("Website Analytics", "Reporting Dashboard", "Consent Management")
+interface Testimonial {
+  id: number;
+  name: string;
+  jobTitle: string;
+  company: string;
+  testimonial: string;
+  services: string;
+  image?: string; // ✅ Optional image field
+}
 
+const testimonialsData: Testimonial[] = [
+  {
+    id: 1,
+    name: "Jane Doe",
+    jobTitle: "Marketing Manager",
+    company: "ABC Corp",
+    testimonial: "The analytics service transformed our marketing strategy.",
+    services: "Website Analytics",
+    image: "/images/testimonials/jane-doe.jpg", // ✅ Example image
   },
   {
-    quote: "Professional, efficient, and extremely knowledgeable in data analytics!",
-    author: "Emily Carter, CEO of DataTech Solutions",
-    services: ("Website Analytics", "Reporting Dashboard", "Consent Management")
-  },
+    id: 2,
+    name: "John Smith",
+    jobTitle: "CEO",
+    company: "XYZ Ltd",
+    testimonial: "Data visualization provided clear insights for our business.",
+    services: "Data Visualisation & Reporting",
+  }, // ✅ No image for this testimonial
 ];
 
-export default testimonials;
+export default testimonialsData;

@@ -2,7 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import testimonials from "@/data/testimonialsData"; // ✅ Import testimonials from separate file
+import testimonialsData from "@/data/testimonialsData";
+import Link from "next/link";
+import Image from "next/image";
+
+const serviceLinks: Record<string, string> = {
+  "Website Analytics": "#services",
+  "Data Visualisation & Reporting": "#services",
+  "Consent Management": "#services",
+};
 
 const Testimonials = () => {
   const [index, setIndex] = useState(0);
@@ -11,7 +19,7 @@ const Testimonials = () => {
   useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
-        setIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+        setIndex((prevIndex) => (prevIndex + 1) % testimonialsData.length);
       }, 6000);
       return () => clearInterval(interval);
     }
@@ -19,23 +27,49 @@ const Testimonials = () => {
 
   return (
     <section id="testimonials" className="testimonials-section">
-      <h2 className="testimonials-heading">What Clients Say</h2>
+      {/* ✅ Fixed Header */}
+      <h2 className="testimonials-header">What Clients Say</h2>
 
       <div
-        className="testimonials-content"
+        className="testimonials-container"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.5 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
           >
-            <p className="testimonial-quote">"{testimonials[index].quote}"</p>
-            <p className="testimonial-author">- {testimonials[index].author}</p>
+            {/* ✅ Display Image if Available */}
+            {testimonialsData[index].image && (
+              <div className="testimonial-image">
+                <Image
+                  src={testimonialsData[index].image}
+                  alt={testimonialsData[index].name}
+                  width={150}
+                  height={150}
+                  className="rounded-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* ✅ Quote Below Image */}
+            <p className="testimonial-text">"{testimonialsData[index].testimonial}"</p>
+            <p className="author-name">{testimonialsData[index].name}</p>
+            <p className="author-job">
+              {testimonialsData[index].jobTitle}, {testimonialsData[index].company}
+            </p>
+            <p className="testimonial-services">
+              <Link
+                href={serviceLinks[testimonialsData[index].services] || "#services"}
+                className="service-link"
+              >
+                {testimonialsData[index].services}
+              </Link>
+            </p>
           </motion.div>
         </AnimatePresence>
       </div>
