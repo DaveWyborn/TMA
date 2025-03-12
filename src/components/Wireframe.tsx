@@ -20,7 +20,6 @@ const Wireframe = ({ selectedService }: { selectedService: string }) => {
   return (
     <div className="wireframe-container">
       <Image src={getWireframeSrc()} alt="Wireframe" width={800} height={600} />
-      <button className="popup-button" onClick={() => alert('Show Popup Here')}>Tell me more</button>
     </div>
   );
 };

@@ -117,168 +117,186 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5; /* Updated to light grey */
+  background-color: #f5f5f5;
   color: #2D3748;
-  padding-top: 6rem;
+  padding-top: 4rem;
+  position: relative;
 }
 
 .services-heading {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--primary-color); /* Updated color */
+  margin-bottom: 1rem;
+  color: var(--primary-color);
   text-align: center;
+  position: relative;
+  width: 100%;
 }
 
 .services-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   width: 100%;
   max-width: 600px;
   margin-bottom: 2rem;
+  position: relative;
 }
 
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .services-buttons {
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
   }
 }
 
 .service-button {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: row;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-bottom: 2px solid #CBD5E0;
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: 1rem;
+  cursor: pointer;
   transition: all 0.3s ease;
-  width: 12rem; /* Set fixed width to prevent text wrapping */
-  height: auto; /* Adjust height automatically */
-  text-align: center;
+  position: relative;
+  min-height: 50px;
 }
 
-.service-button.selected {
-  border-bottom-color: var(--primary-color); /* Updated color */
-  color: var(--primary-color); /* Updated color */
-  font-weight: bold;
-  transform: scale(1.05);
-}
-
-.service-button:hover {
-  border-bottom-color: #313863;
-  color: #313863;
-  transform: scale(1.1);
-}
-
-.service-icon {
+.service-button img {
+  width: 24px;
+  height: 24px;
   transition: transform 0.3s ease;
 }
 
-.service-title {
-  font-size: 1rem;
-  white-space: nowrap; /* Prevent text wrapping */
+.service-button.selected {
+  font-weight: bold;
+  position: relative;
 }
 
-.service-description {
-  max-width: 40rem;
-  text-align: left;
-  font-size: 1.125rem;
-  color: #4A5568;
-  line-height: 1.6;
-  padding: 0 1rem;
+.service-button.selected::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color);
 }
 
-.get-started-button {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  color: white;
-  background-color: var(--primary-color); /* Updated color */
-  border-radius: 0.5rem;
-  transition: background 0.3s, transform 0.2s;
+.service-button:hover {
+  color: #313863;
+  text-decoration: underline;
 }
 
-.get-started-button:hover {
-  background: #313863;
-  transform: scale(1.05);
+.service-button:hover img {
+  transform: scale(1.2);
 }
 
 /* ==========================
-   Testimonials Section
+   Wireframe Container Consistency
    ========================== */
-.testimonials-section {
-  width: 100%;
-  height: 100vh;
+.wireframe-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  background-color: #e5e7eb; /* bg-gray-200 */
-  padding: 2rem;
+  align-items: center;
+  min-height: 450px;
 }
 
-.testimonials-heading {
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--primary-color); /* Updated color */
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.testimonials-content {
-  width: 100%;
-  max-width: 700px;
-  text-align: center;
-  padding: 1.5rem;
-}
-
-.testimonial-quote {
-  font-size: 1.5rem;
-  font-style: italic;
-  font-weight: 300;
-  color: #333;
-  line-height: 1.6;
-}
-
-.testimonial-author {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--primary-color); /* Updated color */
-  margin-top:
-  
+@media (max-width: 768px) {
+  .wireframe-container img {
+    content: url("/images/wireframe-mobile.svg");
   }
-  
-  .wireframe-container {
-  position: relative;
+}
+
+/* ==========================
+   Tell Me More Button
+   ========================== */
+.popup-button {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.popup-button:hover {
+  background: #313863;
+}
+
+/* ==========================
+   Overlay Fixes
+   ========================== */
+.overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
   text-align: center;
-}
-
-.wireframe-svg {
   position: relative;
-  display: inline-block;
-  transition: filter 0.3s ease-in-out;
 }
 
-/* Default state (no highlight) */
-.wireframe-svg img {
-  filter: grayscale(80%);
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5rem;
+  border: none;
+  cursor: pointer;
 }
 
-/* Highlight effects */
-.highlight-analytics img {
-  filter: drop-shadow(0px 0px 10px rgba(27, 31, 59, 0.7)) grayscale(0%);
+.overlay-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
-.highlight-visualisation img {
-  filter: brightness(1.2) grayscale(0%);
+.buy-button, .book-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease-in-out;
 }
 
-.highlight-consent img {
-  filter: contrast(1.3) grayscale(0%);
+.buy-button {
+  background: var(--primary-color);
+  color: white;
 }
 
+.buy-button:hover {
+  background: #313863;
+}
+
+.book-button {
+  background: #4A148C;
+  color: white;
+}
+
+.book-button:hover {
+  background: #6A1B9A;
+}
