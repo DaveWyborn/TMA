@@ -84,19 +84,20 @@ export default function ContactForm() {
         </form>
       </div>
 
-      {/* ✅ Right Side - Buy Now (Fixed in Place) */}
+      {/* ✅ Right Side - Buy Now */}
       <div className="contact-right">
-        <h2 className="text-3xl font-semibold mb-6 text-center">Buy Now</h2>
-        <p className="text-lg text-center max-w-2xl mb-6">Instantly purchase our ready-made solutions.</p>
+        <h2 className="contact-header">Buy Now</h2>
+        <p className="contact-subheader">Instantly purchase our ready-made solutions.</p>
 
-        <div className="cart-container">
-          <div className="w-full max-w-md space-y-6">
+        {/* ✅ Product List Positioned Below Subheader */}
+        <div className="cart-container mt-6">
+          <div className="w-full max-w-md space-y-4">
             {PRODUCTS.map((product) => (
-              <div key={product.id} className="p-4 border rounded-lg text-center">
-                <h3 className="text-xl font-semibold">{product.name}</h3>
-                <p>£{product.price} {product.type === "subscription" && "/ month"}</p>
-                <button onClick={() => addToCart(product)} className="contact-button mt-3">
-                  Add to Cart
+              <div key={product.id} className="cart-item">
+                <span className="product-name">{product.name}</span>
+                <span className="product-price">£{product.price} {product.type === "subscription" && "/ month"}</span>
+                <button onClick={() => addToCart(product)} className="contact-button add-to-cart">
+                  +
                 </button>
               </div>
             ))}
