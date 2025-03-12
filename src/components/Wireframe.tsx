@@ -1,27 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import dynamic from "next/dynamic";
+
+const wireframeImages = {
+  analytics: "/images/analytics.svg",
+  visualisation: "/images/visualisation.svg",
+  consent: "/images/consent.svg",
+};
 
 const Wireframe = ({ selectedService }: { selectedService: string }) => {
-  const getWireframeSrc = () => {
-    if (selectedService === "analytics") {
-      return "/images/Analytics.svg";
-    } else if (selectedService === "visualisation") {
-      return "/images/Visualisation.svg";
-    } else if (selectedService === "consent") {
-      return "/images/Consent.svg";
-    } else {
-      return "/images/TMA_Wireframe_Default.svg";
+  const [currentImage, setCurrentImage] = useState(wireframeImages[selectedService]);
+
+  useEffect(() => {
+    if (wireframeImages[selectedService]) {
+      setCurrentImage(wireframeImages[selectedService]);
     }
-  };
+  }, [selectedService]);
 
   return (
     <div className="wireframe-container">
-      <Image src={getWireframeSrc()} alt="Wireframe" width={800} height={600} />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={selectedService}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="wireframe-svg"
+        >
+          <Image
+            src={currentImage}
+            alt={`${selectedService} wireframe`}
+            width={800}
+            height={450}
+            priority
+            className="transition-all duration-500 ease-in-out"
+          />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 };
 
-export default dynamic(() => Promise.resolve(Wireframe), { ssr: false });
+export default Wireframe;
