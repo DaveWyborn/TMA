@@ -391,3 +391,89 @@ section {
   color: #313863;
   text-decoration: underline;
 }
+
+
+/* ==========================
+   Contact Section
+   ========================== */
+.contact-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    flex-direction: column;
+  }
+}
+
+.contact-left, .contact-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  height: 100%;
+}
+
+.contact-left {
+  background-color: #ffffff;
+  color: var(--primary-color);
+}
+
+.contact-right {
+  background-color: var(--primary-color);
+  color: #ffffff;
+  position: relative;
+}
+
+/* Fix Buy Now Section Positioning */
+.cart-container {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+/* ✅ Buttons with Opposite Colors */
+.contact-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: 2px solid;
+  transition: all 0.3s;
+}
+
+.contact-left .contact-button {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.contact-left .contact-button:hover {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.contact-right .contact-button {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.contact-right .contact-button:hover {
+  background-color: #ffffff;
+  color: var(--primary-color);
+}
+

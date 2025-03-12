@@ -20,11 +20,12 @@ export default function ContactForm() {
   const addToCart = (product: typeof PRODUCTS[number]) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
-      return existingItem
-        ? prevCart.map((item) =>
-            item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-          )
-        : [...prevCart, { ...product, quantity: 1 }];
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prevCart, { ...product, quantity: 1 }];
     });
   };
 
@@ -49,73 +50,77 @@ export default function ContactForm() {
   return (
     <section id="contact" className="contact-container">
       {/* ✅ Left Side - Contact Form & Booking */}
-      <div className="contact-form">
-        <h2 className="contact-heading">Contact Me</h2>
-        <p className="contact-description">Let’s talk about how I can help your business.</p>
+      <div className="contact-left">
+        <h2 className="text-3xl font-semibold mb-6 text-center">Contact Me</h2>
+        <p className="text-lg text-center max-w-2xl">Let’s talk about how I can help your business.</p>
 
-        <form onSubmit={() => {}} className="contact-inputs">
+        <form onSubmit={() => {}} className="mt-6 max-w-lg mx-auto flex flex-col space-y-6">
           <input type="text" name="honeypot" className="hidden" />
 
-          <div className="input-group">
+          <div className="relative w-full">
             <label>Your Name</label>
-            <input type="text" name="name" required />
+            <input type="text" name="name" className="w-full border-b-2 focus:border-primary outline-none bg-transparent py-2 transition-all" required />
           </div>
 
-          <div className="input-group">
+          <div className="relative w-full">
             <label>Your Email</label>
-            <input type="email" name="email" required />
+            <input type="email" name="email" className="w-full border-b-2 focus:border-primary outline-none bg-transparent py-2 transition-all" required />
           </div>
 
-          <div className="input-group">
+          <div className="relative w-full">
             <label>Your Message</label>
-            <textarea name="message" required />
+            <textarea name="message" className="w-full border-b-2 focus:border-primary outline-none bg-transparent py-2 transition-all resize-none" required />
           </div>
 
-          <div className="contact-buttons">
-            <button type="submit" className="btn-primary">Send Message</button>
-            <Link href={GOOGLE_MEETING_LINK} target="_blank" className="btn-primary text-center">
+          <div className="flex flex-col space-y-4">
+            <button type="submit" className="contact-button">
+              Send Message
+            </button>
+
+            <Link href={GOOGLE_MEETING_LINK} target="_blank" className="contact-button text-center">
               Book a Meeting
             </Link>
           </div>
         </form>
       </div>
 
-      {/* ✅ Right Side - Buy Now with Cart */}
-      <div className="cart-container">
-        <h2 className="cart-heading">Buy Now</h2>
-        <p className="cart-description">Instantly purchase our ready-made solutions.</p>
+      {/* ✅ Right Side - Buy Now (Fixed in Place) */}
+      <div className="contact-right">
+        <h2 className="text-3xl font-semibold mb-6 text-center">Buy Now</h2>
+        <p className="text-lg text-center max-w-2xl mb-6">Instantly purchase our ready-made solutions.</p>
 
-        <div className="product-list">
-          {PRODUCTS.map((product) => (
-            <div key={product.id} className="product-card">
-              <h3 className="product-title">{product.name}</h3>
-              <p className="product-price">£{product.price} {product.type === "subscription" && "/ month"}</p>
-              <button onClick={() => addToCart(product)} className="btn-primary">
-                Add to Cart
+        <div className="cart-container">
+          <div className="w-full max-w-md space-y-6">
+            {PRODUCTS.map((product) => (
+              <div key={product.id} className="p-4 border rounded-lg text-center">
+                <h3 className="text-xl font-semibold">{product.name}</h3>
+                <p>£{product.price} {product.type === "subscription" && "/ month"}</p>
+                <button onClick={() => addToCart(product)} className="contact-button mt-3">
+                  Add to Cart
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {cart.length > 0 && (
+            <div className="mt-6 w-full max-w-md bg-gray-800 p-4 rounded-lg">
+              <h3 className="text-lg font-semibold text-white">Cart</h3>
+              <ul className="mt-2 space-y-2">
+                {cart.map((item) => (
+                  <li key={item.id} className="flex justify-between items-center">
+                    <span>
+                      {item.name} (x{item.quantity})
+                    </span>
+                    <button onClick={() => removeFromCart(item.id)} className="text-red-500">✕</button>
+                  </li>
+                ))}
+              </ul>
+              <button onClick={handleCheckout} className="contact-button mt-4 w-full">
+                Proceed to Checkout
               </button>
             </div>
-          ))}
+          )}
         </div>
-
-        {/* ✅ Cart Summary */}
-        {cart.length > 0 && (
-          <div className="cart-summary">
-            <h3 className="cart-title">Cart</h3>
-            <ul className="cart-items">
-              {cart.map((item) => (
-                <li key={item.id} className="cart-item">
-                  <span>
-                    {item.name} (x{item.quantity})
-                  </span>
-                  <button onClick={() => removeFromCart(item.id)} className="btn-remove">✕</button>
-                </li>
-              ))}
-            </ul>
-            <button onClick={handleCheckout} className="btn-checkout">
-              Proceed to Checkout
-            </button>
-          </div>
-        )}
       </div>
     </section>
   );
