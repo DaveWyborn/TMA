@@ -1,13 +1,12 @@
-/* Import Tailwind CSS */
 @import "tailwindcss";
 
 /* ==========================
    Custom Brand Colors
    ========================== */
 :root {
-  --primary-color: #6c04dc;
+  --primary-color: #1B1F3B; /* Updated to dark blue */
   --accent-color: #4A148C;
-  --dark-bg: #1B1F3B;
+  --dark-bg: #211445ff;
   --deep-purple: #2A0A5E;
   --light-text: #FAFAFA;
 }
@@ -95,7 +94,7 @@ section {
 }
 
 .hero-button:hover {
-  background: #AD72F9;
+  background: #313863;
   transform: scale(1.05);
 }
 
@@ -118,7 +117,7 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: white;
+  background-color: #f5f5f5; /* Updated to light grey */
   color: #2D3748;
   padding-top: 6rem;
 }
@@ -127,7 +126,7 @@ section {
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: var(--primary-color);
+  color: var(--primary-color); /* Updated color */
   text-align: center;
 }
 
@@ -163,15 +162,15 @@ section {
 }
 
 .service-button.selected {
-  border-bottom-color: var(--primary-color);
-  color: var(--primary-color);
+  border-bottom-color: var(--primary-color); /* Updated color */
+  color: var(--primary-color); /* Updated color */
   font-weight: bold;
   transform: scale(1.05);
 }
 
 .service-button:hover {
-  border-bottom-color: #AD72F9;
-  color: #AD72F9;
+  border-bottom-color: #313863;
+  color: #313863;
   transform: scale(1.1);
 }
 
@@ -199,13 +198,13 @@ section {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   color: white;
-  background-color: var(--primary-color);
+  background-color: var(--primary-color); /* Updated color */
   border-radius: 0.5rem;
   transition: background 0.3s, transform 0.2s;
 }
 
 .get-started-button:hover {
-  background: #AD72F9;
+  background: #313863;
   transform: scale(1.05);
 }
 
@@ -226,7 +225,7 @@ section {
 .testimonials-heading {
   font-size: 2rem;
   font-weight: 600;
-  color: var(--accent-color);
+  color: var(--primary-color); /* Updated color */
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -249,48 +248,37 @@ section {
 .testimonial-author {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #555;
-  margin-top: 1rem;
-}
-/* ==========================
-   Contact Section
-   ========================== */
-.contact-section {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white; /* bg-gray-300 */
-  padding: 2rem;
-}
-
-@media (min-width: 768px) {
-  .contact-section {
-    flex-direction: row;
-    gap: 2rem;
-    align-items: stretch;
+  color: var(--primary-color); /* Updated color */
+  margin-top:
+  
   }
+  
+  .wireframe-container {
+  position: relative;
+  text-align: center;
 }
 
-.contact-form, .cart-container {
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+.wireframe-svg {
+  position: relative;
+  display: inline-block;
+  transition: filter 0.3s ease-in-out;
 }
 
-.contact-form {
-  background-color: white;
-  color: #2D3748;
+/* Default state (no highlight) */
+.wireframe-svg img {
+  filter: grayscale(80%);
 }
 
-.cart-container {
-  background-color: #0B0016;
-  color: white;
+/* Highlight effects */
+.highlight-analytics img {
+  filter: drop-shadow(0px 0px 10px rgba(27, 31, 59, 0.7)) grayscale(0%);
+}
+
+.highlight-visualisation img {
+  filter: brightness(1.2) grayscale(0%);
+}
+
+.highlight-consent img {
+  filter: contrast(1.3) grayscale(0%);
 }
 

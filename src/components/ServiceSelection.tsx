@@ -1,25 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
-
-// Import service descriptions
+import Wireframe from "@/components/Wireframe"; // Import the Wireframe component
 import analyticsDescription from "./services/analytics";
 import visualisationDescription from "./services/visualisation";
 import consentDescription from "./services/consent";
 
-// ✅ Dynamically load DOMPurify only in the browser
-const loadDOMPurify = async () => {
-  if (typeof window !== "undefined") {
-    const mod = await import("dompurify");
-    return mod.default || mod;
-  }
-  return null;
-};
-
-// ✅ Service Data
 const services = [
   { id: "analytics", title: "Website Analytics", description: analyticsDescription, icon: "/icons/analytics.svg" },
   { id: "visualisation", title: "Data Visualisation", description: visualisationDescription, icon: "/icons/visualisation.svg" },
@@ -28,33 +17,15 @@ const services = [
 
 const ServiceSelection = () => {
   const [selectedService, setSelectedService] = useState(services[0].id);
-  const [sanitizedDescription, setSanitizedDescription] = useState<string | null>(null);
-  const [DOMPurify, setDOMPurify] = useState<any>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // ✅ Load DOMPurify on mount
-  useEffect(() => {
-    loadDOMPurify().then((purify) => {
-      setDOMPurify(purify);
-      if (purify && typeof purify.sanitize === "function") {
-        const initialDescription = services.find((service) => service.id === selectedService)?.description ?? "";
-        setSanitizedDescription(purify.sanitize(initialDescription, { ALLOWED_TAGS: ["h3", "p", "strong", "ul", "li", "span", "br"], ALLOWED_ATTR: ["class"] }));
-      }
-    });
-  }, []);
-
-  // ✅ Update sanitized description when the service changes
-  useEffect(() => {
-    if (DOMPurify && typeof DOMPurify.sanitize === "function") {
-      const newDescription = services.find((service) => service.id === selectedService)?.description ?? "";
-      setSanitizedDescription(DOMPurify.sanitize(newDescription, { ALLOWED_TAGS: ["h3", "p", "strong", "ul", "li", "span", "br"], ALLOWED_ATTR: ["class"] }));
-    }
-  }, [selectedService, DOMPurify]);
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
 
   return (
     <section id="services" className="services-container">
       <h2 className="services-heading">Our Services</h2>
 
-      {/* ✅ Service Selection Buttons */}
       <div className="services-buttons">
         {services.map((service) => (
           <button
@@ -67,37 +38,41 @@ const ServiceSelection = () => {
               alt={service.title}
               width={40}
               height={40}
-              className="service-icon"
+              className="mr-4 md:mr-0 md:mb-2 transition-transform duration-300"
             />
-            <span className="service-title">{service.title}</span>
+            <span className="text-lg text-left md:text-center">{service.title}</span>
           </button>
         ))}
       </div>
 
-      {/* ✅ Selected Service Description - Only show when DOMPurify is available */}
-      <div className="service-description">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedService}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+      {/* Expanded Wireframe Space */}
+      <div className="wireframe-wrapper">
+        <Wireframe selectedService={selectedService} />
+      </div>
+
+      <button className="popup-button" onClick={openPopup}>Tell me more</button>
+
+      {/* Full Page Overlay */}
+      {isPopupOpen && (
+        <div className="overlay-container" onClick={closePopup}>
+          <motion.div 
+            className="overlay-content" 
+            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            {sanitizedDescription ? (
-              <div dangerouslySetInnerHTML={{ __html: sanitizedDescription }} />
-            ) : (
-              <p>Loading description...</p>
-            )}
-            <a href="#contact" className="get-started-button">
-              Get Started
-            </a>
+            <button className="close-button" onClick={closePopup}>×</button>
+            <h2 className="overlay-title">{services.find((service) => service.id === selectedService)?.title}</h2>
+            <div className="overlay-text" dangerouslySetInnerHTML={{
+              __html: services.find((service) => service.id === selectedService)?.description ?? "",
+            }} />
           </motion.div>
-        </AnimatePresence>
-      </div>
+        </div>
+      )}
     </section>
   );
 };
 
-// ✅ Ensure component is client-side only
 export default dynamic(() => Promise.resolve(ServiceSelection), { ssr: false });
