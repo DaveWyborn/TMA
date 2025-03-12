@@ -85,8 +85,8 @@ section {
   margin-top: 1.5rem;
   padding: 0.75rem 2rem;
   font-size: 1.125rem;
-  color: white;
-  background-color: var(--primary-color);
+  color: var(--dark-bg);
+  background-color: var(--light-text);
   border: 2px solid var(--primary-color);
   border-radius: 0.5rem;
   transition: background 0.3s, transform 0.2s;
@@ -95,6 +95,7 @@ section {
 
 .hero-button:hover {
   background: #313863;
+  color: var(--light-text);
   transform: scale(1.05);
 }
 
