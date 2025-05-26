@@ -3,6 +3,7 @@ import ServiceSelection from "@/components/ServiceSelection";
 import NavBar from "@/components/NavBar";
 import ContactForm from "@/components/ContactForm";
 import Testimonials from "@/components/Testimonials";
+import BuyNow from "@/components/BuyNow"; // 👈 new import
 
 export default function Home() {
   return (
@@ -13,14 +14,14 @@ export default function Home() {
       <section className="service-section">
         <ServiceSelection />
       </section>
-
       <section id="testimonials" className="testimonials-section">
         <Testimonials />
       </section>
-
-      <section id="contact" className="contact-section">
-        <ContactForm />
-      </section>
+      <BuyNow /> {/* 👈 New Buy Now section */}
+     
+      <ContactForm /> {/* 👈 Contact now stands on its own */}
+      
     </main>
   );
 }
+
