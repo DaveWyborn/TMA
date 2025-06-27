@@ -1,8 +1,3 @@
-/*
-  BuyNow.tsx - Hybrid checkout with FastCheckout and Book a Call flow
-  Includes email confirmation on booking
-*/
-
 "use client";
 
 import { useState, useMemo } from "react";
@@ -10,17 +5,27 @@ import pricingData from "@/data/tiered_pricing_data.json";
 import { motion, AnimatePresence } from "framer-motion";
 import classNames from "classnames";
 import { loadStripe } from "@stripe/stripe-js";
-import Link from "next/link";
 
 const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(STRIPE_PUBLIC_KEY!);
 const GOOGLE_MEETING_LINK = process.env.NEXT_PUBLIC_GOOGLE_MEETING_LINK;
-const OWNER_EMAIL = process.env.NEXT_PUBLIC_BOOKING_NOTIFICATION_EMAIL;
 
-const ToggleGroup = ({ label, options, value, onChange }: any) => (
+
+// const OWNER_EMAIL = process.env.NEXT_PUBLIC_BOOKING_NOTIFICATION_EMAIL;
+// TODO: OWNER_EMAIL is reserved for booking notification emails in future.
+
+
+type ToggleGroupProps = {
+  label: string;
+  options: { label: string; value: string }[];
+  value: string;
+  onChange: (value: string) => void;
+};
+
+const ToggleGroup = ({ label, options, value, onChange }: ToggleGroupProps) => (
   <div className="toggle-group">
     <span>{label}</span>
-    {options.map((opt: any) => (
+    {options.map((opt) => (
       <button
         key={opt.value}
         onClick={() => onChange(opt.value)}
@@ -32,7 +37,25 @@ const ToggleGroup = ({ label, options, value, onChange }: any) => (
   </div>
 );
 
-const PricingCard = ({ item, price, onAddToCart }: any) => (
+type PricingItem = {
+  Service: string;
+  "Service Name": string;
+  "Pricing Agency": number;
+  "Pricing Individual": number;
+  "Pricing Type": string;
+  "Existing Setup": string;
+  Tier?: string;
+  FastCheckout?: boolean;
+  [key: string]: any;
+};
+
+type PricingCardProps = {
+  item: PricingItem;
+  price: number;
+  onAddToCart: (item: PricingItem, price: number) => void;
+};
+
+const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
   <motion.div
     className={classNames("product-block", item.Tier === "Pro" && "highlighted")}
     initial={{ opacity: 0, y: 10 }}
@@ -42,11 +65,14 @@ const PricingCard = ({ item, price, onAddToCart }: any) => (
   >
     {item.Tier === "Pro" && <span className="badge">Best for eCommerce</span>}
     <h3>{item["Service Name"]}</h3>
-    <p className="price">£{price}{item["Pricing Type"].includes("Monthly") ? "/mo" : ""}</p>
+    <p className="price">
+      £{price}
+      {item["Pricing Type"].includes("Monthly") ? "/mo" : ""}
+    </p>
     <ul>
-      {[...Array(5)].map((_, i) => (
-        item[`Feature ${i + 1}`] && <li key={i}>{item[`Feature ${i + 1}`]}</li>
-      ))}
+      {[...Array(5)].map(
+        (_, i) => item[`Feature ${i + 1}`] && <li key={i}>{item[`Feature ${i + 1}`]}</li>
+      )}
     </ul>
     <button onClick={() => onAddToCart(item, price)}>Add to Selection</button>
   </motion.div>
@@ -56,7 +82,7 @@ export default function BuyNow() {
   const [userType, setUserType] = useState("agency");
   const [setupType, setSetupType] = useState("new");
   const [billingCycle, setBillingCycle] = useState("monthly");
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<PricingItem[]>([]);
   const [email, setEmail] = useState("");
   const [emailConfirmed, setEmailConfirmed] = useState(false);
 
@@ -65,23 +91,24 @@ export default function BuyNow() {
       item.Service.toLowerCase().includes(category.toLowerCase())
     );
 
-  const filterCards = (list: any[]) =>
+  const filterCards = (list: PricingItem[]) =>
     list.filter((item) => {
-      const setupMatch = item["Existing Setup"] === "N/A" ||
+      const setupMatch =
+        item["Existing Setup"] === "N/A" ||
         (setupType === "existing" && item["Existing Setup"] === "Yes") ||
         (setupType === "new" && item["Existing Setup"] === "No");
-
       return setupMatch;
     });
 
-  const getPrice = (item: any) => {
-    const basePrice = userType === "agency" ? item["Pricing Agency"] : item["Pricing Individual"];
+  const getPrice = (item: PricingItem) => {
+    const basePrice =
+      userType === "agency" ? item["Pricing Agency"] : item["Pricing Individual"];
     return billingCycle === "annual" && item["Pricing Type"].includes("Monthly")
       ? basePrice * 10
       : basePrice;
   };
 
-  const handleAddToCart = (item: any, price: number) => {
+  const handleAddToCart = (item: PricingItem, price: number) => {
     setCart((prev) => {
       const existing = prev.find((i) => i.Service === item.Service);
       if (existing) {
@@ -112,7 +139,9 @@ export default function BuyNow() {
   };
 
   const handleBookCall = async () => {
-    const summary = cart.map((i) => `- ${i["Service Name"]} (£${i.price})`).join("\n");
+    const summary = cart
+      .map((i) => `- ${i["Service Name"]} (£${i.price})`)
+      .join("\n");
 
     await fetch("/api/book-call-email", {
       method: "POST",
@@ -125,13 +154,26 @@ export default function BuyNow() {
     });
 
     setEmailConfirmed(true);
-    window.open(`${GOOGLE_MEETING_LINK}?details=${encodeURIComponent(summary)}`, "_blank");
+    window.open(
+      `${GOOGLE_MEETING_LINK}?details=${encodeURIComponent(summary)}`,
+      "_blank"
+    );
   };
 
   const allFastCheckout = cart.every((item) => item.FastCheckout === true);
-  const analytics = useMemo(() => filterCards(filterByCategory("Analytics")), [userType, setupType, billingCycle]);
-  const reporting = useMemo(() => filterCards(filterByCategory("Reporting")), [userType, setupType, billingCycle]);
-  const consent = useMemo(() => filterCards(filterByCategory("Consent")), [userType, setupType, billingCycle]);
+
+  const analytics = useMemo(
+    () => filterCards(filterByCategory("Analytics")),
+    [filterCards, userType, setupType, billingCycle]
+  );
+  const reporting = useMemo(
+    () => filterCards(filterByCategory("Reporting")),
+    [filterCards, userType, setupType, billingCycle]
+  );
+  const consent = useMemo(
+    () => filterCards(filterByCategory("Consent")),
+    [filterCards, userType, setupType, billingCycle]
+  );
 
   return (
     <section id="buy-now" className="buy-now-wrapper">
@@ -144,19 +186,28 @@ export default function BuyNow() {
             label="User Type"
             value={userType}
             onChange={setUserType}
-            options={[{ label: "Agency", value: "agency" }, { label: "Individual", value: "individual" }]}
+            options={[
+              { label: "Agency", value: "agency" },
+              { label: "Individual", value: "individual" },
+            ]}
           />
           <ToggleGroup
             label="Setup Type"
             value={setupType}
             onChange={setSetupType}
-            options={[{ label: "Existing", value: "existing" }, { label: "New", value: "new" }]}
+            options={[
+              { label: "Existing", value: "existing" },
+              { label: "New", value: "new" },
+            ]}
           />
           <ToggleGroup
             label="Billing"
             value={billingCycle}
             onChange={setBillingCycle}
-            options={[{ label: "Monthly", value: "monthly" }, { label: "Annual", value: "annual" }]}
+            options={[
+              { label: "Monthly", value: "monthly" },
+              { label: "Annual", value: "annual" },
+            ]}
           />
         </div>
 
@@ -165,7 +216,12 @@ export default function BuyNow() {
           <div className="buy-column column-analytics">
             <AnimatePresence>
               {analytics.map((item, i) => (
-                <PricingCard key={item.Service + i} item={item} price={getPrice(item)} onAddToCart={handleAddToCart} />
+                <PricingCard
+                  key={item.Service + i}
+                  item={item}
+                  price={getPrice(item)}
+                  onAddToCart={handleAddToCart}
+                />
               ))}
             </AnimatePresence>
           </div>
@@ -174,7 +230,12 @@ export default function BuyNow() {
           <div className="buy-column column-reporting">
             <AnimatePresence>
               {reporting.map((item, i) => (
-                <PricingCard key={item.Service + i} item={item} price={getPrice(item)} onAddToCart={handleAddToCart} />
+                <PricingCard
+                  key={item.Service + i}
+                  item={item}
+                  price={getPrice(item)}
+                  onAddToCart={handleAddToCart}
+                />
               ))}
             </AnimatePresence>
           </div>
@@ -183,7 +244,12 @@ export default function BuyNow() {
           <div className="buy-column column-consent">
             <AnimatePresence>
               {consent.map((item, i) => (
-                <PricingCard key={item.Service + i} item={item} price={getPrice(item)} onAddToCart={handleAddToCart} />
+                <PricingCard
+                  key={item.Service + i}
+                  item={item}
+                  price={getPrice(item)}
+                  onAddToCart={handleAddToCart}
+                />
               ))}
             </AnimatePresence>
           </div>
@@ -197,10 +263,14 @@ export default function BuyNow() {
           <ul>
             {cart.map((item) => (
               <li key={item.Service}>
-                <span>{item["Service Name"]} × {item.quantity}</span>
+                <span>
+                  {item["Service Name"]} × {item.quantity}
+                </span>
                 <div>
                   £{item.price * item.quantity}
-                  <button onClick={() => handleRemoveFromCart(item.Service)}>Remove</button>
+                  <button onClick={() => handleRemoveFromCart(item.Service)}>
+                    Remove
+                  </button>
                 </div>
               </li>
             ))}
@@ -213,9 +283,11 @@ export default function BuyNow() {
           ) : (
             <div className="call-to-book">
               <p>
-                <strong>This service requires a face-to-face call.</strong><br />
-                Don’t worry — we’ll remember your selection and if you still want to go ahead after the call,
-                we’ll email you instructions on how to complete the order.
+                <strong>This service requires a face-to-face call.</strong>
+                <br />
+                Don&apos;t worry — we&apos;ll remember your selection and if you
+                still want to go ahead after the call, we&apos;ll email you
+                instructions on how to complete the order.
               </p>
               <input
                 type="email"
@@ -226,7 +298,12 @@ export default function BuyNow() {
               <button onClick={handleBookCall} className="book-call-btn">
                 Book a Call
               </button>
-              {emailConfirmed && <p className="confirmation-message">Selection sent! We've opened the booking link in a new tab.</p>}
+              {emailConfirmed && (
+                <p className="confirmation-message">
+                  Selection sent! We&apos;ve opened the booking link in a new
+                  tab.
+                </p>
+              )}
             </div>
           )}
         </div>
