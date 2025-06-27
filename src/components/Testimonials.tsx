@@ -57,7 +57,9 @@ const Testimonials = () => {
             )}
 
             {/* ✅ Quote Below Image */}
-            <p className="testimonial-text">"{testimonialsData[index].testimonial}"</p>
+            <p className="testimonial-text">
+              &quot;{testimonialsData[index].testimonial}&quot;
+            </p>
             <p className="author-name">{testimonialsData[index].name}</p>
             <p className="author-job">
               {testimonialsData[index].jobTitle}, {testimonialsData[index].company}

@@ -10,10 +10,8 @@ const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(STRIPE_PUBLIC_KEY!);
 const GOOGLE_MEETING_LINK = process.env.NEXT_PUBLIC_GOOGLE_MEETING_LINK;
 
-
 // const OWNER_EMAIL = process.env.NEXT_PUBLIC_BOOKING_NOTIFICATION_EMAIL;
-// TODO: OWNER_EMAIL is reserved for booking notification emails in future.
-
+// TODO: Reserved for booking notification emails later
 
 type ToggleGroupProps = {
   label: string;
@@ -86,12 +84,12 @@ export default function BuyNow() {
   const [email, setEmail] = useState("");
   const [emailConfirmed, setEmailConfirmed] = useState(false);
 
-  const filterByCategory = (category: string) =>
+  const filterByCategory = (category: string): PricingItem[] =>
     pricingData.filter((item) =>
       item.Service.toLowerCase().includes(category.toLowerCase())
     );
 
-  const filterCards = (list: PricingItem[]) =>
+  const filterCards = (list: PricingItem[]): PricingItem[] =>
     list.filter((item) => {
       const setupMatch =
         item["Existing Setup"] === "N/A" ||
@@ -100,7 +98,7 @@ export default function BuyNow() {
       return setupMatch;
     });
 
-  const getPrice = (item: PricingItem) => {
+  const getPrice = (item: PricingItem): number => {
     const basePrice =
       userType === "agency" ? item["Pricing Agency"] : item["Pricing Individual"];
     return billingCycle === "annual" && item["Pricing Type"].includes("Monthly")
@@ -164,15 +162,15 @@ export default function BuyNow() {
 
   const analytics = useMemo(
     () => filterCards(filterByCategory("Analytics")),
-    [filterCards, userType, setupType, billingCycle]
+    [filterCards]
   );
   const reporting = useMemo(
     () => filterCards(filterByCategory("Reporting")),
-    [filterCards, userType, setupType, billingCycle]
+    [filterCards]
   );
   const consent = useMemo(
     () => filterCards(filterByCategory("Consent")),
-    [filterCards, userType, setupType, billingCycle]
+    [filterCards]
   );
 
   return (
