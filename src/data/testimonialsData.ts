@@ -11,19 +11,19 @@ interface Testimonial {
 const testimonialsData: Testimonial[] = [
   {
     id: 1,
-    name: "Jane Doe",
+    name: "Tim Morris",
     jobTitle: "Marketing Manager",
-    company: "ABC Corp",
-    testimonial: "The analytics service transformed our marketing strategy.",
+    company: "Dale Hill",
+    testimonial: "Working with TMA in the run up to Christmas gave us the tracking clarity we needed. Our consent management was rock-solid and the Looker dashboards made our seasonal performance crystal clear.",
     services: "Website Analytics",
-    image: "/images/testimonials/jane-doe.jpg", // ✅ Example image
+    // image: "/images/testimonials/jane-doe.jpg", // ✅ Example image
   },
   {
     id: 2,
-    name: "John Smith",
+    name: "Dan Taylor",
     jobTitle: "CEO",
-    company: "XYZ Ltd",
-    testimonial: "Data visualization provided clear insights for our business.",
+    // company: "XYZ Ltd",
+    testimonial: "I had no idea how much data was available to me. Dave made the process so simple and I understand so much more about how my site is performing. A real game changer.",
     services: "Data Visualisation & Reporting",
   }, // ✅ No image for this testimonial
 ];
