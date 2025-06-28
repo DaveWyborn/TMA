@@ -1,166 +1,73 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
-import Wireframe from "@/components/Wireframe";
+import Image from "next/image";
 
-// ✅ Service key type: only valid keys
-type ServiceKey = "analytics" | "visualisation" | "consent";
-
-// ✅ Each service object structure
-type Service = {
-  id: ServiceKey;
-  title: string;
-  description: string;
-  icon: string;
-};
-
-// ✅ Your local descriptions (keep them plain strings!)
-import analyticsDescription from "./services/analytics";
-import visualisationDescription from "./services/visualisation";
-import consentDescription from "./services/consent";
-
-// ✅ Define services array with proper type
-const services: Service[] = [
+const services = [
   {
-    id: "analytics",
-    title: "Website Analytics",
-    description: analyticsDescription,
-    icon: "/icons/analytics.svg",
+    id: "gtm",
+    title: "GTM Setup & Support",
+    description:
+      "We help you set up Google Tag Manager for accurate and efficient data tracking.",
+    icon: "/icons/gtm.svg",
   },
   {
-    id: "visualisation",
-    title: "Data Visualisation",
-    description: visualisationDescription,
-    icon: "/icons/visualisation.svg",
+    id: "looker",
+    title: "Custom Looker Dashboard",
+    description:
+      "Get tailored dashboards that visualize your key metrics clearly and effectively.",
+    icon: "/icons/looker.svg",
   },
   {
     id: "consent",
     title: "Consent Management",
-    description: consentDescription,
+    description:
+      "Ensure compliance with privacy laws through effective consent management solutions.",
     icon: "/icons/consent.svg",
+  },
+  {
+    id: "monitoring",
+    title: "Ongoing Monitoring & Updates",
+    description:
+      "Continuous monitoring and updates to keep your analytics accurate and up to date.",
+    icon: "/icons/monitoring.svg",
   },
 ];
 
 const ServiceSelection = () => {
-  // ✅ Typed state
-  const [selectedService, setSelectedService] = useState<ServiceKey>("analytics");
-  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
-
-  // ✅ Handle Escape key
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsOverlayOpen(false);
-      }
-    };
-
-    if (isOverlayOpen) {
-      window.addEventListener("keydown", handleKeyDown);
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOverlayOpen]);
-
   return (
     <section
       id="services"
-      className="w-full h-screen flex flex-col items-center justify-center bg-white scroll-snap-align-start pt-24 md:pt-0 text-gray-800"
+      className="w-full min-h-screen flex flex-col items-center justify-center bg-white scroll-snap-align-start pt-24 md:pt-0 text-gray-800 px-4"
     >
-      <h2 className="text-3xl font-semibold text-[#1B1F3B] mb-6 text-center">
-        Our Services
+      <h2 className="text-3xl font-semibold text-[#1B1F3B] mb-12 text-center">
+        Our Bundled Services
       </h2>
 
-      {/* Service Buttons */}
-      <div className="services-buttons flex flex-col md:flex-row justify-center gap-6 mb-8 w-full px-4">
+      <div className="services-list grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl w-full">
         {services.map((service) => (
-          <button
+          <div
             key={service.id}
-            className={`service-button flex items-center md:flex-col px-4 md:px-6 pb-2 border-b-2 transition-all duration-300 transform w-full md:w-auto
-              ${
-                selectedService === service.id
-                  ? "border-[#1B1F3B] text-[#1B1F3B] scale-105 font-semibold"
-                  : "border-gray-400 text-gray-700"
-              }
-              hover:border-[#313863] hover:text-[#313863] hover:scale-110`}
-            onClick={() => setSelectedService(service.id)} // ✅ No cast needed now!
+            className="service-item flex items-start space-x-4 p-6 border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
           >
             <Image
               src={service.icon}
               alt={service.title}
-              width={40}
-              height={40}
-              className="mr-4 md:mr-0 md:mb-2 transition-transform duration-300"
+              width={48}
+              height={48}
+              className="flex-shrink-0"
             />
-            <span className="text-lg text-left md:text-center">
-              {service.title}
-            </span>
-          </button>
+            <div>
+              <h3 className="text-xl font-semibold text-[#1B1F3B] mb-2">
+                {service.title}
+              </h3>
+              <p className="text-gray-700 leading-relaxed">{service.description}</p>
+            </div>
+          </div>
         ))}
       </div>
-
-      {/* ✅ Wireframe Display */}
-      <div className="wireframe-container">
-        <Wireframe selectedService={selectedService} />
-      </div>
-
-      {/* ✅ Tell Me More Button */}
-      <button className="popup-button" onClick={() => setIsOverlayOpen(true)}>
-        Tell Me More
-      </button>
-
-      {/* ✅ Overlay */}
-      {isOverlayOpen && (
-        <div
-          className="overlay-container"
-          onClick={() => setIsOverlayOpen(false)}
-        >
-          <div className="overlay-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="close-button"
-              onClick={() => setIsOverlayOpen(false)}
-            >
-              ✕
-            </button>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedService}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="text-lg text-gray-700 leading-relaxed">
-                  {
-                    services.find((service) => service.id === selectedService)
-                      ?.description
-                  }
-                </div>
-
-                <div className="overlay-actions">
-                  <a href="#contact" className="buy-button">
-                    Buy Now
-                  </a>
-                  <a
-                    href="YOUR_CALENDAR_BOOKING_LINK"
-                    target="_blank"
-                    className="book-button"
-                  >
-                    Book a Call
-                  </a>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      )}
     </section>
   );
 };
 
-// ✅ Ensure component is client-side only
 export default dynamic(() => Promise.resolve(ServiceSelection), { ssr: false });
