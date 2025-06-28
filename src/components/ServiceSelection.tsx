@@ -10,6 +10,7 @@ type Service = {
   title: string;
   description: string;
   icon: string;
+  points: string[];
 };
 
 const services: Service[] = [
@@ -18,24 +19,28 @@ const services: Service[] = [
     title: "GTM Setup & Support",
     description: "Set up Google Tag Manager for accurate and efficient tracking, with essential tags and events. More advanced setups available as your needs grow.",
     icon: "/icons/gtm.svg",
+    points: ["Essential tags and triggers", "Cross-domain tracking", "Event tracking and troubleshooting"],
   },
   {
     id: "looker",
     title: "Custom Looker Dashboard",
     description: "Clear dashboards that visualise your key metrics. Start with a proven template, with flexibility for custom reporting as you grow.",
     icon: "/icons/looker.svg",
+    points: ["Pre-built dashboards", "Custom metrics as needed", "Easy sharing and export"],
   },
   {
     id: "consent",
     title: "Consent Management",
     description: "Stay compliant with privacy laws through effective consent management — built in for all plans.",
     icon: "/icons/consent.svg",
+    points: ["Cookie consent banners", "Policy updates", "User preference management"],
   },
   {
     id: "monitoring",
     title: "Ongoing Monitoring & Updates",
     description: "Ongoing monitoring and updates keep your analytics accurate. Support and recommendations evolve with your business.",
     icon: "/icons/monitoring.svg",
+    points: ["Regular data checks", "Alerts for issues", "Recommendations for improvement"],
   },
 ];
 
@@ -89,6 +94,7 @@ const ServiceSelection = () => {
         onClose={() => setSelectedService(null)}
         title={selectedService?.title || ""}
         details={selectedService?.description || ""}
+        points={selectedService?.points || []}
       />
     </section>
   );
