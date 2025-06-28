@@ -80,7 +80,7 @@ const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
         ) as React.ReactNode[]
       }
     </ul>
-    // <button onClick={() => onAddToCart(item, price)}>Add to Selection</button>
+    {/* <button onClick={() => onAddToCart(item, price)}>Add to Selection</button> */}
   </motion.div>
 );
 
