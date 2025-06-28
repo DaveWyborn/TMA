@@ -32,7 +32,7 @@ export default function BuyNow() {
 
   return (
     <section className="buy-now-wrapper py-16 px-4">
-      <h1 className="text-4xl font-bold text-center mb-4">Choose Your Plan</h1>
+      <h1 className="text-4xl font-bold text-center mb-4 text-[#1B1F3B]">Choose Your Plan</h1>
       <p className="text-lg text-center mb-8 text-gray-700">
         Your plan includes everything: GTM, dashboards, consent management and monitoring — no hidden extras.
       </p>
@@ -70,11 +70,11 @@ export default function BuyNow() {
             key={tier.name}
             className="border rounded-lg p-6 shadow-md hover:shadow-[0_6px_15px_rgba(173,114,249,0.5)] transition"
           >
-            <h3 className="text-2xl font-semibold mb-2">{tier.name}</h3>
+            <h3 className="text-2xl font-semibold mb-2 text-[#1B1F3B]">{tier.name}</h3>
             <p className="text-sm text-[#1B1F3B] mb-4">
               {siteType === "marketing" ? tier.trafficDescription : tier.salesDescription}
             </p>
-            <p className="text-3xl font-bold mb-4">
+            <p className="text-3xl font-bold mb-4 text-[#1B1F3B]">
               £{siteType === "marketing" ? tier.price : tier.ecommercePrice}{" "}
               <span className="text-base font-normal">/month</span>
             </p>
