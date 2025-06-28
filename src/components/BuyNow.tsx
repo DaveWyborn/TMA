@@ -4,9 +4,9 @@ import { useState, useMemo, useCallback } from "react";
 import pricingData from "@/data/tiered_pricing_data.json";
 import { motion, AnimatePresence } from "framer-motion";
 import classNames from "classnames";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 
-const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
+// const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
 // const stripePromise = loadStripe(STRIPE_PUBLIC_KEY!);
 // const GOOGLE_MEETING_LINK = process.env.NEXT_PUBLIC_GOOGLE_MEETING_LINK;
 
