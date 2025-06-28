@@ -66,35 +66,36 @@ export default function BuyNow() {
       {/* Pricing cards */}
       <div className="grid md:grid-cols-3 gap-8">
         {tiers.map((tier) => (
-          <div
-            key={tier.name}
-            className="border rounded-lg p-6 shadow-md hover:shadow-[0_6px_15px_rgba(173,114,249,0.5)] transition"
-          >
-            <h3 className="text-2xl font-semibold mb-2 text-[#1B1F3B]">{tier.name}</h3>
-            <p className="text-sm text-[#1B1F3B] mb-4">
-              {siteType === "marketing" ? tier.trafficDescription : tier.salesDescription}
-            </p>
-            <p className="text-3xl font-bold mb-4 text-[#1B1F3B]">
-              £{siteType === "marketing" ? tier.price : tier.ecommercePrice}{" "}
-              <span className="text-base font-normal">/month</span>
-            </p>
-            <ul className="text-sm text-[#1B1F3B] mb-4 space-y-2">
-              <li>✅ Clear, accurate tracking from day one</li>
-              <li>✅ Simple dashboard to see what’s working</li>
-              <li>✅ Fully compliant data collection</li>
-              {tier.name !== "Small Business" && (
-                <li>✅ Proactive checks & insights each month</li>
-              )}
-              {tier.name === "Established Business" && (
-                <>
-                  <li>✅ Customised reporting for your goals</li>
-                  <li>✅ Priority support & personal optimisation tips</li>
-                </>
-              )}
-            </ul>
-            <button className="w-full bg-[#1B1F3B] text-white py-2 rounded hover:bg-[#313863] transition">
-              Get Started
-            </button>
+          <div key={tier.name} className="flex flex-col h-full">
+            <div
+              className="border rounded-lg p-6 shadow-md hover:shadow-[0_6px_15px_rgba(173,114,249,0.5)] transition flex flex-col h-full"
+            >
+              <h3 className="text-2xl font-semibold mb-2 text-[#1B1F3B]">{tier.name}</h3>
+              <p className="text-sm text-[#1B1F3B] mb-4">
+                {siteType === "marketing" ? tier.trafficDescription : tier.salesDescription}
+              </p>
+              <p className="text-3xl font-bold mb-4 text-[#1B1F3B]">
+                £{siteType === "marketing" ? tier.price : tier.ecommercePrice}{" "}
+                <span className="text-base font-normal">/month</span>
+              </p>
+              <ul className="text-sm text-[#1B1F3B] mb-4 space-y-2">
+                <li>✅ Clear, accurate tracking from day one</li>
+                <li>✅ Simple dashboard to see what’s working</li>
+                <li>✅ Fully compliant data collection</li>
+                {tier.name !== "Small Business" && (
+                  <li>✅ Proactive checks & insights each month</li>
+                )}
+                {tier.name === "Established Business" && (
+                  <>
+                    <li>✅ Customised reporting for your goals</li>
+                    <li>✅ Priority support & personal optimisation tips</li>
+                  </>
+                )}
+              </ul>
+              <button className="w-full bg-[#1B1F3B] text-white py-2 rounded hover:bg-[#313863] transition mt-auto">
+                Get Started
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -102,6 +103,11 @@ export default function BuyNow() {
       {siteType === "ecommerce" && (
         <p className="text-xs text-gray-500 mt-6 text-center">
           Larger eCommerce sites like auctions or marketplaces? Get in touch — typical pricing starts at £149/mo.
+        </p>
+      )}
+      {siteType === "marketing" && (
+        <p className="text-xs text-gray-500 mt-6 text-center">
+          Larger marketing sites with multiple brands or special requirements? Get in touch for a custom plan.
         </p>
       )}
     </section>
