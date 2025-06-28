@@ -72,9 +72,11 @@ const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
         [...Array(5)].map(
           (_, i) =>
             item[`Feature ${i + 1}`] && (
-              <li key={i}>{item[`Feature ${i + 1}`]}</li>
+              <li key={i}>
+                {item[`Feature ${i + 1}`] as React.ReactNode}
+              </li>
             )
-        ) as React.ReactNode[] // ✅ Assert entire map result!
+        ) as React.ReactNode[]
       }
     </ul>
     <button onClick={() => onAddToCart(item, price)}>Add to Selection</button>
