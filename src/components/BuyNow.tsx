@@ -1,115 +1,99 @@
 "use client";
 
 import { useState } from "react";
-import classNames from "classnames";
 
-export default function BuyNow() {
-  const [siteType, setSiteType] = useState<"marketing" | "ecommerce">("marketing");
+export default function BuyNowForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    company: "",
+    email: "",
+    website: "",
+    tier: "Small Business",
+    siteType: "marketing",
+  });
 
-  const tiers = [
-    {
-      name: "Small Business",
-      trafficDescription: "Up to 30,000 visits/month",
-      salesDescription: "Up to £10,000 sales/month",
-      price: 29,
-      ecommercePrice: 39,
-    },
-    {
-      name: "Growing Business",
-      trafficDescription: "30k–100k visits/month",
-      salesDescription: "£10k–£50k sales/month",
-      price: 49,
-      ecommercePrice: 69,
-    },
-    {
-      name: "Established Business",
-      trafficDescription: "100k+ visits/month",
-      salesDescription: "£50k+ sales/month",
-      price: 69,
-      ecommercePrice: 99,
-    },
-  ];
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert(data.error || "Something went wrong. Please try again.");
+    }
+  };
 
   return (
-    <section className="buy-now-wrapper py-16 px-4">
-      <h1 className="text-4xl font-bold text-center mb-4 text-[#1B1F3B]">Choose Your Plan</h1>
-      <p className="text-lg text-center mb-8 text-gray-700">
-        Your plan includes everything: GTM, dashboards, consent management and monitoring — no hidden extras.
-      </p>
+    <section className="max-w-xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">Get Started</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Your Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          className="border p-2 w-full"
+        />
+        <input
+          type="text"
+          name="company"
+          placeholder="Company Name (optional)"
+          value={formData.company}
+          onChange={handleChange}
+          className="border p-2 w-full"
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          className="border p-2 w-full"
+        />
+        <input
+          type="url"
+          name="website"
+          placeholder="Website URL"
+          value={formData.website}
+          onChange={handleChange}
+          required
+          className="border p-2 w-full"
+        />
 
-      {/* Site type toggle */}
-      <div className="flex justify-center gap-4 mb-10">
+        <label className="block">Choose Tier</label>
+        <select name="tier" value={formData.tier} onChange={handleChange} className="border p-2 w-full">
+          <option>Small Business</option>
+          <option>Growing Business</option>
+          <option>Established Business</option>
+        </select>
+
+        <label className="block">Site Type</label>
+        <select name="siteType" value={formData.siteType} onChange={handleChange} className="border p-2 w-full">
+          <option value="marketing">Marketing</option>
+          <option value="ecommerce">Ecommerce</option>
+        </select>
+
         <button
-          onClick={() => setSiteType("marketing")}
-          className={classNames(
-            "px-4 py-2 border rounded transition",
-            siteType === "marketing"
-              ? "bg-[#1B1F3B] text-white border-[#1B1F3B]"
-              : "bg-white text-[#1B1F3B] border-[#1B1F3B]"
-          )}
+          type="submit"
+          className="bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863] transition"
         >
-          Marketing / Brochure Site
+          Continue to Payment
         </button>
-        <button
-          onClick={() => setSiteType("ecommerce")}
-          className={classNames(
-            "px-4 py-2 border rounded transition",
-            siteType === "ecommerce"
-              ? "bg-[#1B1F3B] text-white border-[#1B1F3B]"
-              : "bg-white text-[#1B1F3B] border-[#1B1F3B]"
-          )}
-        >
-          Online Store
-        </button>
-      </div>
-
-      {/* Pricing cards */}
-      <div className="grid md:grid-cols-3 gap-8">
-        {tiers.map((tier) => (
-          <div key={tier.name} className="flex flex-col h-full">
-            <div
-              className="border rounded-lg p-6 shadow-md hover:shadow-[0_6px_15px_rgba(173,114,249,0.5)] transition flex flex-col h-full"
-            >
-              <h3 className="text-2xl font-semibold mb-2 text-[#1B1F3B]">{tier.name}</h3>
-              <p className="text-sm text-[#1B1F3B] mb-4">
-                {siteType === "marketing" ? tier.trafficDescription : tier.salesDescription}
-              </p>
-              <p className="text-3xl font-bold mb-4 text-[#1B1F3B]">
-                £{siteType === "marketing" ? tier.price : tier.ecommercePrice}{" "}
-                <span className="text-base font-normal">/month</span>
-              </p>
-              <ul className="text-sm text-[#1B1F3B] mb-4 space-y-2">
-                <li>✅ Clear, accurate tracking from day one</li>
-                <li>✅ Simple dashboard to see what’s working</li>
-                <li>✅ Fully compliant data collection</li>
-                {tier.name !== "Small Business" && (
-                  <li>✅ Proactive checks & insights each month</li>
-                )}
-                {tier.name === "Established Business" && (
-                  <>
-                    <li>✅ Customised reporting for your goals</li>
-                    <li>✅ Priority support & personal optimisation tips</li>
-                  </>
-                )}
-              </ul>
-              <button className="w-full bg-[#1B1F3B] text-white py-2 rounded hover:bg-[#313863] transition mt-auto">
-                Get Started
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {siteType === "ecommerce" && (
-        <p className="text-xs text-gray-500 mt-6 text-center">
-          Larger eCommerce sites like auctions or marketplaces? Get in touch — typical pricing starts at £149/mo.
-        </p>
-      )}
-      {siteType === "marketing" && (
-        <p className="text-xs text-gray-500 mt-6 text-center">
-          Larger marketing sites with multiple brands or special requirements? Get in touch for a custom plan.
-        </p>
-      )}
+      </form>
     </section>
   );
 }
