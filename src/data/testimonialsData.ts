@@ -21,8 +21,8 @@ const testimonialsData: Testimonial[] = [
   {
     id: 2,
     name: "Dan Taylor",
-    jobTitle: "CEO",
-    // company: "XYZ Ltd",
+    jobTitle: "Head of Finance",
+    company: "Sweet & Maxwell",
     testimonial: "I had no idea how much data was available to me. Dave made the process so simple and I understand so much more about how my site is performing. A real game changer.",
     services: "Data Visualisation & Reporting",
   }, // ✅ No image for this testimonial
