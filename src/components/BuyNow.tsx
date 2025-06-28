@@ -44,6 +44,7 @@ type PricingItem = {
   "Existing Setup": string;
   Tier?: string;
   FastCheckout?: boolean;
+  quantity: (i.quantity ?? 0) + 1
   [key: string]: unknown; // ✅ Replaced 'any' with 'unknown'
 };
 
