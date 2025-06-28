@@ -7,8 +7,8 @@ import classNames from "classnames";
 import { loadStripe } from "@stripe/stripe-js";
 
 const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
-const stripePromise = loadStripe(STRIPE_PUBLIC_KEY!);
-const GOOGLE_MEETING_LINK = process.env.NEXT_PUBLIC_GOOGLE_MEETING_LINK;
+// const stripePromise = loadStripe(STRIPE_PUBLIC_KEY!);
+// const GOOGLE_MEETING_LINK = process.env.NEXT_PUBLIC_GOOGLE_MEETING_LINK;
 
 // const OWNER_EMAIL = process.env.NEXT_PUBLIC_BOOKING_NOTIFICATION_EMAIL;
 // TODO: Reserved for booking notification emails later
@@ -89,7 +89,7 @@ export default function BuyNow() {
   const [userType, setUserType] = useState("agency");
   const [setupType, setSetupType] = useState("new");
   const [billingCycle, setBillingCycle] = useState("monthly");
-  const [cart, setCart] = useState<PricingItem[]>([]);
+  // const [cart, setCart] = useState<PricingItem[]>([]);
 
   const filterByCategory = (category: string): PricingItem[] =>
     pricingData.filter((item) =>
