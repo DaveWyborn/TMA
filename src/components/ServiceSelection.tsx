@@ -12,7 +12,7 @@ import visualisationDescription from "./services/visualisation";
 import consentDescription from "./services/consent";
 
 // ✅ Dynamically load DOMPurify only in the browser to prevent SSR issues
-let DOMPurify: any = null;
+let DOMPurify: unknown = null;
 if (typeof window !== "undefined") {
   import("dompurify").then((mod) => {
     DOMPurify = mod.default || mod;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import pricingData from "@/data/tiered_pricing_data.json";
 import { motion, AnimatePresence } from "framer-motion";
 import classNames from "classnames";
@@ -44,7 +44,7 @@ type PricingItem = {
   "Existing Setup": string;
   Tier?: string;
   FastCheckout?: boolean;
-  [key: string]: any;
+  [key: string]: unknown; // ✅ Replaced 'any' with 'unknown'
 };
 
 type PricingCardProps = {
@@ -89,14 +89,18 @@ export default function BuyNow() {
       item.Service.toLowerCase().includes(category.toLowerCase())
     );
 
-  const filterCards = (list: PricingItem[]): PricingItem[] =>
-    list.filter((item) => {
-      const setupMatch =
-        item["Existing Setup"] === "N/A" ||
-        (setupType === "existing" && item["Existing Setup"] === "Yes") ||
-        (setupType === "new" && item["Existing Setup"] === "No");
-      return setupMatch;
-    });
+  const filterCards = useCallback(
+    (list: PricingItem[]): PricingItem[] => {
+      return list.filter((item) => {
+        const setupMatch =
+          item["Existing Setup"] === "N/A" ||
+          (setupType === "existing" && item["Existing Setup"] === "Yes") ||
+          (setupType === "new" && item["Existing Setup"] === "No");
+        return setupMatch;
+      });
+    },
+    [setupType]
+  );
 
   const getPrice = (item: PricingItem): number => {
     const basePrice =
