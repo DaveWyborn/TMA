@@ -10,7 +10,9 @@ const wireframeImages = {
   consent: "/images/consent.svg",
 };
 
-const Wireframe = ({ selectedService }: { selectedService: string }) => {
+type ServiceKey = keyof typeof wireframeImages;
+
+const Wireframe = ({ selectedService }: { selectedService: ServiceKey }) => {
   const [currentImage, setCurrentImage] = useState(wireframeImages[selectedService]);
 
   useEffect(() => {
@@ -18,6 +20,11 @@ const Wireframe = ({ selectedService }: { selectedService: string }) => {
       setCurrentImage(wireframeImages[selectedService]);
     }
   }, [selectedService]);
+
+  return (
+    ...
+  );
+};
 
   return (
     <div className="wireframe-container">
