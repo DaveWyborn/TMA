@@ -90,8 +90,6 @@ export default function BuyNow() {
   const [setupType, setSetupType] = useState("new");
   const [billingCycle, setBillingCycle] = useState("monthly");
   const [cart, setCart] = useState<PricingItem[]>([]);
-  const [email, setEmail] = useState("");
-  const [emailConfirmed, setEmailConfirmed] = useState(false);
 
   const filterByCategory = (category: string): PricingItem[] =>
     pricingData.filter((item) =>
@@ -130,48 +128,6 @@ export default function BuyNow() {
   //    return [...prev, { ...item, price, quantity: 1 }];
   //  });
   //};
-
-  const handleRemoveFromCart = (service: string) => {
-    setCart((prev) => prev.filter((i) => i.Service !== service));
-  };
-
-  const handleCheckout = async () => {
-    const stripe = await stripePromise;
-    if (!stripe) return;
-
-    const response = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cart }),
-    });
-
-    const session = await response.json();
-    await stripe.redirectToCheckout({ sessionId: session.id });
-  };
-
-  const handleBookCall = async () => {
-    const summary = cart
-      .map((i) => `- ${i["Service Name"]} (£${i.price})`)
-      .join("\n");
-
-    await fetch("/api/book-call-email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        bcc: !!email,
-        items: summary,
-      }),
-    });
-
-    setEmailConfirmed(true);
-    window.open(
-      `${GOOGLE_MEETING_LINK}?details=${encodeURIComponent(summary)}`,
-      "_blank"
-    );
-  };
-
-  const allFastCheckout = cart.every((item) => item.FastCheckout === true);
 
   const analytics = useMemo(
     () => filterCards(filterByCategory("Analytics")),
