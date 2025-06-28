@@ -268,6 +268,7 @@ export default function BuyNow() {
       </div>
 
       {/* Cart Sidebar */}
+      {/* 
       {cart.length > 0 && (
         <div className="cart-sidebar">
           <h4>Your Selection</h4>
@@ -319,6 +320,7 @@ export default function BuyNow() {
           )}
         </div>
       )}
+      */}
     </section>
   );
 }
