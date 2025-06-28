@@ -45,6 +45,7 @@ type PricingItem = {
   Tier?: string;
   FastCheckout?: boolean;
   quantity?: number;
+  price?: number;
   [key: string]: unknown; // ✅ Replaced 'any' with 'unknown'
 };
 
