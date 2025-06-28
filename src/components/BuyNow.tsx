@@ -54,7 +54,7 @@ type PricingCardProps = {
   // onAddToCart: (item: PricingItem, price: number) => void;
 };
 
-const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
+const PricingCard = ({ item, price }: PricingCardProps) => (
   <motion.div
     className={classNames("product-block", item.Tier === "Pro" && "highlighted")}
     initial={{ opacity: 0, y: 10 }}
@@ -244,7 +244,7 @@ export default function BuyNow() {
                   key={item.Service + i}
                   item={item}
                   price={getPrice(item)}
-                  onAddToCart={handleAddToCart}
+                  //onAddToCart={handleAddToCart}
                 />
               ))}
             </AnimatePresence>
@@ -258,7 +258,7 @@ export default function BuyNow() {
                   key={item.Service + i}
                   item={item}
                   price={getPrice(item)}
-                  onAddToCart={handleAddToCart}
+                  //onAddToCart={handleAddToCart}
                 />
               ))}
             </AnimatePresence>
