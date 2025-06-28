@@ -5,22 +5,14 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import Wireframe from "@/components/Wireframe"; // ✅ Import the Wireframe component
-import { JSDOMPurify } from 'dompurify';
+
 
 // Import service descriptions
 import analyticsDescription from "./services/analytics";
 import visualisationDescription from "./services/visualisation";
 import consentDescription from "./services/consent";
 
-// ✅ Dynamically load DOMPurify only in the browser to prevent SSR issues
 
-let DOMPurify: JSDOMPurify | null = null;
-
-if (typeof window !== "undefined") {
-  import("dompurify").then((mod) => {
-    DOMPurify = mod.default;
-  });
-}
 
 // ✅ Service Data
 const services = [
@@ -99,15 +91,9 @@ const ServiceSelection = () => {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
               >
-                <div
-                  className="text-lg text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify && typeof DOMPurify.sanitize === "function"
-                      ? DOMPurify.sanitize(services.find((service) => service.id === selectedService)?.description ?? "",
-                          { ALLOWED_TAGS: ["h3", "p", "strong", "ul", "li", "span", "br"] })
-                      : "",
-                  }}
-                />
+                <div className="text-lg text-gray-700 leading-relaxed">
+  {services.find((service) => service.id === selectedService)?.description}
+</div>
                 {/* ✅ CTA Buttons */}
                 <div className="overlay-actions">
                   <a href="#contact" className="buy-button">Buy Now</a>
