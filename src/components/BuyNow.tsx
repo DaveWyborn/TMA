@@ -1,282 +1,100 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import pricingData from "@/data/tiered_pricing_data.json";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import classNames from "classnames";
-// import { loadStripe } from "@stripe/stripe-js";
-
-// const STRIPE_PUBLIC_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY;
-// const stripePromise = loadStripe(STRIPE_PUBLIC_KEY!);
-// const GOOGLE_MEETING_LINK = process.env.NEXT_PUBLIC_GOOGLE_MEETING_LINK;
-
-// const OWNER_EMAIL = process.env.NEXT_PUBLIC_BOOKING_NOTIFICATION_EMAIL;
-// TODO: Reserved for booking notification emails later
-
-type ToggleGroupProps = {
-  label: string;
-  options: { label: string; value: string }[];
-  value: string;
-  onChange: (value: string) => void;
-};
-
-const ToggleGroup = ({ label, options, value, onChange }: ToggleGroupProps) => (
-  <div className="toggle-group">
-    <span>{label}</span>
-    {options.map((opt) => (
-      <button
-        key={opt.value}
-        onClick={() => onChange(opt.value)}
-        className={classNames("toggle-btn", { active: value === opt.value })}
-      >
-        {opt.label}
-      </button>
-    ))}
-  </div>
-);
-
-type PricingItem = {
-  Service: string;
-  "Service Name": string;
-  "Pricing Agency": number;
-  "Pricing Individual": number;
-  "Pricing Type": string;
-  "Existing Setup": string;
-  Tier?: string;
-  FastCheckout?: boolean;
-  quantity?: number;
-  price?: number;
-  [key: string]: unknown; // ✅ Replaced 'any' with 'unknown'
-};
-
-type PricingCardProps = {
-  item: PricingItem;
-  price: number;
-  // onAddToCart: (item: PricingItem, price: number) => void;
-};
-
-const PricingCard = ({ item, price }: PricingCardProps) => (
-  <motion.div
-    className={classNames("product-block", item.Tier === "Pro" && "highlighted")}
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.3 }}
-  >
-    {item.Tier === "Pro" && <span className="badge">Best for eCommerce</span>}
-    <h3>{item["Service Name"]}</h3>
-    <p className="price">
-      £{price}
-      {item["Pricing Type"].includes("Monthly") ? "/mo" : ""}
-    </p>
-    <ul>
-      {
-        [...Array(5)].map(
-          (_, i) =>
-            item[`Feature ${i + 1}`] && (
-              <li key={i}>
-                {item[`Feature ${i + 1}`] as React.ReactNode}
-              </li>
-            )
-        ) as React.ReactNode[]
-      }
-    </ul>
-    {/* <button onClick={() => onAddToCart(item, price)}>Add to Selection</button> */}
-  </motion.div>
-);
 
 export default function BuyNow() {
-  const [userType, setUserType] = useState("agency");
-  const [setupType, setSetupType] = useState("new");
-  const [billingCycle, setBillingCycle] = useState("monthly");
-  // const [cart, setCart] = useState<PricingItem[]>([]);
+  const [siteType, setSiteType] = useState<"marketing" | "ecommerce">("marketing");
 
-  const filterByCategory = (category: string): PricingItem[] =>
-    pricingData.filter((item) =>
-      item.Service.toLowerCase().includes(category.toLowerCase())
-    );
-
-  const filterCards = useCallback(
-    (list: PricingItem[]): PricingItem[] => {
-      return list.filter((item) => {
-        const setupMatch =
-          item["Existing Setup"] === "N/A" ||
-          (setupType === "existing" && item["Existing Setup"] === "Yes") ||
-          (setupType === "new" && item["Existing Setup"] === "No");
-        return setupMatch;
-      });
+  const tiers = [
+    {
+      name: "Small Business",
+      trafficDescription: "Up to 30,000 visits/month",
+      salesDescription: "Up to £10,000 sales/month",
+      price: 29,
+      ecommercePrice: 39,
     },
-    [setupType]
-  );
-
-  const getPrice = (item: PricingItem): number => {
-    const basePrice =
-      userType === "agency" ? item["Pricing Agency"] : item["Pricing Individual"];
-    return billingCycle === "annual" && item["Pricing Type"].includes("Monthly")
-      ? basePrice * 10
-      : basePrice;
-  };
-
-  // const handleAddToCart = (item: PricingItem, price: number) => {
-  //  setCart((prev) => {
-  //    const existing = prev.find((i) => i.Service === item.Service);
-  //    if (existing) {
-  //      return prev.map((i) =>
-  //        i.Service === item.Service ? { ...i, quantity: i.quantity + 1 } : i
-  //      );
-  //    }
-  //    return [...prev, { ...item, price, quantity: 1 }];
-  //  });
-  //};
-
-  const analytics = useMemo(
-    () => filterCards(filterByCategory("Analytics")),
-    [filterCards]
-  );
-  const reporting = useMemo(
-    () => filterCards(filterByCategory("Reporting")),
-    [filterCards]
-  );
-  const consent = useMemo(
-    () => filterCards(filterByCategory("Consent")),
-    [filterCards]
-  );
+    {
+      name: "Growing Business",
+      trafficDescription: "30k–100k visits/month",
+      salesDescription: "£10k–£50k sales/month",
+      price: 49,
+      ecommercePrice: 69,
+    },
+    {
+      name: "Established Business",
+      trafficDescription: "100k+ visits/month",
+      salesDescription: "£50k+ sales/month",
+      price: 69,
+      ecommercePrice: 99,
+    },
+  ];
 
   return (
-    <section id="buy-now" className="buy-now-wrapper">
-      <div className="buy-now-inner">
-        <h2 className="buy-now-title">Ready to get started?</h2>
+    <section className="buy-now-wrapper py-16 px-4">
+      <h1 className="text-4xl font-bold text-center mb-4">Choose Your Plan</h1>
+      <p className="text-lg text-center mb-8 text-gray-700">
+        Your plan includes everything: GTM, dashboards, consent management and monitoring — no hidden extras.
+      </p>
 
-        {/* Toggles */}
-        <div className="toggles-row">
-          <ToggleGroup
-            label="User Type"
-            value={userType}
-            onChange={setUserType}
-            options={[
-              { label: "Agency", value: "agency" },
-              { label: "Individual", value: "individual" },
-            ]}
-          />
-          <ToggleGroup
-            label="Setup Type"
-            value={setupType}
-            onChange={setSetupType}
-            options={[
-              { label: "Existing", value: "existing" },
-              { label: "New", value: "new" },
-            ]}
-          />
-          <ToggleGroup
-            label="Billing"
-            value={billingCycle}
-            onChange={setBillingCycle}
-            options={[
-              { label: "Monthly", value: "monthly" },
-              { label: "Annual", value: "annual" },
-            ]}
-          />
-        </div>
-
-        <div className="buy-now-grid">
-          {/* Column 1: Analytics */}
-          <div className="buy-column column-analytics">
-            <AnimatePresence>
-              {analytics.map((item, i) => (
-                <PricingCard
-                  key={item.Service + i}
-                  item={item}
-                  price={getPrice(item)}
-                  // onAddToCart={handleAddToCart}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* Column 2: Reporting */}
-          <div className="buy-column column-reporting">
-            <AnimatePresence>
-              {reporting.map((item, i) => (
-                <PricingCard
-                  key={item.Service + i}
-                  item={item}
-                  price={getPrice(item)}
-                  //onAddToCart={handleAddToCart}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* Column 3: Consent */}
-          <div className="buy-column column-consent">
-            <AnimatePresence>
-              {consent.map((item, i) => (
-                <PricingCard
-                  key={item.Service + i}
-                  item={item}
-                  price={getPrice(item)}
-                  //onAddToCart={handleAddToCart}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-        </div>
+      {/* Site type toggle */}
+      <div className="flex justify-center gap-4 mb-10">
+        <button
+          onClick={() => setSiteType("marketing")}
+          className={classNames(
+            "px-4 py-2 border rounded transition",
+            siteType === "marketing"
+              ? "bg-[#1B1F3B] text-white border-[#1B1F3B]"
+              : "bg-white text-[#1B1F3B] border-[#1B1F3B]"
+          )}
+        >
+          Marketing / Brochure Site
+        </button>
+        <button
+          onClick={() => setSiteType("ecommerce")}
+          className={classNames(
+            "px-4 py-2 border rounded transition",
+            siteType === "ecommerce"
+              ? "bg-[#1B1F3B] text-white border-[#1B1F3B]"
+              : "bg-white text-[#1B1F3B] border-[#1B1F3B]"
+          )}
+        >
+          Online Store
+        </button>
       </div>
 
-      {/* Cart Sidebar */}
-      {/* 
-      {cart.length > 0 && (
-        <div className="cart-sidebar">
-          <h4>Your Selection</h4>
-          <ul>
-            {cart.map((item) => (
-              <li key={item.Service}>
-                <span>
-                  {item["Service Name"]} × {item.quantity}
-                </span>
-                <div>
-                  £{item.price * item.quantity}
-                  <button onClick={() => handleRemoveFromCart(item.Service)}>
-                    Remove
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-
-          {allFastCheckout ? (
-            <button onClick={handleCheckout} className="checkout-btn">
-              Checkout
-            </button>
-          ) : (
-            <div className="call-to-book">
-              <p>
-                <strong>This service requires a face-to-face call.</strong>
-                <br />
-                Don&apos;t worry — we&apos;ll remember your selection and if you
-                still want to go ahead after the call, we&apos;ll email you
-                instructions on how to complete the order.
+      {/* Pricing cards */}
+      <div className="grid md:grid-cols-3 gap-8">
+        {tiers.map((tier) => (
+          <div
+            key={tier.name}
+            className="border rounded-lg p-6 shadow-md hover:shadow-[0_6px_15px_rgba(173,114,249,0.5)] transition"
+          >
+            <h3 className="text-2xl font-semibold mb-2">{tier.name}</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              {siteType === "marketing" ? tier.trafficDescription : tier.salesDescription}
+            </p>
+            <p className="text-3xl font-bold mb-4">
+              £{siteType === "marketing" ? tier.price : tier.ecommercePrice}{" "}
+              <span className="text-base font-normal">/month</span>
+            </p>
+            <ul className="text-sm text-gray-700 mb-4 space-y-2">
+              <li>✅ Google Tag Manager setup & monitoring</li>
+              <li>✅ Looker Studio dashboard {siteType === "ecommerce" && "(eCommerce-ready)"}</li>
+              <li>✅ Consent Management & compliance</li>
+              <li>✅ Ongoing site health monitoring</li>
+            </ul>
+            {tier.name === "Established Business" && siteType === "ecommerce" && (
+              <p className="text-xs text-gray-500 mb-4">
+                Larger eCommerce sites like auctions or marketplaces? Get in touch — typical pricing starts at £149/mo.
               </p>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email (optional)"
-              />
-              <button onClick={handleBookCall} className="book-call-btn">
-                Book a Call
-              </button>
-              {emailConfirmed && (
-                <p className="confirmation-message">
-                  Selection sent! We&apos;ve opened the booking link in a new
-                  tab.
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-      */}
+            )}
+            <button className="w-full bg-[#1B1F3B] text-white py-2 rounded hover:bg-[#313863] transition">
+              Get Started
+            </button>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
