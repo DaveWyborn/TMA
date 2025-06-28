@@ -21,10 +21,6 @@ const Wireframe = ({ selectedService }: { selectedService: ServiceKey }) => {
     }
   }, [selectedService]);
 
-  return (
-    ...
-  );
-};
 
   return (
     <div className="wireframe-container">
