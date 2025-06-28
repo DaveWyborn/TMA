@@ -16,25 +16,25 @@ const services: Service[] = [
   {
     id: "gtm",
     title: "GTM Setup & Support",
-    description: "We help you set up Google Tag Manager for accurate and efficient data tracking.\nIncludes support for custom events, tags, and troubleshooting.",
+    description: "Set up Google Tag Manager for accurate and efficient tracking, with essential tags and events. More advanced setups available as your needs grow.",
     icon: "/icons/gtm.svg",
   },
   {
     id: "looker",
     title: "Custom Looker Dashboard",
-    description: "Get tailored dashboards that visualize your key metrics clearly and effectively.\nWe build views that match your business goals.",
+    description: "Clear dashboards that visualise your key metrics. Start with a proven template, with flexibility for custom reporting as you grow.",
     icon: "/icons/looker.svg",
   },
   {
     id: "consent",
     title: "Consent Management",
-    description: "Ensure compliance with privacy laws through effective consent management solutions.\nIntegrated with your site for a seamless user experience.",
+    description: "Stay compliant with privacy laws through effective consent management — built in for all plans.",
     icon: "/icons/consent.svg",
   },
   {
     id: "monitoring",
     title: "Ongoing Monitoring & Updates",
-    description: "Continuous monitoring and updates to keep your analytics accurate and up to date.\nProactive alerts and recommendations.",
+    description: "Ongoing monitoring and updates keep your analytics accurate. Support and recommendations evolve with your business.",
     icon: "/icons/monitoring.svg",
   },
 ];
