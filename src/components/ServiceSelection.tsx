@@ -21,8 +21,11 @@ const services = [
   { id: "consent", title: "Consent Management", description: consentDescription, icon: "/icons/consent.svg" },
 ];
 
+type ServiceKey = "analytics" | "visualisation" | "consent";
+
+
 const ServiceSelection = () => {
-  const [selectedService, setSelectedService] = useState(services[0].id);
+  const [selectedService, setSelectedService] = useState<ServiceKey>("analytics");
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   // ✅ Handle Escape key to close overlay
