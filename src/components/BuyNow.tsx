@@ -44,14 +44,14 @@ type PricingItem = {
   "Existing Setup": string;
   Tier?: string;
   FastCheckout?: boolean;
-  quantity: (i.quantity ?? 0) + 1
+  quantity?: number;
   [key: string]: unknown; // ✅ Replaced 'any' with 'unknown'
 };
 
 type PricingCardProps = {
   item: PricingItem;
   price: number;
-  onAddToCart: (item: PricingItem, price: number) => void;
+  // onAddToCart: (item: PricingItem, price: number) => void;
 };
 
 const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
@@ -80,7 +80,7 @@ const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
         ) as React.ReactNode[]
       }
     </ul>
-    <button onClick={() => onAddToCart(item, price)}>Add to Selection</button>
+    // <button onClick={() => onAddToCart(item, price)}>Add to Selection</button>
   </motion.div>
 );
 
@@ -118,17 +118,17 @@ export default function BuyNow() {
       : basePrice;
   };
 
-  const handleAddToCart = (item: PricingItem, price: number) => {
-    setCart((prev) => {
-      const existing = prev.find((i) => i.Service === item.Service);
-      if (existing) {
-        return prev.map((i) =>
-          i.Service === item.Service ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prev, { ...item, price, quantity: 1 }];
-    });
-  };
+  // const handleAddToCart = (item: PricingItem, price: number) => {
+  //  setCart((prev) => {
+  //    const existing = prev.find((i) => i.Service === item.Service);
+  //    if (existing) {
+  //      return prev.map((i) =>
+  //        i.Service === item.Service ? { ...i, quantity: i.quantity + 1 } : i
+  //      );
+  //    }
+  //    return [...prev, { ...item, price, quantity: 1 }];
+  //  });
+  //};
 
   const handleRemoveFromCart = (service: string) => {
     setCart((prev) => prev.filter((i) => i.Service !== service));
@@ -230,7 +230,7 @@ export default function BuyNow() {
                   key={item.Service + i}
                   item={item}
                   price={getPrice(item)}
-                  onAddToCart={handleAddToCart}
+                  // onAddToCart={handleAddToCart}
                 />
               ))}
             </AnimatePresence>
