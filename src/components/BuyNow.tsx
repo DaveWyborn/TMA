@@ -68,9 +68,14 @@ const PricingCard = ({ item, price, onAddToCart }: PricingCardProps) => (
       {item["Pricing Type"].includes("Monthly") ? "/mo" : ""}
     </p>
     <ul>
-      {[...Array(5)].map(
-        (_, i) => item[`Feature ${i + 1}`] && <li key={i}>{item[`Feature ${i + 1}`] as React.ReactNode}</li>
-      )}
+      {
+        [...Array(5)].map(
+          (_, i) =>
+            item[`Feature ${i + 1}`] && (
+              <li key={i}>{item[`Feature ${i + 1}`]}</li>
+            )
+        ) as React.ReactNode[] // ✅ Assert entire map result!
+      }
     </ul>
     <button onClick={() => onAddToCart(item, price)}>Add to Selection</button>
   </motion.div>
