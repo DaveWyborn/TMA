@@ -68,7 +68,7 @@ const ServiceSelection = () => {
           <button
             key={service.id}
             onClick={() => setSelectedService(service)}
-            className="service-item flex items-start space-x-4 p-6 border rounded-lg shadow-[0_4px_10px_0_rgba(173,114,249,0.3)] hover:shadow-[0_6px_15px_0_rgba(173,114,249,0.5)] transition-shadow duration-300 text-left w-full"
+            className="service-item flex items-start space-x-4 p-6 border rounded-lg shadow-md hover:shadow-[0_6px_15px_0_rgba(173,114,249,0.5)] transition-shadow duration-300 text-left w-full"
           >
             <Image
               src={service.icon}
