@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import Wireframe from "@/components/Wireframe"; // ✅ Import the Wireframe component
+import type { DOMPurifyI } from 'dompurify';
 
 // Import service descriptions
 import analyticsDescription from "./services/analytics";
@@ -12,7 +13,7 @@ import visualisationDescription from "./services/visualisation";
 import consentDescription from "./services/consent";
 
 // ✅ Dynamically load DOMPurify only in the browser to prevent SSR issues
-let DOMPurify: unknown = null;
+let DOMPurify: DOMPurifyI | null = null;
 if (typeof window !== "undefined") {
   import("dompurify").then((mod) => {
     DOMPurify = mod.default || mod;
