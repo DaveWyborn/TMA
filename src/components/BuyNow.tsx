@@ -79,10 +79,18 @@ export default function BuyNow() {
               <span className="text-base font-normal">/month</span>
             </p>
             <ul className="text-sm text-gray-700 mb-4 space-y-2">
-              <li>✅ Google Tag Manager setup & monitoring</li>
-              <li>✅ Looker Studio dashboard {siteType === "ecommerce" && "(eCommerce-ready)"}</li>
-              <li>✅ Consent Management & compliance</li>
-              <li>✅ Ongoing site health monitoring</li>
+              <li>✅ Clear, accurate tracking from day one</li>
+              <li>✅ Simple dashboard to see what’s working</li>
+              <li>✅ Fully compliant data collection</li>
+              {tier.name !== "Small Business" && (
+                <li>✅ Proactive checks & insights each month</li>
+              )}
+              {tier.name === "Established Business" && (
+                <>
+                  <li>✅ Customised reporting for your goals</li>
+                  <li>✅ Priority support & personal optimisation tips</li>
+                </>
+              )}
             </ul>
             {tier.name === "Established Business" && siteType === "ecommerce" && (
               <p className="text-xs text-gray-500 mb-4">
