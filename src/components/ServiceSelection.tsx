@@ -14,13 +14,7 @@ type Service = {
 };
 
 const services: Service[] = [
-  {
-    id: "visual",
-    title: "Visual Results",
-    description: "We deliver clear reporting and insights so you can see what works.",
-    icon: "/icons/visual.svg",
-    points: ["Looker Studio dashboards with live data", "Easy sharing with your team", "Actionable insights"],
-  },
+  
   {
     id: "tracking",
     title: "Accurate Tracking",
@@ -28,6 +22,15 @@ const services: Service[] = [
     icon: "/icons/tracking.svg",
     points: ["Google Tag Manager setup", "Key events tracked correctly", "No data leaks or gaps"],
   },
+  
+  {
+    id: "visual",
+    title: "Visual Results",
+    description: "We deliver clear reporting and insights so you can see what works.",
+    icon: "/icons/visual.svg",
+    points: ["Looker Studio dashboards with live data", "Easy sharing with your team", "Actionable insights"],
+  },
+  
   {
     id: "consent",
     title: "Privacy & Compliance",
