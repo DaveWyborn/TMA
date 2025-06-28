@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import Wireframe from "@/components/Wireframe"; // ✅ Import the Wireframe component
-import type { default as DOMPurifyType } from 'dompurify';
+
 
 // Import service descriptions
 import analyticsDescription from "./services/analytics";
