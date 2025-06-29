@@ -54,12 +54,19 @@ export default function BuyNowForm() {
     website: "",
   });
 
+  const [callReason, setCallReason] = useState("Discuss pricing");
+
   const [selectedTier, setSelectedTier] = useState(tiers[0].name);
   const [siteType, setSiteType] = useState("marketing");
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [modalView, setModalView] = useState<"decision" | "callForm" | "paymentForm">("decision");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCallReasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCallReason(e.target.value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,7 +90,7 @@ export default function BuyNowForm() {
   };
 
   const handleEnquiry = async () => {
-    const dataToSend = { ...formData, tier: selectedTier, siteType };
+    const dataToSend = { ...formData, tier: selectedTier, siteType, callReason };
 
     const res = await fetch("/api/enquiry", {
       method: "POST",
@@ -94,9 +101,20 @@ export default function BuyNowForm() {
     if (res.ok) {
       alert("Your enquiry has been sent. We'll be in touch soon.");
       setIsFormOpen(false);
+      setModalView("decision");
     } else {
       alert("Something went wrong. Please try again.");
     }
+  };
+
+  const openModal = () => {
+    setIsFormOpen(true);
+    setModalView("decision");
+  };
+
+  const closeModal = () => {
+    setIsFormOpen(false);
+    setModalView("decision");
   };
 
   return (
@@ -167,7 +185,7 @@ export default function BuyNowForm() {
             </ul>
             <button
               type="button"
-              onClick={(e) => { e.stopPropagation(); setIsFormOpen(true); }}
+              onClick={(e) => { e.stopPropagation(); openModal(); }}
               className={`mt-2 px-4 py-2 rounded transition ${
                 selectedTier === tier.name
                   ? "bg-[#AD72F9] text-white hover:bg-[#8a4bdc]"
@@ -188,80 +206,187 @@ export default function BuyNowForm() {
       {isFormOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={() => setIsFormOpen(false)}
+          onClick={closeModal}
         >
           <div
             className="bg-white p-6 rounded shadow max-w-lg w-full relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setIsFormOpen(false)}
+              onClick={closeModal}
               className="absolute top-4 right-4 text-xl font-bold hover:text-red-600"
               aria-label="Close modal"
               type="button"
             >
               ✕
             </button>
-            <h2 className="text-xl font-bold mb-2">Complete Your Details</h2>
-            <p className="text-gray-700 mb-4">
-              You have selected {selectedTier} for a {siteType} site.
-            </p>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="border p-2 w-full"
-              />
-              <input
-                type="text"
-                name="company"
-                placeholder="Company Name (optional)"
-                value={formData.company}
-                onChange={handleChange}
-                className="border p-2 w-full"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Your Email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="border p-2 w-full"
-              />
-              <input
-                type="url"
-                name="website"
-                placeholder="Website URL"
-                value={formData.website}
-                onChange={handleChange}
-                required
-                className="border p-2 w-full"
-              />
 
-              <input type="hidden" name="tier" value={selectedTier} />
-              <input type="hidden" name="siteType" value={siteType} />
+            {modalView === "decision" && (
+              <>
+                <h2 className="text-xl font-bold mb-6 text-center">Choose an Action</h2>
+                <div className="flex flex-col md:flex-row gap-6 justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setModalView("callForm")}
+                    className="flex-1 bg-gray-500 text-white px-6 py-6 rounded text-lg font-semibold hover:bg-gray-700"
+                  >
+                    Book a Call
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalView("paymentForm")}
+                    className="flex-1 bg-[#AD72F9] text-white px-6 py-6 rounded text-lg font-semibold hover:bg-[#8a4bdc] transition"
+                  >
+                    Make Payment
+                  </button>
+                </div>
+              </>
+            )}
 
-              <div className="flex flex-col md:flex-row gap-4">
-                <button
-                  type="button"
-                  onClick={handleEnquiry}
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-                >
-                  Book a Call
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc] transition"
-                >
-                  Make Payment
-                </button>
-              </div>
-            </form>
+            {modalView === "callForm" && (
+              <>
+                <h2 className="text-xl font-bold mb-2">Book a Call</h2>
+                <p className="text-gray-700 mb-4">
+                  You have selected {selectedTier} for a {siteType} site.
+                </p>
+                <form onSubmit={(e) => { e.preventDefault(); handleEnquiry(); }} className="space-y-4">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 w-full"
+                  />
+                  <input
+                    type="text"
+                    name="company"
+                    placeholder="Company Name (optional)"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="border p-2 w-full"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 w-full"
+                  />
+                  <input
+                    type="url"
+                    name="website"
+                    placeholder="Website URL"
+                    value={formData.website}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 w-full"
+                  />
+                  <label className="block text-gray-700 font-semibold">
+                    What do you hope to get from the call?
+                    <select
+                      name="callReason"
+                      value={callReason}
+                      onChange={handleCallReasonChange}
+                      className="border p-2 w-full mt-1"
+                      required
+                    >
+                      <option value="Discuss pricing">Discuss pricing</option>
+                      <option value="Clarify features">Clarify features</option>
+                      <option value="Just want to meet you">Just want to meet you</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </label>
+
+                  <input type="hidden" name="tier" value={selectedTier} />
+                  <input type="hidden" name="siteType" value={siteType} />
+
+                  <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setModalView("decision")}
+                      className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                    >
+                      Send Enquiry
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
+
+            {modalView === "paymentForm" && (
+              <>
+                <h2 className="text-xl font-bold mb-2">Make Payment</h2>
+                <p className="text-gray-700 mb-4">
+                  You have selected {selectedTier} for a {siteType} site.
+                </p>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 w-full"
+                  />
+                  <input
+                    type="text"
+                    name="company"
+                    placeholder="Company Name (optional)"
+                    value={formData.company}
+                    onChange={handleChange}
+                    className="border p-2 w-full"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 w-full"
+                  />
+                  <input
+                    type="url"
+                    name="website"
+                    placeholder="Website URL"
+                    value={formData.website}
+                    onChange={handleChange}
+                    required
+                    className="border p-2 w-full"
+                  />
+
+                  <input type="hidden" name="tier" value={selectedTier} />
+                  <input type="hidden" name="siteType" value={siteType} />
+
+                  <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setModalView("decision")}
+                      className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc] transition"
+                    >
+                      Make Payment
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}
