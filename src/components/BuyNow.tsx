@@ -12,6 +12,7 @@ export default function BuyNowForm() {
 
   const [selectedTier, setSelectedTier] = useState("Small Business");
   const [siteType, setSiteType] = useState("marketing");
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,6 +35,23 @@ export default function BuyNowForm() {
       window.location.href = data.url;
     } else {
       alert(data.error || "Something went wrong. Please try again.");
+    }
+  };
+
+  const handleEnquiry = async () => {
+    const dataToSend = { ...formData, tier: selectedTier, siteType };
+
+    const res = await fetch("/api/enquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
+    });
+
+    if (res.ok) {
+      alert("Your enquiry has been sent. We'll be in touch soon.");
+      setIsFormOpen(false);
+    } else {
+      alert("Something went wrong. Please try again.");
     }
   };
 
@@ -89,53 +107,85 @@ export default function BuyNowForm() {
         )}
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="border p-2 w-full"
-        />
-        <input
-          type="text"
-          name="company"
-          placeholder="Company Name (optional)"
-          value={formData.company}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="border p-2 w-full"
-        />
-        <input
-          type="url"
-          name="website"
-          placeholder="Website URL"
-          value={formData.website}
-          onChange={handleChange}
-          required
-          className="border p-2 w-full"
-        />
-
-        <input type="hidden" name="tier" value={selectedTier} />
-        <input type="hidden" name="siteType" value={siteType} />
-
+      {!isFormOpen && (
         <button
-          type="submit"
-          className="bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863] transition"
+          onClick={() => setIsFormOpen(true)}
+          className="bg-[#1B1F3B] text-white px-6 py-3 rounded hover:bg-[#313863]"
         >
-          Continue to Payment
+          Continue
         </button>
-      </form>
+      )}
+
+      {isFormOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow max-w-lg w-full relative">
+            <button
+              onClick={() => setIsFormOpen(false)}
+              className="absolute top-4 right-4 text-xl font-bold"
+              aria-label="Close modal"
+              type="button"
+            >
+              ✕
+            </button>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                type="text"
+                name="name"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="border p-2 w-full"
+              />
+              <input
+                type="text"
+                name="company"
+                placeholder="Company Name (optional)"
+                value={formData.company}
+                onChange={handleChange}
+                className="border p-2 w-full"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Your Email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="border p-2 w-full"
+              />
+              <input
+                type="url"
+                name="website"
+                placeholder="Website URL"
+                value={formData.website}
+                onChange={handleChange}
+                required
+                className="border p-2 w-full"
+              />
+
+              <input type="hidden" name="tier" value={selectedTier} />
+              <input type="hidden" name="siteType" value={siteType} />
+
+              <div className="flex flex-col md:flex-row gap-4">
+                <button
+                  type="button"
+                  onClick={handleEnquiry}
+                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
+                >
+                  Make Enquiry
+                </button>
+                <button
+                  type="submit"
+                  className="bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863] transition"
+                >
+                  Make Payment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
