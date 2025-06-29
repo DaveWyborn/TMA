@@ -12,7 +12,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { name, company, email, website, tier, siteType } = req.body;
+const { name, company, email, website, tier, siteType } = req.body as {
+  name: string;
+  company?: string;
+  email: string;
+  website: string;
+  tier: TierKey;
+  siteType: SiteType;
+};
 
   if (!name || !email || !website || !tier || !siteType) {
     return res.status(400).json({ error: 'Missing required fields' });
@@ -28,10 +35,7 @@ const pricing = {
 type TierKey = keyof typeof pricing;
 type SiteType = keyof (typeof pricing)[TierKey];
 
-const { tier, siteType } = req.body as {
-  tier: TierKey;
-  siteType: SiteType;
-};
+
 
 const unitAmount = pricing[tier][siteType] ?? 0;
 
