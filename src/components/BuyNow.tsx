@@ -100,7 +100,7 @@ export default function BuyNowForm() {
   };
 
   return (
-    <section className="w-full max-w-5xl mx-auto p-4 bg-white text-gray-900">
+    <section className="w-full p-4 bg-white text-gray-900">
       <h1 className="text-2xl font-bold mb-4">Get Started</h1>
 
       <div className="flex gap-4 mb-6">
@@ -132,9 +132,10 @@ export default function BuyNowForm() {
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className={`border p-6 shadow-md rounded-lg hover:shadow-xl hover:border-[#AD72F9] ${
+            onClick={() => setSelectedTier(tier.name)}
+            className={`border p-6 shadow-md rounded-lg cursor-pointer transition-colors ${
               selectedTier === tier.name ? "border-[#AD72F9]" : "border-gray-300"
-            }`}
+            } hover:border-[#AD72F9] hover:shadow-xl`}
           >
             <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
             <p className="text-gray-700 text-sm mb-1">{siteType === 'marketing' ? tier.volume : 'Based on total sales volume'}</p>
@@ -150,14 +151,11 @@ export default function BuyNowForm() {
             </ul>
             <button
               type="button"
-              onClick={() => {
-                setSelectedTier(tier.name);
-                setIsFormOpen(true);
-              }}
+              onClick={(e) => { e.stopPropagation(); setIsFormOpen(true); }}
               className={`mt-2 px-4 py-2 rounded transition ${
                 selectedTier === tier.name
                   ? "bg-[#AD72F9] text-white hover:bg-[#8a4bdc]"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  : "bg-gray-200 text-gray-800 hover:bg-[#AD72F9] hover:text-white"
               }`}
             >
               Select
@@ -189,6 +187,10 @@ export default function BuyNowForm() {
             >
               ✕
             </button>
+            <h2 className="text-xl font-bold mb-2">Complete Your Details</h2>
+            <p className="text-gray-700 mb-4">
+              You have selected {selectedTier} for a {siteType} site.
+            </p>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 type="text"
