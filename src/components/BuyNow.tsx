@@ -158,42 +158,46 @@ export default function BuyNowForm() {
               selectedTier === tier.name ? "border-[#AD72F9] shadow-lg ring-2 ring-[#AD72F9]" : "border-gray-300"
             } hover:border-[#AD72F9] hover:shadow-xl`}
           >
-            {tier.name === "Growing Business" && (
-              <span className="inline-block bg-[#AD72F9] text-white text-xs px-2 py-1 rounded mb-2">
-                Most Popular
-              </span>
-            )}
-            <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
-            <p className="text-gray-700 text-sm mb-1">
-              {siteType === 'marketing'
-                ? tier.volume
-                : index === 0
-                  ? 'Up to £10k online sales per month'
-                  : index === 1
-                    ? '£10k–£50k online sales per month'
-                    : '£50k+ online sales per month'}
-            </p>
-            <p className="text-xl font-bold mb-4">
-              £
-              {siteType === "marketing" ? tier.price : tier.ecommercePrice}
-              /mo
-            </p>
-            <ul className="text-sm mb-4 list-disc list-inside space-y-1">
-              {tier.bullets.map((point, i) => (
-                <li key={i}>{point}</li>
-              ))}
-            </ul>
-            <button
-              type="button"
-              onClick={(e) => { e.stopPropagation(); openModal(); }}
-              className={`mt-auto px-4 py-2 rounded transition ${
-                selectedTier === tier.name
-                  ? "bg-[#AD72F9] text-white hover:bg-[#8a4bdc]"
-                  : "bg-gray-200 text-gray-800 hover:bg-[#AD72F9] hover:text-white"
-              }`}
-            >
-              Select
-            </button>
+            <div className="flex flex-col h-full">
+              {tier.name === "Growing Business" && (
+                <span className="inline-block bg-[#AD72F9] text-white text-xs px-2 py-1 rounded mb-2">
+                  Most Popular
+                </span>
+              )}
+              <div className={`${tier.name !== "Growing Business" ? 'pt-8' : ''}`}>
+                <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
+                <p className="text-gray-700 text-sm mb-1">
+                  {siteType === 'marketing'
+                    ? tier.volume
+                    : index === 0
+                      ? 'Up to £10k online sales per month'
+                      : index === 1
+                        ? '£10k–£50k online sales per month'
+                        : '£50k+ online sales per month'}
+                </p>
+                <p className="text-xl font-bold mb-4">
+                  £
+                  {siteType === "marketing" ? tier.price : tier.ecommercePrice}
+                  /mo
+                </p>
+                <ul className="text-sm mb-4 list-disc list-inside space-y-1">
+                  {tier.bullets.map((point, i) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); openModal(); }}
+                  className={`mt-auto px-4 py-2 rounded transition ${
+                    selectedTier === tier.name
+                      ? "bg-[#AD72F9] text-white hover:bg-[#8a4bdc]"
+                      : "bg-gray-200 text-gray-800 hover:bg-[#AD72F9] hover:text-white"
+                  }`}
+                >
+                  Select
+                </button>
+              </div>
+            </div>
           </div>
         ))}
       </div>
