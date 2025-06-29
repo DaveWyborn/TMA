@@ -127,7 +127,7 @@ export default function BuyNowForm() {
       <div className="flex gap-4 mb-6">
         <button
           type="button"
-          onClick={() => setSiteType("marketing")}
+          onClick={() => { setSiteType("marketing"); setSelectedTier("Growing Business"); }}
           className={
             siteType === "marketing"
               ? "bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc]"
@@ -138,7 +138,7 @@ export default function BuyNowForm() {
         </button>
         <button
           type="button"
-          onClick={() => setSiteType("ecommerce")}
+          onClick={() => { setSiteType("ecommerce"); setSelectedTier("Growing Business"); }}
           className={
             siteType === "ecommerce"
               ? "bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc]"
@@ -154,7 +154,7 @@ export default function BuyNowForm() {
           <div
             key={tier.name}
             onClick={() => setSelectedTier(tier.name)}
-            className={`border p-6 shadow-md rounded-lg cursor-pointer transition-colors flex flex-col h-full ${
+            className={`border p-6 shadow-md rounded-lg cursor-pointer transition-colors flex flex-col h-full ${tier.name !== "Growing Business" ? "mt-6" : ""} ${
               selectedTier === tier.name ? "border-[#AD72F9] shadow-lg ring-2 ring-[#AD72F9]" : "border-gray-300"
             } hover:border-[#AD72F9] hover:shadow-xl`}
           >
