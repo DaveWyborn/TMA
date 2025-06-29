@@ -129,7 +129,7 @@ export default function BuyNowForm() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-        {tiers.map((tier) => (
+        {tiers.map((tier, index) => (
           <div
             key={tier.name}
             onClick={() => setSelectedTier(tier.name)}
@@ -138,7 +138,15 @@ export default function BuyNowForm() {
             } hover:border-[#AD72F9] hover:shadow-xl`}
           >
             <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
-            <p className="text-gray-700 text-sm mb-1">{siteType === 'marketing' ? tier.volume : 'Based on total sales volume'}</p>
+            <p className="text-gray-700 text-sm mb-1">
+              {siteType === 'marketing'
+                ? tier.volume
+                : index === 0
+                  ? 'Up to £10k online sales per month'
+                  : index === 1
+                    ? '£10k–£50k online sales per month'
+                    : '£50k+ online sales per month'}
+            </p>
             <p className="text-xl font-bold mb-4">
               £
               {siteType === "marketing" ? tier.price : tier.ecommercePrice}
