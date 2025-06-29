@@ -101,7 +101,10 @@ export default function BuyNowForm() {
 
   return (
     <section className="w-full p-4 bg-white text-gray-900">
-      <h1 className="text-2xl font-bold mb-4">Get Started</h1>
+      <h1 className="text-2xl font-bold mb-4">Flexible Plans That Grow With You</h1>
+      <p className="text-gray-700 mb-4">
+        Choose a plan that suits you best. You can make a payment now or book a call to chat it through — no commitment needed.
+      </p>
 
       <div className="flex gap-4 mb-6">
         <button
@@ -137,6 +140,11 @@ export default function BuyNowForm() {
               selectedTier === tier.name ? "border-[#AD72F9]" : "border-gray-300"
             } hover:border-[#AD72F9] hover:shadow-xl`}
           >
+            {tier.name === "Growing Business" && (
+              <span className="inline-block bg-[#AD72F9] text-white text-xs px-2 py-1 rounded mb-2">
+                Most Popular
+              </span>
+            )}
             <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
             <p className="text-gray-700 text-sm mb-1">
               {siteType === 'marketing'
@@ -173,9 +181,8 @@ export default function BuyNowForm() {
       </div>
 
       <p className="text-gray-700 mb-8 text-center">
-        {siteType === "marketing"
-          ? "Need something more complex? Larger marketing sites and multi-domain setups — get in touch to discuss a custom plan."
-          : "Larger eCommerce sites like auctions or marketplaces? Get in touch — typical pricing starts at £149/mo."}
+        Not sure which plan fits? If you feel your needs are different — or the price feels out of reach for your situation —
+        <a href="/book-call" className="text-[#AD72F9] underline ml-1">book a call</a> and we’ll find the right fit together.
       </p>
 
       {isFormOpen && (
@@ -245,7 +252,7 @@ export default function BuyNowForm() {
                   onClick={handleEnquiry}
                   className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
                 >
-                  Make Enquiry
+                  Book a Call
                 </button>
                 <button
                   type="submit"
