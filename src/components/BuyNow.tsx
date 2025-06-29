@@ -224,6 +224,22 @@ export default function BuyNowForm() {
             {modalView === "decision" && (
               <>
                 <h2 className="text-xl font-bold mb-6 text-center">Choose an Action</h2>
+                <p className="text-gray-700 mb-4 text-center">
+                  You've chosen {selectedTier} for a {siteType} site.
+                  <br />
+                  Price: £{siteType === "marketing"
+                    ? tiers.find(t => t.name === selectedTier)?.price
+                    : tiers.find(t => t.name === selectedTier)?.ecommercePrice
+                  }/mo
+                </p>
+                <ul className="text-sm mb-4 list-disc list-inside space-y-1">
+                  {tiers.find(t => t.name === selectedTier)?.bullets.map((point, i) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+                <p className="text-gray-700 mb-4 text-center">
+                  How would you like to proceed?
+                </p>
                 <div className="flex flex-col md:flex-row gap-6 justify-center">
                   <button
                     type="button"
@@ -299,6 +315,13 @@ export default function BuyNowForm() {
                       <option value="Just want to meet you">Just want to meet you</option>
                       <option value="Other">Other</option>
                     </select>
+                    {callReason === "Other" && (
+                      <textarea
+                        name="otherReason"
+                        placeholder="Tell us more"
+                        className="border p-2 w-full mt-2"
+                      ></textarea>
+                    )}
                   </label>
 
                   <input type="hidden" name="tier" value={selectedTier} />
@@ -326,6 +349,9 @@ export default function BuyNowForm() {
             {modalView === "paymentForm" && (
               <>
                 <h2 className="text-xl font-bold mb-2">Make Payment</h2>
+                <p className="text-sm text-gray-600 mb-2">
+                  Please note: This plan is billed as a 12-month minimum contract.
+                </p>
                 <p className="text-gray-700 mb-4">
                   You have selected {selectedTier} for a {siteType} site.
                 </p>
