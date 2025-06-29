@@ -56,7 +56,7 @@ export default function BuyNowForm() {
 
   const [callReason, setCallReason] = useState("Discuss pricing");
 
-  const [selectedTier, setSelectedTier] = useState(tiers[0].name);
+  const [selectedTier, setSelectedTier] = useState(tiers[1].name);
   const [siteType, setSiteType] = useState("marketing");
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [modalView, setModalView] = useState<"decision" | "callForm" | "paymentForm">("decision");
@@ -154,8 +154,8 @@ export default function BuyNowForm() {
           <div
             key={tier.name}
             onClick={() => setSelectedTier(tier.name)}
-            className={`border p-6 shadow-md rounded-lg cursor-pointer transition-colors ${
-              selectedTier === tier.name ? "border-[#AD72F9]" : "border-gray-300"
+            className={`border p-6 shadow-md rounded-lg cursor-pointer transition-colors flex flex-col h-full ${
+              selectedTier === tier.name ? "border-[#AD72F9] shadow-lg ring-2 ring-[#AD72F9]" : "border-gray-300"
             } hover:border-[#AD72F9] hover:shadow-xl`}
           >
             {tier.name === "Growing Business" && (
@@ -186,7 +186,7 @@ export default function BuyNowForm() {
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); openModal(); }}
-              className={`mt-2 px-4 py-2 rounded transition ${
+              className={`mt-auto px-4 py-2 rounded transition ${
                 selectedTier === tier.name
                   ? "bg-[#AD72F9] text-white hover:bg-[#8a4bdc]"
                   : "bg-gray-200 text-gray-800 hover:bg-[#AD72F9] hover:text-white"
