@@ -19,13 +19,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Define your dynamic pricing in pennies
-  const pricing = {
-    "Small Business": { marketing: 2900, ecommerce: 3900 },
-    "Growing Business": { marketing: 4900, ecommerce: 6900 },
-    "Established Business": { marketing: 6900, ecommerce: 9900 },
-  };
+const pricing = {
+  "Small Business": { marketing: 29, ecommerce: 39 },
+  "Growing Business": { marketing: 49, ecommerce: 69 },
+  "Established Business": { marketing: 69, ecommerce: 99 },
+} as const;
 
-  const unitAmount = pricing[tier]?.[siteType] || 0;
+type TierKey = keyof typeof pricing;
+type SiteType = keyof (typeof pricing)[TierKey];
+
+const { tier, siteType } = req.body as {
+  tier: TierKey;
+  siteType: SiteType;
+};
+
+const unitAmount = pricing[tier][siteType] ?? 0;
 
   if (!unitAmount) {
     return res.status(400).json({ error: 'Invalid pricing tier or site type' });
