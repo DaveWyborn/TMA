@@ -56,7 +56,7 @@ export default function BuyNowForm() {
   };
 
   return (
-    <section className="max-w-xl mx-auto p-4">
+    <section className="max-w-5xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Get Started</h1>
 
       <div className="flex gap-4 mb-6">
@@ -84,17 +84,21 @@ export default function BuyNowForm() {
         </button>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {["Small Business", "Growing Business", "Established Business"].map(
           (tier) => (
             <div
               key={tier}
-              className={`border p-4 rounded ${
+              className={`border p-4 shadow-lg rounded-lg p-6 hover:shadow-xl ${
                 selectedTier === tier ? "border-blue-600" : "border-gray-300"
               }`}
             >
               <h3 className="font-semibold mb-2">{tier}</h3>
-              <p className="text-sm mb-4">Some benefit bullets here for this tier...</p>
+              <ul className="text-sm mb-4 list-disc list-inside space-y-1">
+                <li>Visual results with easy-to-understand dashboards</li>
+                <li>Clear actions and recommendations</li>
+                <li>Performance monitoring and alerts</li>
+              </ul>
               <button
                 type="button"
                 onClick={() => setSelectedTier(tier)}
@@ -117,11 +121,17 @@ export default function BuyNowForm() {
       )}
 
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow max-w-lg w-full relative">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setIsFormOpen(false)}
+        >
+          <div
+            className="bg-white p-6 rounded shadow max-w-lg w-full relative"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               onClick={() => setIsFormOpen(false)}
-              className="absolute top-4 right-4 text-xl font-bold"
+              className="absolute top-4 right-4 text-xl font-bold hover:text-red-600"
               aria-label="Close modal"
               type="button"
             >
