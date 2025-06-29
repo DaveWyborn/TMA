@@ -200,7 +200,7 @@ export default function BuyNowForm() {
 
       <p className="text-gray-700 mb-8 text-center">
         Not sure which plan fits? If you feel your needs are different — or the price feels out of reach for your situation —
-        <a href="/book-call" className="text-[#AD72F9] underline ml-1">book a call</a> and we’ll find the right fit together.
+        <a href="/book-call" className="text-[#AD72F9] underline ml-1">book a call</a> and we&rsquo;ll find the right fit together.
       </p>
 
       {isFormOpen && (
