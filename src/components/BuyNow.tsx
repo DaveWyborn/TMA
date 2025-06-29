@@ -109,7 +109,7 @@ export default function BuyNowForm() {
           onClick={() => setSiteType("marketing")}
           className={
             siteType === "marketing"
-              ? "bg-blue-600 text-white px-4 py-2 rounded"
+              ? "bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc]"
               : "bg-gray-200 px-4 py-2 rounded"
           }
         >
@@ -120,7 +120,7 @@ export default function BuyNowForm() {
           onClick={() => setSiteType("ecommerce")}
           className={
             siteType === "ecommerce"
-              ? "bg-blue-600 text-white px-4 py-2 rounded"
+              ? "bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc]"
               : "bg-gray-200 px-4 py-2 rounded"
           }
         >
@@ -133,8 +133,8 @@ export default function BuyNowForm() {
           <div
             key={tier.name}
             className={`border p-6 shadow-md rounded-lg hover:shadow-xl ${
-              selectedTier === tier.name ? "border-blue-600" : "border-gray-300"
-            }`}
+              selectedTier === tier.name ? "border-[#AD72F9]" : "border-gray-300"
+            } hover:border-[#AD72F9]`}
           >
             <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
             <p className="text-gray-700 text-sm mb-1">{tier.volume}</p>
