@@ -100,7 +100,7 @@ export default function BuyNowForm() {
   };
 
   return (
-    <section className="max-w-5xl mx-auto p-4">
+    <section className="max-w-5xl mx-auto p-4 bg-white text-gray-900">
       <h1 className="text-2xl font-bold mb-4">Get Started</h1>
 
       <div className="flex gap-4 mb-6">
@@ -110,7 +110,7 @@ export default function BuyNowForm() {
           className={
             siteType === "marketing"
               ? "bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc]"
-              : "bg-gray-200 px-4 py-2 rounded"
+              : "bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
           }
         >
           Marketing Site
@@ -121,7 +121,7 @@ export default function BuyNowForm() {
           className={
             siteType === "ecommerce"
               ? "bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc]"
-              : "bg-gray-200 px-4 py-2 rounded"
+              : "bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
           }
         >
           Ecommerce Site
@@ -132,9 +132,9 @@ export default function BuyNowForm() {
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className={`border p-6 shadow-md rounded-lg hover:shadow-xl ${
+            className={`border p-6 shadow-md rounded-lg hover:shadow-xl hover:border-[#AD72F9] ${
               selectedTier === tier.name ? "border-[#AD72F9]" : "border-gray-300"
-            } hover:border-[#AD72F9]`}
+            }`}
           >
             <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
             <p className="text-gray-700 text-sm mb-1">{tier.volume}</p>
@@ -150,8 +150,11 @@ export default function BuyNowForm() {
             </ul>
             <button
               type="button"
-              onClick={() => setSelectedTier(tier.name)}
-              className="mt-2 bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863] transition"
+              onClick={() => {
+                setSelectedTier(tier.name);
+                setIsFormOpen(true);
+              }}
+              className="mt-2 bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc] transition"
             >
               Select
             </button>
@@ -164,15 +167,6 @@ export default function BuyNowForm() {
           ? "Need something more complex? Larger marketing sites and multi-domain setups — get in touch to discuss a custom plan."
           : "Larger eCommerce sites like auctions or marketplaces? Get in touch — typical pricing starts at £149/mo."}
       </p>
-
-      {!isFormOpen && (
-        <button
-          onClick={() => setIsFormOpen(true)}
-          className="bg-[#1B1F3B] text-white px-6 py-3 rounded hover:bg-[#313863]"
-        >
-          Continue
-        </button>
-      )}
 
       {isFormOpen && (
         <div
@@ -241,7 +235,7 @@ export default function BuyNowForm() {
                 </button>
                 <button
                   type="submit"
-                  className="bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863] transition"
+                  className="bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc] transition"
                 >
                   Make Payment
                 </button>
