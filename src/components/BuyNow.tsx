@@ -100,7 +100,7 @@ export default function BuyNowForm() {
   };
 
   return (
-    <section className="max-w-5xl mx-auto p-4 bg-white text-gray-900">
+    <section className="w-full max-w-5xl mx-auto p-4 bg-white text-gray-900">
       <h1 className="text-2xl font-bold mb-4">Get Started</h1>
 
       <div className="flex gap-4 mb-6">
@@ -137,7 +137,7 @@ export default function BuyNowForm() {
             }`}
           >
             <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
-            <p className="text-gray-700 text-sm mb-1">{tier.volume}</p>
+            <p className="text-gray-700 text-sm mb-1">{siteType === 'marketing' ? tier.volume : 'Based on total sales volume'}</p>
             <p className="text-xl font-bold mb-4">
               £
               {siteType === "marketing" ? tier.price : tier.ecommercePrice}
@@ -154,7 +154,11 @@ export default function BuyNowForm() {
                 setSelectedTier(tier.name);
                 setIsFormOpen(true);
               }}
-              className="mt-2 bg-[#AD72F9] text-white px-4 py-2 rounded hover:bg-[#8a4bdc] transition"
+              className={`mt-2 px-4 py-2 rounded transition ${
+                selectedTier === tier.name
+                  ? "bg-[#AD72F9] text-white hover:bg-[#8a4bdc]"
+                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              }`}
             >
               Select
             </button>
