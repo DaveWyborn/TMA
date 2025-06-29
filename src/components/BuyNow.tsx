@@ -225,7 +225,7 @@ export default function BuyNowForm() {
               <>
                 <h2 className="text-xl font-bold mb-6 text-center">Choose an Action</h2>
                 <p className="text-gray-700 mb-4 text-center">
-                  You've chosen {selectedTier} for a {siteType} site.
+                  You&rsquo;ve chosen {selectedTier} for a {siteType} site.
                   <br />
                   Price: £{siteType === "marketing"
                     ? tiers.find(t => t.name === selectedTier)?.price
