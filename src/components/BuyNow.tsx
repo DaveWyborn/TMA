@@ -2,6 +2,50 @@
 
 import { useState } from "react";
 
+type Tier = {
+  name: string;
+  volume: string;
+  price: number;
+  ecommercePrice: number;
+  bullets: string[];
+};
+
+const tiers: Tier[] = [
+  {
+    name: "Small Business",
+    volume: "0–30k visitors/month",
+    price: 29,
+    ecommercePrice: 49,
+    bullets: [
+      "Visual results with simple dashboards",
+      "Clear actions & basic recommendations",
+      "Standard monitoring & alerts"
+    ]
+  },
+  {
+    name: "Growing Business",
+    volume: "30k–100k visitors/month",
+    price: 49,
+    ecommercePrice: 79,
+    bullets: [
+      "Deeper custom dashboards",
+      "Priority performance alerts",
+      "Regular strategy check-ins"
+    ]
+  },
+  {
+    name: "Established Business",
+    volume: "100k+ visitors/month",
+    price: 69,
+    ecommercePrice: 149,
+    bullets: [
+      "Fully tailored dashboards & KPIs",
+      "Advanced analytics & tracking",
+      "Priority support & insights"
+    ]
+  }
+];
+
 export default function BuyNowForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -10,7 +54,7 @@ export default function BuyNowForm() {
     website: "",
   });
 
-  const [selectedTier, setSelectedTier] = useState("Small Business");
+  const [selectedTier, setSelectedTier] = useState(tiers[0].name);
   const [siteType, setSiteType] = useState("marketing");
   const [isFormOpen, setIsFormOpen] = useState(false);
 
@@ -84,32 +128,42 @@ export default function BuyNowForm() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {["Small Business", "Growing Business", "Established Business"].map(
-          (tier) => (
-            <div
-              key={tier}
-              className={`border p-4 shadow-lg rounded-lg p-6 hover:shadow-xl ${
-                selectedTier === tier ? "border-blue-600" : "border-gray-300"
-              }`}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+        {tiers.map((tier) => (
+          <div
+            key={tier.name}
+            className={`border p-6 shadow-md rounded-lg hover:shadow-xl ${
+              selectedTier === tier.name ? "border-blue-600" : "border-gray-300"
+            }`}
+          >
+            <h3 className="font-semibold text-lg mb-1">{tier.name}</h3>
+            <p className="text-gray-700 text-sm mb-1">{tier.volume}</p>
+            <p className="text-xl font-bold mb-4">
+              £
+              {siteType === "marketing" ? tier.price : tier.ecommercePrice}
+              /mo
+            </p>
+            <ul className="text-sm mb-4 list-disc list-inside space-y-1">
+              {tier.bullets.map((point, i) => (
+                <li key={i}>{point}</li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={() => setSelectedTier(tier.name)}
+              className="mt-2 bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863] transition"
             >
-              <h3 className="font-semibold mb-2">{tier}</h3>
-              <ul className="text-sm mb-4 list-disc list-inside space-y-1">
-                <li>Visual results with easy-to-understand dashboards</li>
-                <li>Clear actions and recommendations</li>
-                <li>Performance monitoring and alerts</li>
-              </ul>
-              <button
-                type="button"
-                onClick={() => setSelectedTier(tier)}
-                className="mt-4 bg-[#1B1F3B] text-white px-4 py-2 rounded hover:bg-[#313863]"
-              >
-                Select
-              </button>
-            </div>
-          )
-        )}
+              Select
+            </button>
+          </div>
+        ))}
       </div>
+
+      <p className="text-gray-700 mb-8 text-center">
+        {siteType === "marketing"
+          ? "Need something more complex? Larger marketing sites and multi-domain setups — get in touch to discuss a custom plan."
+          : "Larger eCommerce sites like auctions or marketplaces? Get in touch — typical pricing starts at £149/mo."}
+      </p>
 
       {!isFormOpen && (
         <button
