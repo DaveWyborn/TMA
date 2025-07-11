@@ -2,17 +2,24 @@
 
 import { useState } from "react";
 import TierCard from "./TierCard";
+import type { TierName } from "./TierCard"; // ✅ add this!
 import ServiceBox from "./ServiceBox";
 import BuyNowModal from "./BuyNowModal";
 
 const BuyNow = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedPremium, setSelectedPremium] = useState<string[]>([]);
-  const [currentTier, setCurrentTier] = useState("Tracker");
+  const [currentTier, setCurrentTier] = useState<TierName>("Tracker"); // ✅ type it!
   const [isCallModalOpen, setIsCallModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [activeTagline, setActiveTagline] = useState<string | null>(null);
 
+  const tiers: { tier: TierName; price: string }[] = [ // ✅ typed safely!
+    { tier: "Tracker", price: "£29" },
+    { tier: "Explorer", price: "£49" },
+    { tier: "Adventurer", price: "£69" },
+    { tier: "Trailblazer", price: "£89" },
+  ];
   const allServices = [
     {
       name: "Basic Reporting Dashboard",
@@ -116,7 +123,6 @@ const BuyNow = () => {
     else if (totalCount <= 4) setCurrentTier("Adventurer");
     else setCurrentTier("Trailblazer");
   };
-
   return (
     <section id="buy-now" className="buy-now-section">
       <h2 className="text-2xl font-bold mb-2 text-[var(--primary-color)]">
@@ -142,20 +148,15 @@ const BuyNow = () => {
 
         {/* 🟢 Tiers on the right */}
         <div className="tiers-column">
-          {[
-            { tier: "Tracker", price: "£29" },
-            { tier: "Explorer", price: "£49" },
-            { tier: "Adventurer", price: "£69" },
-            { tier: "Trailblazer", price: "£89" },
-          ].map(({ tier, price }) => (
-            <TierCard
-              key={tier}
-              tier={tier}
-              isActive={currentTier === tier}
-              price={price}
-            />
-          ))}
-        </div>
+        {tiers.map(({ tier, price }) => (
+          <TierCard
+            key={tier}
+            tier={tier}
+            isActive={currentTier === tier}
+            price={price}
+          />
+        ))}
+      </div>
       </div>
 
       <p className="text-sm text-gray-600 mt-4 max-w-xl mx-auto">
