@@ -22,7 +22,8 @@ const details = {
 } as const; // ✅ makes keys and values readonly & precise
 
 // ✅ Create a type for valid tier names:
-type TierName = keyof typeof details;
+export type TierName = keyof typeof details;
+
 
 const TierCard = ({
   tier,
