@@ -1,7 +1,7 @@
 import HeroSection from "@/components/HeroSection";
-import ServiceSelection from "@/components/ServiceSelection";
+import PromiseSection from "@/components/PromiseSection";
 import NavBar from "@/components/NavBar";
-import ContactForm from "@/components/ContactForm";
+import FooterSection from "@/components/FooterSection";
 import Testimonials from "@/components/Testimonials";
 import BuyNow from "@/components/BuyNow"; // 👈 new import
 
@@ -11,15 +11,15 @@ export default function Home() {
       <NavBar />
       <HeroSection />
 
-      <section className="service-section">
-        <ServiceSelection />
+      <section className="PromiseSection">
+        <PromiseSection />
       </section>
       <section id="testimonials" className="testimonials-section">
-        <Testimonials />
+        <Testimonials/>
       </section>
       <BuyNow /> {/* 👈 New Buy Now section */}
      
-      <ContactForm /> {/* 👈 Contact now stands on its own */}
+      <FooterSection /> {/* 👈 Contact now stands on its own */}
       
     </main>
   );

@@ -8,10 +8,13 @@
 :root {
   --primary-color: #1B1F3B; /* Updated to dark blue */
   --accent-color: #4A148C;
+  --accent-soft: #7E57C2;
   --dark-bg: #211445ff;
   --deep-purple: #2A0A5E;
   --light-text: #FAFAFA;
 }
+
+
 
 /* ==========================
    Base Styles
@@ -76,15 +79,15 @@ section {
 }
 
 .hero-heading {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 600;
   max-width: 600px;
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 .hero-button {
-  margin-top: 1.5rem;
+  margin-top: 5rem;
   padding: 0.75rem 2rem;
   font-size: 1.125rem;
   color: var(--dark-bg);
@@ -96,11 +99,17 @@ section {
 }
 
 .hero-button:hover {
-  background: #313863;
+  background: var(--primary-color);
   color: var(--light-text);
   transform: scale(1.05);
 }
 
+
+
+.hero-heading-muted {
+  opacity: 0.85;
+  font-style: italic;
+}
 /* ==========================
    Animated Background
    ========================== */
@@ -532,257 +541,99 @@ section {
 }
 
 
-/****************/
-/* Buy Now */
 
-
+/* ================================
+   Buy Now Section (Sticky + Snap)
+   ================================ */
 .buy-now-section {
-  padding: 4rem 1rem;
-  background-color: #fff;
-  text-align: center;
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-text);  /* white background from light-text */
+  color: var(--primary-color);          /* text uses primary brand colour */
+  padding: 2rem;
 }
 
 .buy-now-container {
+  display: flex;
+  flex-direction: column;
   max-width: 1200px;
-  margin: 0 auto;
-  padding-right: 20rem; /* account for sidebar */
-}
-
-.product-panel h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.product-panel p {
-  margin-bottom: 2rem;
-  color: #555;
-}
-
-.product-grid {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-}
-
-.product-card {
-  border: 1px solid #ddd;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
-.product-card h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.product-card p {
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.product-card button {
-  background-color: #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.product-card button:hover {
-  background-color: #1d4ed8;
-}
-
-.cart-sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 20rem;
-  height: 100vh;
-  background-color: #f9fafb;
-  border-left: 1px solid #ddd;
-  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
-  padding: 2rem 1rem;
-  overflow-y: auto;
-  z-index: 1000;
-  text-align: left;
-}
-
-.cart-sidebar h4 {
-  font-size: 1.25rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.cart-sidebar ul {
-  margin-bottom: 1rem;
-  list-style: none;
-  padding: 0;
-}
-
-.cart-sidebar li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.cart-sidebar button {
-  background: none;
-  border: none;
-  color: #dc2626;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.checkout-btn {
-  display: block;
   width: 100%;
-  background-color: #16a34a;
-  color: white;
-  padding: 0.75rem;
-  border-radius: 0.375rem;
-  text-align: center;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s;
 }
 
-.checkout-btn:hover {
-  background-color: #15803d;
-}
-
-.meeting-link {
-  margin-top: 4rem;
-  font-size: 0.875rem;
-  color: #666;
-}
-
-
-.buy-now-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  padding: 4rem 2rem;
-  max-width: 1400px;
-  margin: 0 auto;
-  align-items: stretch; /* 💥 Force equal column height */
-}
-
-.buy-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  height: 100%;
-}
-
-.product-block {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-
-.tall {
-  flex: 2;
-}
-
-.medium {
-  flex: 1;
-}
-
-/* Optional styling inside each block */
-.product-block h3 {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-
-.product-block .price {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-
-.product-block ul {
-  margin: 0 0 1rem 1.25rem;
-  list-style-type: disc;
-  color: #555;
-  font-size: 0.95rem;
-}
-
-.product-block button {
-  align-self: start;
-  background-color: #2563eb;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.product-block button:hover {
-  background-color: #1d4ed8;
-}
-
-/* Responsive */
-@media (max-width: 960px) {
-  .buy-now-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 768px) {
+  .buy-now-container {
+    flex-direction: row; /* tiers left, services right */
+    gap: 2rem;
   }
 }
 
-
-.buy-now-wrapper {
-  background-color: #ffffff;
-  padding: 6rem 1rem;
-}
-
-.buy-now-inner {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.buy-now-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 3rem;
-  color: #111827;
-}
-
-.toggles-row {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.toggle-group {
+.tiers-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
-.toggle-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  background: white;
+.services-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.buy-now-form {
+  margin-top: 2rem;
+}
+
+.buy-now-form button {
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.3s ease;
 }
 
-.toggle-btn.active {
-  background: #0070f3;
-  color: white;
-  border-color: #0070f3;
+.buy-now-form button:hover {
+  background-color: #313863; /* darker variant or use a shade of var(--primary-color) if you prefer */
 }
 
 
+.tier-card.active {
+  border-color: var(--accent-soft);
+  background-color: #f8f6fc; /* very light purple tint */
+}
+
+
+
+.hidden-honeypot {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+/*****************/
+/* Promise section */
+
+
+
+.promise-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(225deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}

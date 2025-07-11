@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const ContactForm = ({
+const BookingForm = ({
   tier,
   standard,
   premium,
@@ -11,25 +11,27 @@ const ContactForm = ({
   standard: string[];
   premium: string[];
 }) => {
-  const [form, setForm] = useState({ name: "", email: "", url: "", comment: "" });
+  const [form, setForm] = useState({ name: "", email: "", url: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Contact Form Submitted:", {
+    // TODO: Send data to your email backend OR API
+    console.log("Form submitted", {
       ...form,
       tier,
       standard,
       premium,
     });
-    alert("Thanks! We’ll be in touch shortly.");
+    // TODO: Redirect to Google Calendar link
+    window.location.href = "YOUR_GOOGLE_CAL_BOOKING_URL";
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 border p-4 rounded-lg max-w-md mx-auto bg-white text-[var(--primary-color)]"
+      className="mt-8 border p-4 rounded-lg max-w-md mx-auto"
     >
-      <h4 className="text-lg font-semibold mb-4">Contact Us</h4>
+      <h4 className="text-lg font-semibold mb-4">Tell us about you</h4>
       <input
         type="text"
         placeholder="Name"
@@ -54,21 +56,14 @@ const ContactForm = ({
         className="w-full mb-4 p-2 border rounded"
         required
       />
-      <textarea
-        placeholder="Tell us more about your requirements..."
-        value={form.comment}
-        onChange={(e) => setForm({ ...form, comment: e.target.value })}
-        rows={4}
-        className="w-full mb-4 p-2 border rounded"
-      />
       <button
         type="submit"
-        className="border border-[var(--accent-soft)] bg-white text-[var(--primary-color)] px-6 py-3 rounded hover:shadow-md transition"
+        className="bg-[#1B1F3B] text-white px-6 py-3 rounded hover:bg-[#313863] transition"
       >
-        Submit
+        Submit & Book a Call
       </button>
     </form>
   );
 };
 
-export default ContactForm;
+export default BookingForm;
