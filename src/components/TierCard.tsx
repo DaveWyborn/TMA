@@ -1,35 +1,38 @@
+const details = {
+  Tracker: {
+    services: "0 Standard Services",
+    monitoring: "Monthly Monitoring",
+    tagline: "Get started with essentials",
+  },
+  Explorer: {
+    services: "2 Standard Services",
+    monitoring: "Weekly Monitoring",
+    tagline: "Grow with deeper insights",
+  },
+  Adventurer: {
+    services: "4 Standard Services",
+    monitoring: "Daily Monitoring",
+    tagline: "Optimise & take action daily",
+  },
+  Trailblazer: {
+    services: "6 Standard Services",
+    monitoring: "Hourly Monitoring",
+    tagline: "Lead with full proactive support",
+  },
+} as const; // ✅ makes keys and values readonly & precise
+
+// ✅ Create a type for valid tier names:
+type TierName = keyof typeof details;
+
 const TierCard = ({
   tier,
   isActive,
   price,
 }: {
-  tier: string;
+  tier: TierName; // ✅ now 'tier' must be valid!
   isActive: boolean;
   price: string;
 }) => {
-  const details = {
-    Tracker: {
-      services: "0 Standard Services",
-      monitoring: "Monthly Monitoring",
-      tagline: "Get started with essentials",
-    },
-    Explorer: {
-      services: "2 Standard Services",
-      monitoring: "Weekly Monitoring",
-      tagline: "Grow with deeper insights",
-    },
-    Adventurer: {
-      services: "4 Standard Services",
-      monitoring: "Daily Monitoring",
-      tagline: "Optimise & take action daily",
-    },
-    Trailblazer: {
-      services: "6 Standard Services",
-      monitoring: "Hourly Monitoring",
-      tagline: "Lead with full proactive support",
-    },
-  };
-
   return (
     <div
       className={`tier-card p-4 border rounded-lg transition ${
