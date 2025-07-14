@@ -37,7 +37,7 @@ export default function PromiseSection() {
   };
   return (
     <motion.section
-      id="testimonials"
+      id="promise"
       className="promise-section relative w-full h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden"
     >
       <h2 className="text-3xl font-bold mb-4 text-[var(--light-text)]">
@@ -90,7 +90,7 @@ export default function PromiseSection() {
       </div>
               {/* Simple down chevron */}
         <motion.div
-        onClick={() => scrollToSection("Testimonials")}
+        onClick={() => scrollToSection("testimonials")}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer"
         animate={{ y: [0, -5, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
