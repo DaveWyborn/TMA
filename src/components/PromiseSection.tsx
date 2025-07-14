@@ -74,12 +74,11 @@ export default function PromiseSection() {
           >
             {/* ✅ Industry First ribbon for Monitoring */}
             {title === "Monitoring" && (
-              <div className="absolute -top-2 -left-2 w-[100px] overflow-hidden">
-                <div className="bg-white text-[10px] text-gray-800 font-semibold py-1 transform -rotate-45 origin-top-left shadow-md">
-                  Industry First
-                </div>
-              </div>
-            )}
+  <div className="absolute top-2 right-2 bg-white text-[10px] text-gray-800 font-semibold px-2 py-0.5 rounded shadow">
+    Industry First
+  </div>
+)}
+
 
             <h3 className="text-lg font-semibold mb-2 text-[var(--light-text)]">
               {title}
