@@ -15,7 +15,7 @@ export default function PromiseSection() {
       title: "Monitoring",
       desc: "Insurance for your SEO: know the minute your tracking breaks.",
       detail:
-        "Every minute of broken tracking wastes your client’s ad spend and damages SEO results. Our unique monitoring checks your consent, GA4 signals and site health 24/7 — so you never lose revenue without knowing. That’s why our clients see 0% tracking blackouts.",
+        "Every minute of broken tracking wastes your client’s ad spend, breaks your results, and damages your reputation. Our unique monitoring checks your consent, GA4 signals, and site health 24/7 — so you never lose face in front of your client. That’s why our clients see 0% tracking blackouts.",
     },
     {
       title: "Reporting",

@@ -1,65 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function NavBar() {
-  const [scrollPercentage, setScrollPercentage] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const updateScroll = () => {
-      const scrollTop = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercent = (scrollTop / scrollHeight) * 100;
-      setScrollPercentage(scrollPercent);
-
-      // ✅ Show navbar when user starts scrolling
-      if (!hasScrolled && scrollTop > 0) {
-        setIsVisible(true);
-        setHasScrolled(true); // Prevents it from resetting on further scrolls
-      }
-    };
-
-    // ✅ Show navbar after 3 seconds if no scrolling happens
-    const timer = setTimeout(() => {
-      if (!hasScrolled) {
-        setIsVisible(true);
-      }
-    }, 3000);
-
-    window.addEventListener("scroll", updateScroll);
-    
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", updateScroll);
-    };
-  }, [hasScrolled]);
+  const sections = [
+    { id: "promise", label: "Promise" },
+    { id: "testimonials", label: "Testimonials" },
+    { id: "buy-now", label: "Book a Call" },
+    { id: "footer", label: "How We Operate" },
+  ];
 
   return (
     <>
-      {/* Sticky Navigation Bar */}
-      <nav
-        className={`fixed top-4 left-1/2 transform -translate-x-1/2 bg-white shadow-md rounded-full px-6 py-2 flex space-x-6 z-50 transition-opacity duration-1000 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
+      {/* Hamburger Button */}
+      <button
+        onClick={() => setMenuOpen(!menuOpen)}
+        className="fixed top-4 right-4 z-50 p-2 bg-white rounded shadow-md"
+        aria-label="Toggle Menu"
       >
-        {["home", "services", "about", "contact"].map((section) => (
-          <a
-            key={section}
-            href={`#${section}`}
-            className="text-gray-700 hover:text-blue-600 transition"
-          >
-            {section.charAt(0).toUpperCase() + section.slice(1)}
-          </a>
-        ))}
-      </nav>
+        <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
+        <div className="w-6 h-0.5 bg-gray-800 mb-1"></div>
+        <div className="w-6 h-0.5 bg-gray-800"></div>
+      </button>
 
-      {/* Scroll Progress Bar */}
-      <div
-        className="fixed top-0 left-0 w-full h-1 bg-blue-500 transition-all"
-        style={{ width: `${scrollPercentage}%` }}
-      ></div>
+      {/* Slide-in Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="fixed top-16 right-4 bg-white shadow-lg rounded p-4 z-40"
+          >
+            <ul className="space-y-2">
+              {sections.map((section) => (
+                <li key={section.id}>
+                  <a
+                    href={`#${section.id}`}
+                    className="text-gray-800 hover:text-blue-600"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {section.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </>
   );
 }
