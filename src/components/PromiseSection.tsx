@@ -3,48 +3,57 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-
 export default function PromiseSection() {
   const promises = [
     {
       title: "Setup",
       desc: "GA4, Tag Manager, and Consent Manager installed and tested properly.",
-      detail: "We make sure your GA4 and Tag Manager are correctly configured, tested and integrated with your consent tool. No surprises, just reliable data.",
+      detail:
+        "We make sure your GA4 and Tag Manager are correctly configured, tested and integrated with your consent tool. No surprises, just reliable data you can build on.",
     },
     {
       title: "Monitoring",
-      desc: "Your tracking and uptime are watched 24/7 — no hidden data loss.",
-      detail: "We keep an eye on your data streams and your site’s uptime. If something goes wrong, we spot it fast — before it costs you revenue.",
+      desc: "Insurance for your SEO: know the minute your tracking breaks.",
+      detail:
+        "Every minute of broken tracking wastes your client’s ad spend and damages SEO results. Our unique monitoring checks your consent, GA4 signals and site health 24/7 — so you never lose revenue without knowing. That’s why our clients see 0% tracking blackouts.",
     },
     {
       title: "Reporting",
-      desc: "See clear, simple reports with the metrics that matter to you.",
-      detail: "Get dashboards you actually understand. No fluff — just actionable data, when you need it.",
+      desc: "See clear, simple reports with the metrics that matter.",
+      detail:
+        "Get dashboards you actually understand. No fluff — just actionable data you can trust, when you need it.",
     },
     {
       title: "Consent",
       desc: "Stay in line with Google’s requirements — keep your ads running.",
-      detail: "We help you stay up to date with changing consent rules. When Google changes the rules, you don’t get caught out.",
+      detail:
+        "We help you stay up to date with changing consent rules. When Google changes the rules, you don’t get caught out.",
     },
   ];
 
-  const [activePromise, setActivePromise] = useState<string | null>(null);
+  // ✅ Default to Monitoring
+  const [activePromise, setActivePromise] = useState<string | null>("Monitoring");
+
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
   return (
     <motion.section
       id="promise"
-      className="promise-section relative w-full h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden"
+      className="promise-section relative w-full min-h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden py-20"
     >
       <h2 className="text-3xl font-bold mb-4 text-[var(--light-text)]">
         Our Promise
       </h2>
+
       <p className="text-lg text-gray-300 max-w-xl mb-12">
-        We keep your data flowing and your site compliant — so you can focus on what matters.
+        Rock-solid SEO signals, from setup to monitoring. We keep your tracking,
+        consent, and reporting healthy — so your clients’ ads convert, your
+        campaigns perform, and you never get blindsided by hidden data failures.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl z-10">
@@ -52,7 +61,7 @@ export default function PromiseSection() {
           <motion.div
             key={title}
             onClick={() => setActivePromise(title)}
-            className={`bg-white/5 p-6 rounded-lg shadow-md cursor-pointer transition-all ${
+            className={`relative bg-white/5 p-6 rounded-lg shadow-md cursor-pointer transition-all ${
               activePromise === title ? "ring-2 ring-[var(--accent-soft)]" : ""
             }`}
             initial={{ opacity: 0, y: 10 }}
@@ -63,6 +72,15 @@ export default function PromiseSection() {
               transition: { type: "spring", stiffness: 400, damping: 15 },
             }}
           >
+            {/* ✅ Only for Monitoring: Industry First badge */}
+            {title === "Monitoring" && (
+              <div className="absolute top-0 left-0">
+                <div className="bg-white text-[10px] text-gray-800 font-semibold px-2 py-1 transform -rotate-45 origin-top-left shadow-md">
+                  Industry First
+                </div>
+              </div>
+            )}
+
             <h3 className="text-lg font-semibold mb-2 text-[var(--light-text)]">
               {title}
             </h3>
@@ -88,14 +106,20 @@ export default function PromiseSection() {
             )
         )}
       </div>
-              {/* Simple down chevron */}
-        <motion.div
+
+      {/* ✅ Final positioning line below the grid */}
+      <p className="mt-8 text-base text-gray-300 max-w-xl text-center">
+        We don’t just implement GTM — we manage your whole data pipeline to give
+        you results you can rely on.
+      </p>
+
+      {/* Down chevron */}
+      <motion.div
         onClick={() => scrollToSection("testimonials")}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer"
         animate={{ y: [0, -5, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
       >
-        {/* Simple down chevron */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-8 w-8 text-white opacity-80"
@@ -106,12 +130,6 @@ export default function PromiseSection() {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </motion.div>
-
     </motion.section>
-
   );
-
-
 }
-
-
