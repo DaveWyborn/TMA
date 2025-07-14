@@ -69,15 +69,19 @@ export default function FooterSection() {
       */}
 
       {/* ✅ Footer strip */}
-      <div className="absolute bottom-4 w-full text-center text-xs text-gray-500">
-        <p>
-          Tailor Made Analytics &copy; {new Date().getFullYear()} |{" "}
-          <a href="/privacy" className="underline hover:text-gray-300">
-            Privacy Policy
-          </a>
-        </p>
-        <p>Built with care in the UK</p>
-      </div>
+<div className="absolute bottom-4 w-full text-center text-xs text-gray-500">
+  <p>
+    Tailor Made Analytics &copy; {new Date().getFullYear()} |{" "}
+    <a href="/privacy-policy" className="underline hover:text-gray-300">
+      Privacy Policy
+    </a>{" "}
+    |{" "}
+    <a href="/terms" className="underline hover:text-gray-300">
+      Terms &amp; Conditions
+    </a>
+  </p>
+  <p>Built with care in the UK</p>
+</div>
     </motion.section>
   );
 }

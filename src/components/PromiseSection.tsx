@@ -107,7 +107,7 @@ export default function PromiseSection() {
       </div>
 
       {/* ✅ Final sign-off line with border & larger text */}
-      <p className="mt-8 text-lg text-gray-200 max-w-xl text-center border-t border-gray-700 pt-4">
+      <p className="mt-8 text-lg font-semibold max-w-xl text-center border-t border-gray-700 pt-4">
         We don’t just implement GTM — we manage your whole data pipeline to give
         you results you can rely on.
       </p>
