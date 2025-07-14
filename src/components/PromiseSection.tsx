@@ -31,8 +31,8 @@ export default function PromiseSection() {
     },
   ];
 
-  // ✅ Default to Monitoring
-  const [activePromise, setActivePromise] = useState<string | null>("Monitoring");
+  // ✅ No default active promise
+  const [activePromise, setActivePromise] = useState<string | null>(null);
 
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
@@ -72,10 +72,10 @@ export default function PromiseSection() {
               transition: { type: "spring", stiffness: 400, damping: 15 },
             }}
           >
-            {/* ✅ Only for Monitoring: Industry First badge */}
+            {/* ✅ Industry First ribbon for Monitoring */}
             {title === "Monitoring" && (
-              <div className="absolute top-0 left-0">
-                <div className="bg-white text-[10px] text-gray-800 font-semibold px-2 py-1 transform -rotate-45 origin-top-left shadow-md">
+              <div className="absolute -top-2 -left-2 w-[100px] overflow-hidden">
+                <div className="bg-white text-[10px] text-gray-800 font-semibold py-1 transform -rotate-45 origin-top-left shadow-md">
                   Industry First
                 </div>
               </div>
@@ -89,7 +89,7 @@ export default function PromiseSection() {
         ))}
       </div>
 
-      {/* ✅ Reserved Detail Space */}
+      {/* ✅ Reserved Detail Space — nothing shows on first load */}
       <div className="relative mt-8 max-w-3xl min-h-[100px] flex items-center justify-center">
         {promises.map(
           ({ title, detail }) =>
@@ -107,8 +107,8 @@ export default function PromiseSection() {
         )}
       </div>
 
-      {/* ✅ Final positioning line below the grid */}
-      <p className="mt-8 text-base text-gray-300 max-w-xl text-center">
+      {/* ✅ Final sign-off line with border & larger text */}
+      <p className="mt-8 text-lg text-gray-200 max-w-xl text-center border-t border-gray-700 pt-4">
         We don’t just implement GTM — we manage your whole data pipeline to give
         you results you can rely on.
       </p>
