@@ -46,10 +46,9 @@ export default function MetaCheckerPage() {
           />
         </div>
 
-        <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--deep-purple)' }}>SEO Meta Checker</h1>
+        <h1 className="meta-checker-heading">SEO Meta Checker</h1>
         <p className="mb-6 text-gray-200">
-          Use this tool to compare the page title, meta description, and keywords
-          between your page and a competitor's page. Enter the URLs below and click Compare.
+          Use this tool to check your page's title, meta description, and keywords — or compare your page with a competitor. The second URL is optional.
         </p>
 
         <form onSubmit={handleSubmit} className="meta-checker-form mb-8">
@@ -64,12 +63,12 @@ export default function MetaCheckerPage() {
           </div>
 
           <div>
-            <label className="block mb-1">Competitor URL:</label>
+            <label className="block mb-1">Competitor URL (optional):</label>
             <input
               type="url"
               value={compURL}
               onChange={(e) => setCompURL(e.target.value)}
-              required
+              placeholder="Leave blank to check only your page"
             />
           </div>
 
@@ -100,27 +99,31 @@ export default function MetaCheckerPage() {
                 <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
                   <th className="border p-2 text-left">Element</th>
                   <th className="border p-2 text-left">Your Page</th>
-                  <th className="border p-2 text-left">Competitor Page</th>
+                  {compURL && <th className="border p-2 text-left">Competitor Page</th>}
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td className="border p-2">Title</td>
                   <td className="border p-2">{results.my.title}</td>
-                  <td className="border p-2">{results.comp.title}</td>
+                  {compURL && <td className="border p-2">{results.comp.title}</td>}
                 </tr>
                 <tr>
                   <td className="border p-2">Meta Description</td>
                   <td className="border p-2">{results.my.description}</td>
-                  <td className="border p-2">{results.comp.description}</td>
+                  {compURL && <td className="border p-2">{results.comp.description}</td>}
                 </tr>
                 <tr>
                   <td className="border p-2">Meta Keywords</td>
                   <td className="border p-2">{results.my.keywords}</td>
-                  <td className="border p-2">{results.comp.keywords}</td>
+                  {compURL && <td className="border p-2">{results.comp.keywords}</td>}
                 </tr>
               </tbody>
             </table>
+
+            <p className="mt-4 text-sm text-gray-300">
+              Note: Google ignores the &lt;meta name="keywords"&gt; tag, but some other search engines may still reference it.
+            </p>
           </div>
         )}
       </div>

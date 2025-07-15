@@ -667,7 +667,8 @@ section {
   margin: 0 auto;
 }
 
-.meta-checker-container h1 {
+.meta-checker-heading {
+  color: var(--light-text);
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
