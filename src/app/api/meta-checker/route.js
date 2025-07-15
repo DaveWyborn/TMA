@@ -12,11 +12,16 @@ export async function POST(req) {
 
       return {
         title: $('title').text() || 'None',
-        description: $('meta[name=\"description\"]').attr('content') || 'None',
-        keywords: $('meta[name=\"keywords\"]').attr('content') || 'None',
+        description: $('meta[name="description"]').attr('content') || 'None',
+        keywords: $('meta[name="keywords"]').attr('content') || 'None',
       };
-    } catch (error) {
-      return { title: 'Error', description: 'Error', keywords: 'Error' };
+    } catch {
+      // ✅ Clean fallback — no unused 'error' variable!
+      return {
+        title: 'Error',
+        description: 'Error',
+        keywords: 'Error',
+      };
     }
   }
 
