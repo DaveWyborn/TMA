@@ -734,3 +734,67 @@ section {
   border: 1px solid var(--accent-soft);
   padding: 0.75rem;
 }
+
+
+/* ==========================
+   Keyword Finder Page
+   ========================== */
+
+.keyword-finder-container {
+  background: var(--dark-bg);
+  color: var(--light-text);
+  padding: 4rem 2rem;
+  margin: 0 auto;
+}
+
+.keyword-finder-heading {
+  color: var(--light-text);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.keyword-finder-container p {
+  color: var(--light-text);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.keyword-finder-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid var(--accent-soft);
+  border-radius: 6px;
+  background: #fff;
+  color: #000;
+  font-size: 1rem;
+}
+
+.keyword-finder-form input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.keyword-finder-results table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  background: var(--primary-color);
+  color: var(--light-text);
+  table-layout: fixed;   /* ✅ THIS does the trick! */
+}
+
+.keyword-finder-results th {
+  background: var(--deep-purple);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.keyword-finder-results td {
+  border: 1px solid var(--accent-soft);
+  padding: 0.75rem;
+  word-wrap: break-word;  /* ✅ Force wrapping inside cells */
+}
+
+
+

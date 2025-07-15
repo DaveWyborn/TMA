@@ -3,8 +3,8 @@ import "./globals.css";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "Tailor Made Analytics",
-  description: "Providing expert analytics and consent management solutions.",
+  title: "Tailor Made Analytics | Expert Website Tracking, Reporting & Consent Management",
+  description: "Unlock actionable insights with Tailor Made Analytics. We specialise in Google Tag Manager, GA4, Looker Studio dashboards, and consent management — tailored to your business.",
 };
 
 export default function RootLayout({

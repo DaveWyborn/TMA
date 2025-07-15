@@ -36,6 +36,7 @@ export default function MetaCheckerPage() {
       <Navbar />
 
       <div className="meta-checker-container">
+
         <div className="flex flex-col items-center mb-6">
           <Image
             src="/images/TMA Light Logo Transparent.png"
@@ -45,11 +46,30 @@ export default function MetaCheckerPage() {
             priority
           />
         </div>
+        <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
+    🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
+  </div>
+
+  <p className="mb-4 text-xs text-gray-300">
+    Note: Usage is logged for test purposes.
+  </p>
 
         <h1 className="meta-checker-heading">SEO Meta Checker</h1>
+
+        <p className="mb-4">
+    👉 Also check out our{' '}
+    <a href="/keyword-finder" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
+      Keyword Finder Tool
+    </a>
+    !
+  </p>
+
+
         <p className="mb-6 text-gray-200">
           Use this tool to check your page's title, meta description, and keywords — or compare your page with a competitor. The second URL is optional.
         </p>
+        
+
 
         <form onSubmit={handleSubmit} className="meta-checker-form mb-8">
           <div>
