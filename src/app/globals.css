@@ -652,3 +652,84 @@ section {
   pointer-events: none;
   z-index: 0;
 }
+
+
+
+/* ==========================
+   Meta Checker Page
+   ========================== */
+
+.meta-checker-container {
+  background: var(--dark-bg);
+  color: var(--light-text);
+  padding: 4rem 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.meta-checker-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.meta-checker-container p {
+  color: var(--light-text);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.meta-checker-form input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid var(--accent-soft);
+  border-radius: 6px;
+  background: #fff;
+  color: #000;
+  font-size: 1rem;
+}
+
+.meta-checker-form input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.compare-button {
+  background: var(--accent-color);
+  color: var(--light-text);
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.compare-button:hover {
+  background: var(--accent-soft);
+}
+
+.compare-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.meta-checker-results table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  background: var(--primary-color);
+  color: var(--light-text);
+}
+
+.meta-checker-results th {
+  background: var(--deep-purple);
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.meta-checker-results td {
+  border: 1px solid var(--accent-soft);
+  padding: 0.75rem;
+}
