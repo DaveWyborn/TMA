@@ -61,7 +61,7 @@ export default function KeywordFinderPage() {
           Us this tool to search the two given pages for a specific keyword and see how that kewyord is used. 
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-4 mb-8">
+        <form onSubmit={handleSubmit} className="dark-form">
           <div>
             <label className="block mb-1">Keyword:</label>
             <input
@@ -94,7 +94,7 @@ export default function KeywordFinderPage() {
             />
           </div>
 
-          <button type="submit" disabled={loading} className="compare-button">
+          <button type="submit" disabled={loading} className="dark-button">
             {loading ? 'Checking...' : 'Run Check'}
           </button>
         </form>

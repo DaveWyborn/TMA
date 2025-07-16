@@ -71,7 +71,7 @@ export default function MetaCheckerPage() {
         
 
 
-        <form onSubmit={handleSubmit} className="meta-checker-form mb-8">
+        <form onSubmit={handleSubmit} className="dark-form mb-8">
           <div>
             <label className="block mb-1">Your URL:</label>
             <input
@@ -95,7 +95,7 @@ export default function MetaCheckerPage() {
           <div className="flex gap-4 mt-4">
             <button
               type="submit"
-              className="compare-button"
+              className="dark-button"
               disabled={loading}
             >
               {loading ? 'Checking...' : 'Compare'}
@@ -103,7 +103,7 @@ export default function MetaCheckerPage() {
 
             <button
               type="button"
-              className="compare-button"
+              className="dark-button"
               onClick={handleReset}
             >
               Reset
