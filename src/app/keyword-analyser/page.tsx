@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '../../components/NavBar';
+import Image from 'next/image';
 
 type KeywordResult = {
   tag: string;
@@ -13,7 +14,7 @@ type Results = {
   tags: KeywordResult[];
 };
 
-export default function KeywordFinderPage() {
+export default function KeywordAnalyserPage() {
   const [keyword, setKeyword] = useState('');
   const [url1, setUrl1] = useState('');
   const [url2, setUrl2] = useState('');
@@ -24,7 +25,7 @@ export default function KeywordFinderPage() {
     e.preventDefault();
     setLoading(true);
 
-    const res = await fetch('/api/keyword-finder', {
+    const res = await fetch('/api/keyword-analyser', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ keyword, url1, url2 }),
@@ -38,7 +39,17 @@ export default function KeywordFinderPage() {
   return (
     <>
       <Navbar />
-     <div className="keyword-finder-container p-8 max-w-5xl mx-auto">
+     <div className="keyword-analyser-container p-8 max-w-5xl mx-auto">
+ <div className="flex flex-col items-center mb-6">
+          <Image
+            src="/images/TMA Light Logo Transparent.png"
+            alt="Tailor Made Analytics Logo"
+            width={200}
+            height={80}
+            priority
+          />
+        </div>
+
   <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
     🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
   </div>
@@ -47,7 +58,7 @@ export default function KeywordFinderPage() {
     Note: Usage is logged for test purposes.
   </p>
 
-  <h1 className="keyword-finder-heading">Keyword Finder</h1>
+  <h1 className="keyword-analyser-heading">Keyword Analyser</h1>
 
   <p className="mb-4">
     👉 Also check out our{' '}
@@ -58,7 +69,7 @@ export default function KeywordFinderPage() {
   </p>
 
   <p className="mb-6 text-gray-200">
-          Us this tool to search the two given pages for a specific keyword and see how that kewyord is used. 
+          Use this tool to search the two given pages for a specific keyword and see how that kewyord is used. 
         </p>
 
         <form onSubmit={handleSubmit} className="dark-form">
@@ -100,7 +111,7 @@ export default function KeywordFinderPage() {
         </form>
 
         {results && (
-          <div className="keyword-finder-results">
+          <div className="keyword-analyser-results">
             <h2 className="text-xl font-semibold mb-2">Results</h2>
             <table className="w-full border border-gray-300">
   <thead>

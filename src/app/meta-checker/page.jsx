@@ -58,7 +58,7 @@ export default function MetaCheckerPage() {
 
         <p className="mb-4">
     👉 Also check out our{' '}
-    <a href="/keyword-keyword-analyser" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
+    <a href="/keyword-analyser" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
       Keyword Analyser Tool
     </a>
     !
