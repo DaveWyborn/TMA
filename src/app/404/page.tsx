@@ -3,6 +3,12 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+declare global {
+  interface Window {
+    dataLayer: Record<string, any>[];
+  }
+}
+
 export default function Custom404() {
   const jokes = [
     "Why did the analytics page get a 404? It couldn’t find its path to conversion.",
