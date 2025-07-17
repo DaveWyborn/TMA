@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '../../components/NavBar';
+import Image from 'next/image';
 
 type KeywordResult = {
   tag: string;
@@ -38,11 +39,26 @@ export default function KeywordAnalyserPage() {
   return (
     <>
       <Navbar />
-      <div className="keyword-analyser-container p-8 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">Keyword Fnalyser (Test)</h1>
-        <p className="mb-6 text-gray-200">
-          Enter one keyword and compare how it appears across up to 2 URLs.
+
+      <div className="meta-checker-container">
+        <div className="flex flex-col items-center mb-6">
+          <Image
+            src="/images/TMA Light Logo Transparent.png"
+            alt="Tailor Made Analytics Logo"
+            width={200}
+            height={80}
+            priority
+          />
+        </div>
+        <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
+          🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
+        </div>
+
+        <p className="mb-4 text-xs text-gray-300">
+          Note: Usage is logged for test purposes.
         </p>
+
+        <h1 className="meta-checker-heading">SEO Meta Checker</h1>
 
         <form onSubmit={handleSubmit} className="dark-form">
           <div>
