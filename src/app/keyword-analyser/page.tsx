@@ -4,43 +4,41 @@ import { useState } from 'react';
 import Navbar from '../../components/NavBar';
 import Image from 'next/image';
 
-type KeywordResult = {
-  tag: string;
-  url1: { count: number; snippets: string[] };
-  url2?: { count: number; snippets: string[] } | null;
-};
-
-type Results = {
-  tags: KeywordResult[];
-};
-
-export default function KeywordAnalyserPage() {
-  const [keyword, setKeyword] = useState('');
-  const [url1, setUrl1] = useState('');
-  const [url2, setUrl2] = useState('');
-  const [results, setResults] = useState<Results | null>(null);
+export default function MetaCheckerPage() {
+  const [myURL, setMyURL] = useState('');
+  const [compURL, setCompURL] = useState('');
+  const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
 
-    const res = await fetch('/api/keyword-analyser', {
+    const res = await fetch('/api/meta-checker', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ keyword, url1, url2 }),
+      body: JSON.stringify({ myURL, compURL }),
     });
 
     const data = await res.json();
+    console.log('✅ Final Results:', data); // ← Add this
+setResults(data);
     setResults(data);
     setLoading(false);
+  }
+
+  function handleReset() {
+    setMyURL('');
+    setCompURL('');
+    setResults(null);
   }
 
   return (
     <>
       <Navbar />
-     <div className="keyword-analyser-container p-8 max-w-5xl mx-auto">
- <div className="flex flex-col items-center mb-6">
+
+      <div className="meta-checker-container">
+        <div className="flex flex-col items-center mb-6">
           <Image
             src="/images/TMA Light Logo Transparent.png"
             alt="Tailor Made Analytics Logo"
@@ -49,124 +47,119 @@ export default function KeywordAnalyserPage() {
             priority
           />
         </div>
+        <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
+          🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
+        </div>
 
-  <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
-    🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
-  </div>
-
-  <p className="mb-4 text-xs text-gray-300">
-    Note: Usage is logged for test purposes.
-  </p>
-
-  <h1 className="keyword-analyser-heading">Keyword Analyser</h1>
-
-  <p className="mb-4">
-    👉 Also check out our{' '}
-    <a href="/meta-checker" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
-      Meta Checker Tool
-    </a>
-    !
-  </p>
-
-  <p className="mb-6 text-gray-200">
-          Use this tool to search the two given pages for a specific keyword and see how that kewyord is used. 
+        <p className="mb-4 text-xs text-gray-300">
+          Note: Usage is logged for test purposes.
         </p>
 
-        <form onSubmit={handleSubmit} className="dark-form">
-          <div>
-            <label className="block mb-1">Keyword:</label>
-            <input
-              type="text"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              required
-              className="w-full border p-2"
-            />
-          </div>
+        <h1 className="meta-checker-heading">SEO Meta Checker</h1>
 
-          <div>
-            <label className="block mb-1">URL 1:</label>
-            <input
-              type="url"
-              value={url1}
-              onChange={(e) => setUrl1(e.target.value)}
-              required
-              className="w-full border p-2"
-            />
-          </div>
+        <p className="mb-4">
+          👉 Also check out our{' '}
+          <a href="/keyword-analyser" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
+            Keyword Analyser Tool
+          </a>
+          !
+        </p>
 
+        <p className="mb-6 text-gray-200">
+          Use this tool to check your page's title, meta description, keywords, and basic schema types — or compare your page with a competitor. The second URL is optional.
+        </p>
+
+        <form onSubmit={handleSubmit} className="dark-form mb-8">
           <div>
-            <label className="block mb-1">URL 2 (optional):</label>
+            <label className="block mb-1">Your URL:</label>
             <input
               type="url"
-              value={url2}
-              onChange={(e) => setUrl2(e.target.value)}
-              className="w-full border p-2"
+              value={myURL}
+              onChange={(e) => setMyURL(e.target.value)}
+              required
             />
           </div>
 
-          <button type="submit" disabled={loading} className="dark-button">
-            {loading ? 'Checking...' : 'Run Check'}
-          </button>
+          <div>
+            <label className="block mb-1">Competitor URL (optional):</label>
+            <input
+              type="url"
+              value={compURL}
+              onChange={(e) => setCompURL(e.target.value)}
+              placeholder="Leave blank to check only your page"
+            />
+          </div>
+
+          <div className="flex gap-4 mt-4">
+            <button
+              type="submit"
+              className="dark-button"
+              disabled={loading}
+            >
+              {loading ? 'Checking...' : 'Compare'}
+            </button>
+
+            <button
+              type="button"
+              className="dark-button"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
+          </div>
         </form>
 
         {results && (
-          <div className="keyword-analyser-results">
+          <div className="meta-checker-results mt-12">
             <h2 className="text-xl font-semibold mb-2">Results</h2>
             <table className="w-full border border-gray-300">
-  <thead>
-    <tr className="bg-gray-700 text-white">
-      <th className="border p-2 text-left">Tag</th>
-      <th className="border p-2 text-left">Occurrences (URL 1)</th>
-      <th className="border p-2 text-left">Snippets (URL 1)</th>
-      {url2 && (
-        <>
-          <th className="border p-2 text-left">Occurrences (URL 2)</th>
-          <th className="border p-2 text-left">Snippets (URL 2)</th>
-        </>
-      )}
-    </tr>
-  </thead>
-  <tbody>
-    {results.tags.map((tag) => (
-      <tr key={tag.tag}>
-        <td className="border p-2">{tag.tag}</td>
+              <thead>
+                <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
+                  <th className="border p-2 text-left">Element</th>
+                  <th className="border p-2 text-left">Your Page</th>
+                  {compURL && results.comp && <th className="border p-2 text-left">Competitor Page</th>}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border p-2">Title</td>
+                  <td className="border p-2">{results.my.title}</td>
+                  {compURL && results.comp && <td className="border p-2">{results.comp.title}</td>}
+                </tr>
+                <tr>
+                  <td className="border p-2">Meta Description</td>
+                  <td className="border p-2">{results.my.description}</td>
+                  {compURL && results.comp && <td className="border p-2">{results.comp.description}</td>}
+                </tr>
+                <tr>
+                  <td className="border p-2">Meta Keywords</td>
+                  <td className="border p-2">{results.my.keywords}</td>
+                  {compURL && results.comp && <td className="border p-2">{results.comp.keywords}</td>}
+                </tr>
+                <tr>
+                  <td className="border p-2">Schema Types</td>
+                  <td className="border p-2">
+                    {Array.isArray(results.my.schema) && results.my.schema.length > 0
+                      ? results.my.schema.join(', ')
+                      : 'None found'}
+                  </td>
+                  {compURL && results.comp && (
+                    <td className="border p-2">
+                      {Array.isArray(results.comp.schema) && results.comp.schema.length > 0
+                        ? results.comp.schema.join(', ')
+                        : 'None found'}
+                    </td>
+                  )}
+                </tr>
+              </tbody>
+            </table>
 
-        <td className="border p-2">{tag.url1.count}</td>
-
-        <td className="border p-2">
-          {tag.url1.snippets.length > 0 ? (
-            <ul className="list-disc list-inside text-xs">
-              {tag.url1.snippets.map((s, i) => (
-                <li key={i}>“{s}...”</li>
-              ))}
-            </ul>
-          ) : (
-            <span className="text-xs italic">None found</span>
-          )}
-        </td>
-
-        {url2 && tag.url2 && (
-          <>
-            <td className="border p-2">{tag.url2.count}</td>
-            <td className="border p-2">
-              {tag.url2.snippets.length > 0 ? (
-                <ul className="list-disc list-inside text-xs">
-                  {tag.url2.snippets.map((s, i) => (
-                    <li key={i}>“{s}...”</li>
-                  ))}
-                </ul>
-              ) : (
-                <span className="text-xs italic">None found</span>
-              )}
-            </td>
-          </>
-        )}
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+            <p className="mt-4 text-sm text-gray-300">
+              Note: Google ignores the &lt;meta name="keywords"&gt; tag, but some other search engines may still reference it.
+            </p>
+            <p className="mt-2 text-sm text-gray-300">
+              Schema types are based on any detected <code>application/ld+json</code> blocks.
+            </p>
           </div>
         )}
       </div>
