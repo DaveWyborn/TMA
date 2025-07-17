@@ -10,20 +10,35 @@ export async function POST(req) {
       const html = await response.text();
       const $ = cheerio.load(html);
 
-      const schemaTypes = [];
+      const schemaSummary = [];
 
       $('script[type="application/ld+json"]').each((i, el) => {
-        const raw = $(el).text(); // .text() is more reliable than .html()
-        console.log(`📦 Raw Schema Block [${i}]:\n`, raw);
-
+        const raw = $(el).text();
         try {
           if (raw && raw.trim().startsWith('{')) {
             const json = JSON.parse(raw.trim());
-            if (Array.isArray(json)) {
-              json.forEach(item => item['@type'] && schemaTypes.push(item['@type']));
-            } else if (json['@type']) {
-              schemaTypes.push(json['@type']);
-            }
+            const items = Array.isArray(json) ? json : [json];
+
+            items.forEach(item => {
+              const type = item['@type'] || 'Unknown';
+              const summary = { type };
+
+              // Add common fields per type
+              if (type === 'WebSite' || type === 'Organization') {
+                if (item.name) summary.name = item.name;
+                if (item.url) summary.url = item.url;
+              }
+              if (type === 'Article') {
+                if (item.headline) summary.headline = item.headline;
+                if (item.author) summary.author = typeof item.author === 'string' ? item.author : item.author?.name;
+                if (item.datePublished) summary.datePublished = item.datePublished;
+              }
+              if (type === 'FAQPage' && Array.isArray(item.mainEntity)) {
+                summary.faqCount = item.mainEntity.length;
+              }
+
+              schemaSummary.push(summary);
+            });
           }
         } catch (err) {
           console.warn(`⚠️ JSON-LD Parse Error [${url} block ${i}]:`, err.message);
@@ -34,7 +49,7 @@ export async function POST(req) {
         title: $('title').text() || 'None',
         description: $('meta[name="description"]').attr('content') || 'None',
         keywords: $('meta[name="keywords"]').attr('content') || 'None',
-        schema: schemaTypes.length > 0 ? [...new Set(schemaTypes)] : ['None'],
+        schemaSummary: schemaSummary.length > 0 ? schemaSummary : [{ type: 'None' }],
       };
     } catch (err) {
       console.error('❌ Error fetching or parsing URL:', url, err.message);
@@ -42,7 +57,7 @@ export async function POST(req) {
         title: 'Error',
         description: 'Error',
         keywords: 'Error',
-        schema: ['Error'],
+        schemaSummary: [{ type: 'Error' }],
       };
     }
   }

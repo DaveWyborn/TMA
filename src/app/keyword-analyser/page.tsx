@@ -21,8 +21,6 @@ export default function MetaCheckerPage() {
     });
 
     const data = await res.json();
-    console.log('✅ Final Results:', data); // ← Add this
-setResults(data);
     setResults(data);
     setLoading(false);
   }
@@ -59,8 +57,8 @@ setResults(data);
 
         <p className="mb-4">
           👉 Also check out our{' '}
-          <a href="/keyword-analyser" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
-            Keyword Analyser Tool
+          <a href="/meta-checker" className="underline text-[var(--accent-soft)] hover:text-[var(--light-text)]">
+            Meta Checker Tool
           </a>
           !
         </p>
@@ -117,39 +115,29 @@ setResults(data);
                 <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
                   <th className="border p-2 text-left">Element</th>
                   <th className="border p-2 text-left">Your Page</th>
-                  {compURL && results.comp && <th className="border p-2 text-left">Competitor Page</th>}
+                  {compURL && <th className="border p-2 text-left">Competitor Page</th>}
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td className="border p-2">Title</td>
                   <td className="border p-2">{results.my.title}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.title}</td>}
+                  {compURL && <td className="border p-2">{results.comp.title}</td>}
                 </tr>
                 <tr>
                   <td className="border p-2">Meta Description</td>
                   <td className="border p-2">{results.my.description}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.description}</td>}
+                  {compURL && <td className="border p-2">{results.comp.description}</td>}
                 </tr>
                 <tr>
                   <td className="border p-2">Meta Keywords</td>
                   <td className="border p-2">{results.my.keywords}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.keywords}</td>}
+                  {compURL && <td className="border p-2">{results.comp.keywords}</td>}
                 </tr>
                 <tr>
                   <td className="border p-2">Schema Types</td>
-                  <td className="border p-2">
-                    {Array.isArray(results.my.schema) && results.my.schema.length > 0
-                      ? results.my.schema.join(', ')
-                      : 'None found'}
-                  </td>
-                  {compURL && results.comp && (
-                    <td className="border p-2">
-                      {Array.isArray(results.comp.schema) && results.comp.schema.length > 0
-                        ? results.comp.schema.join(', ')
-                        : 'None found'}
-                    </td>
-                  )}
+                  <td className="border p-2">{results.my.schema.join(', ')}</td>
+                  {compURL && <td className="border p-2">{results.comp.schema.join(', ')}</td>}
                 </tr>
               </tbody>
             </table>
