@@ -58,7 +58,7 @@ export default function KeywordAnalyserPage() {
           Note: Usage is logged for test purposes.
         </p>
 
-        <h1 className="meta-checker-heading">SEO Meta Checker</h1>
+        <h1 className="meta-checker-heading">Keyword Analyser</h1>
 
         <form onSubmit={handleSubmit} className="dark-form">
           <div>
