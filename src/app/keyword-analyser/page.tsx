@@ -1,8 +1,11 @@
 'use client';
 
+// Keyword Analyser
+
 import { useState } from 'react';
 import Navbar from '../../components/NavBar';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type KeywordResult = {
   tag: string;

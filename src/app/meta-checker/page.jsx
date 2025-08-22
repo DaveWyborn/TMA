@@ -1,5 +1,7 @@
 'use client';
 
+// Meta Checker
+
 import { useState } from 'react';
 import Navbar from '../../components/NavBar';
 import Image from 'next/image';
@@ -155,7 +157,13 @@ export default function MetaCheckerPage() {
                 ))}
             </div>
 
-            <div className="mt-10">
+            
+          </div>
+        )}
+
+        
+
+      <div className="mt-10">
               <button
                 className="text-sm text-[var(--accent-soft)] underline"
                 onClick={() => setShowLog(prev => !prev)}
@@ -178,9 +186,11 @@ export default function MetaCheckerPage() {
                 </div>
               )}
             </div>
-          </div>
-        )}
+
+
       </div>
+
+
     </>
   );
 }
