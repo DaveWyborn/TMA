@@ -1,61 +1,66 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
-  const scrollToSection = (id: string) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <motion.section
+    <section
       id="home"
-      className="hero-container relative flex flex-col items-center justify-center h-screen text-center"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
+      className="px-6 md:px-12 pt-12 md:pt-24 pb-24 md:pb-32"
+      style={{ background: "var(--paper)" }}
     >
-      {/* ✅ Logo */}
-      <Image
-        src="/images/hero-title.png"
-        alt="Tailor Made Analytics"
-        width={500}
-        height={150}
-        priority
-        className="hero-logo"
-      />
-
-      {/* Stacked tagline */}
-      <div className="hero-tagline mt-4">
-        <h2 className="hero-heading">Data you can trust.</h2>
-        <h2 className="hero-heading">Tracking you can rely on.</h2>
-        <h2 className="hero-heading italic opacity-90">
-          Built under one roof.
-        </h2>
-      </div>
-
-      {/* Animated down arrow */}
       <motion.div
-        onClick={() => scrollToSection("services")}
-        className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        {/* Simple down chevron */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-white opacity-80"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <p className="brand-tag mb-8">
+          A DATA STUDIO
+          <span className="dot">·</span>
+          MEASUREMENT
+          <span className="dot">·</span>
+          SEO
+          <span className="dot">·</span>
+          ON-SITE
+        </p>
+
+        <h1
+          className="display"
+          style={{
+            fontSize: "clamp(44px, 9vw, 96px)",
+            maxWidth: "18ch",
+          }}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+          Analytics,
+          <br />
+          in plain language.
+          <br />
+          <span style={{ color: "var(--signal)" }}>Sharp numbers</span>, quiet design.
+        </h1>
+
+        <p
+          className="mt-10 max-w-xl"
+          style={{ fontSize: "19px", lineHeight: 1.5, color: "var(--ink)" }}
+        >
+          We build measurement stacks that survive releases, dashboards that tell you
+          what to do, and consent setups that keep ads running. No vanity metrics.
+        </p>
+
+        <div className="flex flex-wrap gap-3 mt-12">
+          <Link href="#contact" className="btn-ink">
+            Book a call <span style={{ color: "var(--signal)" }}>→</span>
+          </Link>
+          <Link href="#services" className="btn-ghost">
+            See what we do
+          </Link>
+        </div>
       </motion.div>
-    </motion.section>
+
+      <div className="mt-32 md:mt-40 flex justify-between items-end">
+        <span className="label-mono">Scroll to services</span>
+        <span className="label-mono">v.01 · 2026</span>
+      </div>
+    </section>
   );
 }

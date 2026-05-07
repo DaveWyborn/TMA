@@ -8,37 +8,55 @@ export default function ContactSection() {
   const [modalType, setModalType] = useState<"call" | "contact" | null>(null);
 
   return (
-    <motion.section
+    <section
       id="contact"
-      className="relative w-full min-h-screen flex flex-col justify-center items-center text-center px-6 py-20"
-      style={{ background: "var(--deep-purple)" }}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7 }}
+      className="px-6 md:px-12 py-24 md:py-32"
+      style={{ background: "var(--paper)" }}
     >
-      <h2 className="text-4xl md:text-5xl font-bold mb-4 text-[var(--light-text)]">
-        Let&apos;s talk.
-      </h2>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl"
+      >
+        <p className="brand-tag mb-10">
+          05 <span className="dot">·</span> LET&apos;S TALK
+        </p>
 
-      <p className="text-lg text-gray-300 max-w-md mb-10">
-        No pitch. Just a conversation about where you want to get to.
-      </p>
+        <h2
+          className="display"
+          style={{ fontSize: "clamp(36px, 6vw, 64px)", maxWidth: "16ch" }}
+        >
+          No pitch. Just a conversation about
+          <br />
+          <span style={{ color: "var(--signal)" }}>where you want to get to</span>.
+        </h2>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <button
-          onClick={() => setModalType("call")}
-          className="min-h-[44px] px-7 py-3 bg-white text-[var(--primary-color)] font-semibold rounded hover:shadow-lg transition text-sm"
+        <p
+          className="mt-8 max-w-lg"
+          style={{ fontSize: "17px", lineHeight: 1.55, color: "var(--ink)" }}
         >
-          Book a Call
-        </button>
-        <button
-          onClick={() => setModalType("contact")}
-          className="min-h-[44px] px-7 py-3 border border-white text-white font-semibold rounded hover:bg-white/10 transition text-sm"
-        >
-          Send a Message
-        </button>
-      </div>
+          Book a call or send a message. We&apos;ll come back to you within a working day.
+        </p>
+
+        <div className="flex flex-wrap gap-3 mt-12">
+          <button
+            type="button"
+            onClick={() => setModalType("call")}
+            className="btn-ink"
+          >
+            Book a call <span style={{ color: "var(--signal)" }}>→</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setModalType("contact")}
+            className="btn-ghost"
+          >
+            Send a message
+          </button>
+        </div>
+      </motion.div>
 
       {modalType && (
         <ContactModal
@@ -47,6 +65,6 @@ export default function ContactSection() {
           type={modalType}
         />
       )}
-    </motion.section>
+    </section>
   );
 }

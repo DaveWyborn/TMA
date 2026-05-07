@@ -1,113 +1,78 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 
 const services = [
   {
+    n: "01",
     title: "SEO",
-    desc: "Keyword research, rank tracking, and content strategy backed by real data.",
-    detail:
-      "We use DataForSEO, BigQuery, and Looker Studio to build keyword research pipelines, track ranking movements, connect Google Search Console, and produce custom SEO dashboards. No vanity metrics — just the numbers that drive organic growth.",
+    blurb:
+      "Keyword research and rank tracking through DataForSEO and BigQuery. Search Console wired into Looker Studio dashboards that show what's worth doing next, not vanity rankings.",
   },
   {
+    n: "02",
     title: "GTM & Tag Management",
-    desc: "GA4 setup, event tracking, and server-side tagging done properly.",
-    detail:
-      "From a clean GA4 configuration to full server-side tagging via our Tag Gateway, we handle every layer of your measurement stack. Events fire correctly, consent is respected, and your data stays yours.",
+    blurb:
+      "GA4 setup, event tracking, and full server-side tagging via our own Tag Gateway. Events fire correctly. Consent is respected. Your data stays yours.",
   },
   {
+    n: "03",
     title: "On-site Optimisation",
-    desc: "Technical SEO, page speed, structured data, and CRO.",
-    detail:
-      "We audit and improve Core Web Vitals, fix crawlability issues, implement structured data, and identify conversion bottlenecks — giving search engines and users a site they can rely on.",
+    blurb:
+      "Core Web Vitals, structured data, crawlability, conversion bottlenecks. A site that search engines and users can both rely on.",
   },
 ];
 
 export default function ServicesSection() {
-  const [activeService, setActiveService] = useState<string | null>(null);
-
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <motion.section
+    <section
       id="services"
-      className="relative w-full min-h-screen flex flex-col justify-center items-center text-center px-6 py-20 overflow-hidden promise-section"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      className="px-6 md:px-12 py-24 md:py-32"
+      style={{ background: "var(--paper)" }}
     >
-      <h2 className="text-3xl font-bold mb-4 text-[var(--light-text)]">
-        What We Do
-      </h2>
+      <div className="max-w-5xl">
+        <p className="brand-tag mb-10">
+          03 <span className="dot">·</span> WHAT WE DO
+        </p>
 
-      <p className="text-lg text-gray-300 max-w-xl mb-12">
-        Analytics, SEO, and tag management — designed to work together, not in silos.
-      </p>
+        <h2 className="display mb-4" style={{ fontSize: "clamp(32px, 5vw, 48px)" }}>
+          SEO, GTM, and on-site optimisation —
+          <br />
+          designed to work together.
+        </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl w-full z-10">
-        {services.map(({ title, desc }) => (
-          <motion.div
-            key={title}
-            onClick={() => setActiveService(activeService === title ? null : title)}
-            className={`relative bg-white/5 p-6 rounded-lg shadow-md cursor-pointer transition-all text-left ${
-              activeService === title ? "ring-2 ring-[var(--accent-soft)]" : ""
-            }`}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            whileHover={{
-              scale: 1.03,
-              transition: { type: "spring", stiffness: 400, damping: 15 },
-            }}
-          >
-            <h3 className="text-lg font-semibold mb-2 text-[var(--light-text)]">
-              {title}
-            </h3>
-            <p className="text-sm text-gray-300">{desc}</p>
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Detail panel */}
-      <div className="relative mt-8 max-w-3xl w-full min-h-[80px] flex items-center justify-center">
-        {services.map(
-          ({ title, detail }) =>
-            activeService === title && (
-              <motion.p
-                key={title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35 }}
-                className="text-base text-gray-200 text-center"
+        <div className="mt-16">
+          {services.map(({ n, title, blurb }, i) => (
+            <motion.div
+              key={n}
+              className={`grid grid-cols-12 gap-6 py-10 hairline border-t items-baseline ${
+                i === services.length - 1 ? "border-b" : ""
+              }`}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.4, delay: i * 0.05 }}
+            >
+              <div className="col-span-12 md:col-span-2">
+                <span className="num-tag" style={{ fontSize: "28px" }}>
+                  {n}
+                </span>
+              </div>
+              <div className="col-span-12 md:col-span-4">
+                <h3 className="display" style={{ fontSize: "28px" }}>
+                  {title}
+                </h3>
+              </div>
+              <div
+                className="col-span-12 md:col-span-6"
+                style={{ fontSize: "16px", lineHeight: 1.55, color: "var(--ink)" }}
               >
-                {detail}
-              </motion.p>
-            )
-        )}
+                {blurb}
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-
-      {/* Down chevron */}
-      <motion.div
-        onClick={() => scrollToSection("cookiechest")}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 cursor-pointer"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-white opacity-80"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </motion.div>
-    </motion.section>
+    </section>
   );
 }

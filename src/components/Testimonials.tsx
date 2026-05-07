@@ -3,80 +3,94 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import testimonialsData from "@/data/testimonialsData";
-import Link from "next/link";
-import Image from "next/image";
 
-const serviceLinks: Record<string, string> = {
-  "Website Analytics": "#services",
-  "Data Visualisation & Reporting": "#services",
-  "Consent Management": "#services",
-};
-
-const Testimonials = () => {
+export default function Testimonials() {
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
-    if (!isPaused) {
-      const interval = setInterval(() => {
-        setIndex((prevIndex) => (prevIndex + 1) % testimonialsData.length);
-      }, 6000);
-      return () => clearInterval(interval);
-    }
+    if (isPaused) return;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % testimonialsData.length);
+    }, 7000);
+    return () => clearInterval(id);
   }, [isPaused]);
 
+  const t = testimonialsData[index];
+
   return (
-    <section id="testimonials" className="testimonials-section">
-      {/* ✅ Fixed Header */}
-      <h2 className="testimonials-header">What Clients Say</h2>
+    <section
+      id="testimonials"
+      className="px-6 md:px-12 py-24 md:py-32"
+      style={{ background: "var(--paper)" }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div className="max-w-4xl">
+        <p className="brand-tag mb-10">
+          04 <span className="dot">·</span> WHAT CLIENTS SAY
+        </p>
 
-      <div
-        className="testimonials-container"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          >
-            {/* ✅ Display Image if Available */}
-            {testimonialsData[index].image && (
-              <div className="testimonial-image">
-                <Image
-                  src={testimonialsData[index].image}
-                  alt={testimonialsData[index].name}
-                  width={150}
-                  height={150}
-                  className="rounded-full object-cover"
-                />
-              </div>
-            )}
-
-            {/* ✅ Quote Below Image */}
-            <p className="testimonial-text">
-              &quot;{testimonialsData[index].testimonial}&quot;
-            </p>
-            <p className="author-name">{testimonialsData[index].name}</p>
-            <p className="author-job">
-              {testimonialsData[index].jobTitle}, {testimonialsData[index].company}
-            </p>
-            <p className="testimonial-services">
-              <Link
-                href={serviceLinks[testimonialsData[index].services] || "#services"}
-                className="service-link"
+        <div className="min-h-[260px] md:min-h-[220px]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={t.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
+              <blockquote
+                className="display"
+                style={{
+                  fontSize: "clamp(22px, 3.4vw, 34px)",
+                  lineHeight: 1.25,
+                  letterSpacing: "-0.01em",
+                  fontWeight: 500,
+                  maxWidth: "32ch",
+                }}
               >
-                {testimonialsData[index].services}
-              </Link>
-            </p>
-          </motion.div>
-        </AnimatePresence>
+                <span style={{ color: "var(--signal)" }}>&ldquo;</span>
+                {t.testimonial}
+                <span style={{ color: "var(--signal)" }}>&rdquo;</span>
+              </blockquote>
+
+              <div className="mt-8 flex items-center gap-4 hairline border-t pt-4 max-w-md">
+                <span className="num-mono" style={{ color: "var(--signal)" }}>
+                  0{t.id}
+                </span>
+                <span style={{ fontWeight: 500 }}>{t.name}</span>
+                <span style={{ color: "var(--muted)" }}>·</span>
+                <span style={{ color: "var(--muted)" }}>
+                  {t.jobTitle}, {t.company}
+                </span>
+              </div>
+
+              <p className="label-mono mt-3">{t.services}</p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Pagination dots */}
+        <div className="flex gap-2 mt-10">
+          {testimonialsData.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              aria-label={`Show testimonial ${i + 1}`}
+              style={{
+                width: i === index ? 24 : 8,
+                height: 2,
+                background: i === index ? "var(--signal)" : "var(--hairline)",
+                transition: "all 0.25s ease",
+                cursor: "pointer",
+                border: "none",
+                padding: 0,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
-};
-
-export default Testimonials;
+}

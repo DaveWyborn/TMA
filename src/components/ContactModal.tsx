@@ -18,7 +18,7 @@ export default function ContactModal({
 
   if (!isOpen) return null;
 
-  const title = type === "call" ? "Book a Call" : "Send a Message";
+  const title = type === "call" ? "Book a call" : "Send a message";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,7 +30,13 @@ export default function ContactModal({
     const message = formData.get("message") as string;
     const honeypot = formData.get("companyName") as string;
 
-    const result = await handleContact({ type, name, email, message: message || undefined, honeypot });
+    const result = await handleContact({
+      type,
+      name,
+      email,
+      message: message || undefined,
+      honeypot,
+    });
 
     setIsSubmitting(false);
 
@@ -57,72 +63,111 @@ export default function ContactModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4"
+      className="fixed inset-0 z-50 flex items-end md:items-center justify-center px-4"
+      style={{ background: "rgba(20, 23, 31, 0.55)" }}
+      onClick={handleClose}
     >
       <motion.div
-        initial={{ y: 40, opacity: 0 }}
+        initial={{ y: 24, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 40, opacity: 0 }}
-        className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full relative"
+        exit={{ y: 24, opacity: 0 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="w-full max-w-md p-8 relative"
+        style={{
+          background: "var(--paper)",
+          borderRadius: "var(--radius)",
+          color: "var(--ink)",
+        }}
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={handleClose}
-          className="absolute top-3 right-4 text-gray-400 hover:text-gray-700 text-lg leading-none"
           aria-label="Close"
+          className="absolute top-3 right-3 inline-flex items-center justify-center"
+          style={{
+            width: 36,
+            height: 36,
+            background: "transparent",
+            color: "var(--ink)",
+            border: "none",
+            cursor: "pointer",
+          }}
         >
-          ✕
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path
+              d="M1 1L13 13M13 1L1 13"
+              stroke="currentColor"
+              strokeWidth="1.4"
+            />
+          </svg>
         </button>
 
         {isSuccess ? (
-          <div className="text-center py-4">
-            <p className="text-gray-700 mb-6 text-base">
-              Message sent. We&apos;ll be in touch shortly.
+          <div className="py-6">
+            <p className="brand-tag mb-6">
+              <span style={{ color: "var(--signal)" }}>·</span> SENT
             </p>
-            <button
-              onClick={handleClose}
-              className="px-5 py-2 bg-[var(--primary-color)] text-white rounded hover:opacity-90 transition"
+            <p
+              className="display mb-8"
+              style={{ fontSize: "28px" }}
             >
+              Message received.
+              <br />
+              We&apos;ll be in touch shortly.
+            </p>
+            <button onClick={handleClose} className="btn-ink">
               Done
             </button>
           </div>
         ) : (
           <>
-            <h3 className="text-lg font-semibold mb-4 text-[var(--primary-color)]">
+            <p className="brand-tag mb-4">
+              {type === "call" ? "01 · CALL" : "02 · MESSAGE"}
+            </p>
+            <h3 className="display mb-8" style={{ fontSize: "28px" }}>
               {title}
             </h3>
 
-            <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-1">
-                <label htmlFor="name" className="text-xs font-medium text-gray-600">Name</label>
+            <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="name" className="field-label">
+                  Name
+                </label>
                 <input
                   id="name"
                   type="text"
                   name="name"
-                  placeholder="Your name"
                   required
-                  className="border border-gray-300 p-2.5 rounded text-sm focus:outline-none focus:border-[var(--accent-soft)] text-gray-900"
+                  className="field"
+                  placeholder="Your name"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label htmlFor="email" className="text-xs font-medium text-gray-600">Email</label>
+
+              <div>
+                <label htmlFor="email" className="field-label">
+                  Email
+                </label>
                 <input
                   id="email"
                   type="email"
                   name="email"
-                  placeholder="Your email"
                   required
-                  className="border border-gray-300 p-2.5 rounded text-sm focus:outline-none focus:border-[var(--accent-soft)] text-gray-900"
+                  className="field"
+                  placeholder="you@agency.com"
                 />
               </div>
+
               {type === "contact" && (
-                <div className="flex flex-col gap-1">
-                  <label htmlFor="message" className="text-xs font-medium text-gray-600">Message</label>
+                <div>
+                  <label htmlFor="message" className="field-label">
+                    Message
+                  </label>
                   <textarea
                     id="message"
                     name="message"
-                    placeholder="What would you like to talk about?"
                     rows={4}
-                    className="border border-gray-300 p-2.5 rounded text-sm focus:outline-none focus:border-[var(--accent-soft)] resize-none text-gray-900"
+                    className="field"
+                    placeholder="What would you like to talk about?"
                   />
                 </div>
               )}
@@ -139,9 +184,16 @@ export default function ContactModal({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="mt-1 px-5 py-2.5 bg-[var(--primary-color)] text-white rounded hover:opacity-90 transition disabled:opacity-60 text-sm font-medium"
+                className="btn-ink mt-2"
               >
-                {isSubmitting ? "Sending…" : type === "call" ? "Book Now" : "Send Message"}
+                {isSubmitting
+                  ? "Sending…"
+                  : type === "call"
+                  ? "Book now"
+                  : "Send message"}
+                {!isSubmitting && (
+                  <span style={{ color: "var(--signal)" }}>→</span>
+                )}
               </button>
             </form>
           </>

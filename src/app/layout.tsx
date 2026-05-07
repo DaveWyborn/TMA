@@ -1,19 +1,41 @@
 import type { Metadata } from "next";
+import { Orbitron, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["500", "700", "900"],
+  display: "swap",
+  variable: "--font-orbitron",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+});
+
 export const metadata: Metadata = {
-  title: "Tailor Made Analytics | Expert Website Tracking, Reporting & Consent Management",
-  description: "Unlock actionable insights with Tailor Made Analytics. We specialise in Google Tag Manager, GA4, Looker Studio dashboards, and consent management — tailored to your business.",
+  title: "Tailor Made Analytics | Measurement, SEO and on-site optimisation, done properly",
+  description:
+    "A data studio for marketers and agencies. We build measurement stacks that survive releases, dashboards that tell you what to do, and consent setups that keep ads running.",
 };
 
 export default function RootLayout({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${orbitron.variable} ${jetbrainsMono.variable}`}>
       <head>
-        {/* ✅ Google Tag Manager via Tag Gateway */}
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link
+          rel="stylesheet"
+          href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap"
+        />
         <Script
           id="gtm-head"
           strategy="afterInteractive"
@@ -29,8 +51,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="root-body">
-        {/* ✅ GTM noscript fallback */}
+      <body>
         <noscript>
           <iframe
             src="https://tags.tailormadeanalytics.com/ns.html?id=GTM-THL6DSQM"

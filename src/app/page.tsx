@@ -8,14 +8,12 @@ import FooterSection from "@/components/FooterSection";
 
 export default function Home() {
   return (
-    <main className="main-container">
+    <main>
       <NavBar />
       <HeroSection />
       <ServicesSection />
       <CookieChestSection />
-      <section id="testimonials" className="testimonials-section">
-        <Testimonials />
-      </section>
+      <Testimonials />
       <ContactSection />
       <FooterSection />
     </main>

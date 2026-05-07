@@ -1,87 +1,74 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Link from "next/link";
+import Wordmark from "./Wordmark";
+
+const steps = ["Discover", "Recommend", "Build", "Monitor", "Improve"];
 
 export default function FooterSection() {
   return (
-    <motion.section
+    <footer
       id="footer"
-      className="w-full h-screen flex flex-col justify-center items-center text-center px-6 relative"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
+      className="px-6 md:px-12 py-20"
+      style={{ background: "var(--ink)", color: "var(--paper)" }}
     >
-      {/* ✅ Headline */}
-      <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
-        Working with us is simple.
-      </h2>
+      <div className="max-w-5xl">
+        <p className="brand-tag mb-10" style={{ color: "var(--paper-on-ink)" }}>
+          06 <span className="dot">·</span> HOW WE WORK
+        </p>
 
-      {/* ✅ Supporting line */}
-      <p className="text-lg text-gray-300 mb-8 max-w-2xl">
-        From your first discovery call to continuous improvements, we keep your
-        tracking, consent, and reporting clear — so you can stay focused on your business.
-      </p>
+        <div className="flex flex-wrap items-baseline gap-3 mb-16">
+          {steps.map((s, i) => (
+            <span key={s} className="flex items-baseline gap-3">
+              <span
+                className="num-tag"
+                style={{ fontSize: "12px", color: "var(--paper-on-ink)" }}
+              >
+                0{i + 1}
+              </span>
+              <span
+                className="display"
+                style={{
+                  fontSize: "clamp(20px, 3vw, 28px)",
+                  color: "var(--paper)",
+                }}
+              >
+                {s}
+              </span>
+              {i < steps.length - 1 && (
+                <span style={{ color: "var(--signal)" }}>—</span>
+              )}
+            </span>
+          ))}
+        </div>
 
-      {/* Process steps */}
-      <div className="flex flex-col md:flex-row gap-4 mb-12">
-        <span className="text-gray-400 text-sm uppercase tracking-wider">
-          Discover
-        </span>
-        <span className="text-gray-400 text-sm uppercase tracking-wider">
-          &gt; Recommend
-        </span>
-        <span className="text-gray-400 text-sm uppercase tracking-wider">
-          &gt; Build
-        </span>
-        <span className="text-gray-400 text-sm uppercase tracking-wider">
-          &gt; Monitor
-        </span>
-        <span className="text-gray-400 text-sm uppercase tracking-wider">
-          &gt; Improve
-        </span>
-      </div>
-
-      {/* ✅ Optional back-to-top arrow */}
-      {/* If you want looping scroll UX — optional! */}
-      {/* 
-      <motion.div
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="absolute bottom-16 left-1/2 transform -translate-x-1/2 cursor-pointer"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6 text-gray-400 opacity-80"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <div
+          className="hairline border-t pt-10 flex flex-col md:flex-row md:items-end md:justify-between gap-10"
+          style={{ borderColor: "var(--ink-soft)" }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 15l7-7 7 7"
-          />
-        </svg>
-      </motion.div>
-      */}
+          <Wordmark size={22} inverted />
 
-      {/* ✅ Footer strip */}
-<div className="absolute bottom-4 w-full text-center text-xs text-gray-500">
-  <p>
-    Tailor Made Analytics &copy; {new Date().getFullYear()} |{" "}
-    <a href="/privacy-policy" className="underline hover:text-gray-300">
-      Privacy Policy
-    </a>{" "}
-    |{" "}
-    <a href="/terms" className="underline hover:text-gray-300">
-      Terms &amp; Conditions
-    </a>
-  </p>
-  <p>Built with care in the UK</p>
-</div>
-    </motion.section>
+          <div className="flex flex-col md:items-end gap-2">
+            <p className="label-mono" style={{ color: "var(--paper-on-ink)" }}>
+              Tailor Made Analytics &copy; {new Date().getFullYear()} · Built in
+              the UK
+            </p>
+            <p className="label-mono" style={{ color: "var(--paper-on-ink)" }}>
+              <Link href="/privacy-policy" className="signal-link on-ink">
+                Privacy
+              </Link>
+              {" · "}
+              <Link href="/terms" className="signal-link on-ink">
+                Terms
+              </Link>
+              {" · "}
+              <a href="mailto:hello@tailormadeanalytics.com" className="signal-link on-ink">
+                hello@tailormadeanalytics.com
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }

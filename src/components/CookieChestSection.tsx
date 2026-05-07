@@ -3,92 +3,96 @@
 import { motion } from "framer-motion";
 
 const products = [
-  {
-    label: "GTM Monitoring",
-    desc: "Real-time alerts when your tracking breaks — before your client notices.",
-    href: "https://cookiechest.com",
-  },
-  {
-    label: "Consent Management (CMP)",
-    desc: "Cookie consent built for PPC agencies. Keeps Google happy, keeps ads running.",
-    href: "https://cookiechest.com/CMP",
-  },
+  { label: "GTM Monitoring", value: "live" },
+  { label: "Consent Management", value: "CMP" },
+  { label: "Used by", value: "PPC agencies", signal: true },
 ];
 
 export default function CookieChestSection() {
-  const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
-    <motion.section
+    <section
       id="cookiechest"
-      className="relative w-full min-h-screen flex flex-col justify-center items-center text-center px-6 py-20"
-      style={{ background: "var(--dark-bg)" }}
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      className="px-6 md:px-12 py-24 md:py-32"
+      style={{ background: "var(--ink)", color: "var(--paper)" }}
     >
-      {/* TMA product badge */}
-      <span className="mb-4 text-xs font-semibold tracking-widest uppercase text-[var(--accent-soft)] border border-[var(--accent-soft)] px-3 py-1 rounded-full">
-        A Tailor Made Analytics Product
-      </span>
-
-      <h2 className="text-3xl font-bold mb-3 text-[var(--light-text)]">
-        CookieChest
-      </h2>
-
-      <p className="text-lg text-gray-300 max-w-xl mb-12">
-        Tracking signal monitoring and consent management for PPC agencies.
-        Built to protect your data and your clients.
+      <p className="brand-tag mb-8" style={{ color: "var(--paper-on-ink)" }}>
+        A TMA STUDIO PRODUCT
+        <span className="dot">·</span>
+        v.01
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl w-full z-10">
-        {products.map(({ label, desc, href }) => (
-          <motion.a
-            key={label}
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-white/5 p-6 rounded-lg shadow-md text-left hover:ring-2 hover:ring-[var(--accent-soft)] transition-all"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            whileHover={{
-              scale: 1.03,
-              transition: { type: "spring", stiffness: 400, damping: 15 },
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-end">
+        <motion.div
+          className="md:col-span-7"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2
+            className="display"
+            style={{ fontSize: "clamp(36px, 6vw, 64px)", color: "var(--paper)" }}
+          >
+            CookieChest.
+            <br />
+            Tracking that{" "}
+            <span style={{ color: "var(--signal)" }}>doesn&apos;t break</span>.
+          </h2>
+
+          <p
+            className="mt-8 max-w-md"
+            style={{
+              fontSize: "17px",
+              lineHeight: 1.55,
+              color: "var(--paper-on-ink)",
             }}
           >
-            <h3 className="text-lg font-semibold mb-2 text-[var(--light-text)]">
-              {label}
-            </h3>
-            <p className="text-sm text-gray-300 mb-3">{desc}</p>
-            <span className="text-xs font-medium text-[var(--accent-soft)] underline">
-              Visit cookiechest.com →
-            </span>
-          </motion.a>
-        ))}
-      </div>
+            Real-time tag monitoring and consent management for PPC agencies.
+            Built in-house at TMA — the product version of the work we do for clients.
+          </p>
+        </motion.div>
 
-      {/* Down chevron */}
-      <motion.div
-        onClick={() => scrollToSection("testimonials")}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 cursor-pointer"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-white opacity-80"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
+        <motion.div
+          className="md:col-span-5"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </motion.div>
-    </motion.section>
+          <div className="space-y-3">
+            {products.map(({ label, value, signal }) => (
+              <div
+                key={label}
+                className="flex justify-between border-b pb-3"
+                style={{ borderColor: "var(--ink-soft)" }}
+              >
+                <span style={{ color: "var(--paper-on-ink)" }}>{label}</span>
+                <span
+                  className="num-mono"
+                  style={{ color: signal ? "var(--signal)" : "var(--paper)" }}
+                >
+                  {value}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <a
+            href="https://cookiechest.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex items-center gap-3"
+            style={{
+              color: "var(--paper)",
+              borderBottom: "1px solid var(--signal)",
+              paddingBottom: "4px",
+            }}
+          >
+            Visit cookiechest.com{" "}
+            <span style={{ color: "var(--signal)" }}>→</span>
+          </a>
+        </motion.div>
+      </div>
+    </section>
   );
 }
