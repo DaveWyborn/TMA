@@ -18,7 +18,12 @@ export default function ContactModal({
 
   if (!isOpen) return null;
 
-  const title = type === "call" ? "Book a call" : "Send a message";
+  const title = type === "call" ? "Who are we meeting?" : "Send a message";
+  const intro =
+    type === "call"
+      ? "Tell us who you are, then we'll take you to the calendar to pick a time."
+      : "Drop us a note. We'll come back to you within a working day.";
+  const tag = type === "call" ? "STEP 1 OF 2 · YOUR DETAILS" : "TELL US ABOUT YOU";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -121,12 +126,20 @@ export default function ContactModal({
           </div>
         ) : (
           <>
-            <p className="brand-tag mb-4">
-              {type === "call" ? "01 · CALL" : "02 · MESSAGE"}
-            </p>
-            <h3 className="display mb-8" style={{ fontSize: "28px" }}>
+            <p className="brand-tag mb-4">{tag}</p>
+            <h3 className="display mb-3" style={{ fontSize: "28px" }}>
               {title}
             </h3>
+            <p
+              className="mb-8"
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.5,
+                color: "var(--muted)",
+              }}
+            >
+              {intro}
+            </p>
 
             <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
               <div>
@@ -187,9 +200,11 @@ export default function ContactModal({
                 className="btn-ink mt-2"
               >
                 {isSubmitting
-                  ? "Sending…"
+                  ? type === "call"
+                    ? "Opening calendar…"
+                    : "Sending…"
                   : type === "call"
-                  ? "Book now"
+                  ? "Continue to calendar"
                   : "Send message"}
                 {!isSubmitting && (
                   <span style={{ color: "var(--signal)" }}>→</span>

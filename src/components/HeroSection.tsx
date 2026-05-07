@@ -21,8 +21,6 @@ export default function HeroSection() {
           MEASUREMENT
           <span className="dot">·</span>
           SEO
-          <span className="dot">·</span>
-          ON-SITE
         </p>
 
         <h1

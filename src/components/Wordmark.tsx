@@ -71,10 +71,10 @@ export default function Wordmark({
         <span
           className="inline-flex items-center"
           style={{
-            fontFamily: "'General Sans', sans-serif",
+            fontFamily: "var(--font-orbitron), sans-serif",
             fontWeight: 500,
             fontSize: `${subSize}px`,
-            letterSpacing: "0.32em",
+            letterSpacing: "0.22em",
             textTransform: "uppercase",
             color: fg,
             marginTop: "6px",
