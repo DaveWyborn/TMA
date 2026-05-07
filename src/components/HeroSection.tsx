@@ -41,8 +41,8 @@ export default function HeroSection() {
           className="mt-10 max-w-xl"
           style={{ fontSize: "19px", lineHeight: 1.5, color: "var(--ink)" }}
         >
-          We build measurement stacks that survive releases, dashboards that tell you
-          what to do, and consent setups that keep ads running. No vanity metrics.
+          We build measurement stacks that survive releases, dashboards that drive
+          decisions, and consent setups that keep ads running. No vanity metrics.
         </p>
 
         <div className="flex flex-wrap gap-3 mt-12">

@@ -20,7 +20,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Tailor Made Analytics | Measurement, SEO and on-site optimisation, done properly",
   description:
-    "A data studio for marketers and agencies. We build measurement stacks that survive releases, dashboards that tell you what to do, and consent setups that keep ads running.",
+    "A data studio for marketers and agencies. We build measurement stacks that survive releases, dashboards that drive decisions, and consent setups that keep ads running.",
 };
 
 export default function RootLayout({
