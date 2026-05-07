@@ -47,7 +47,7 @@ export default function HeroSection() {
 
         <div className="flex flex-wrap gap-3 mt-12">
           <Link href="#contact" className="btn-ink">
-            Book a call <span style={{ color: "var(--signal)" }}>→</span>
+            Book a call <span aria-hidden="true">→</span>
           </Link>
           <Link href="#services" className="btn-ghost">
             See what we do

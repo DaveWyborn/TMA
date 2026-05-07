@@ -20,9 +20,7 @@ export default function ContactSection() {
         transition={{ duration: 0.5 }}
         className="max-w-3xl"
       >
-        <p className="brand-tag mb-10">
-          05 <span className="dot">·</span> LET&apos;S TALK
-        </p>
+        <p className="brand-tag mb-10">Let&apos;s talk</p>
 
         <h2
           className="display"
@@ -46,7 +44,7 @@ export default function ContactSection() {
             onClick={() => setModalType("call")}
             className="btn-ink"
           >
-            Book a call <span style={{ color: "var(--signal)" }}>→</span>
+            Book a call <span aria-hidden="true">→</span>
           </button>
           <button
             type="button"

@@ -31,9 +31,7 @@ export default function ServicesSection() {
       style={{ background: "var(--paper)" }}
     >
       <div className="max-w-5xl">
-        <p className="brand-tag mb-10">
-          03 <span className="dot">·</span> WHAT WE DO
-        </p>
+        <p className="brand-tag mb-10">What we do</p>
 
         <h2 className="display mb-4" style={{ fontSize: "clamp(32px, 5vw, 48px)" }}>
           SEO, GTM, and on-site optimisation —

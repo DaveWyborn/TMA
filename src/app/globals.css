@@ -51,14 +51,14 @@ body {
 }
 
 .brand-tag {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 500;
   font-size: 11px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink);
 }
-.brand-tag .dot { color: var(--signal); margin: 0 0.4em; }
+.brand-tag .dot { color: var(--muted); margin: 0 0.4em; }
 
 .num-tag {
   font-family: 'Orbitron', sans-serif;

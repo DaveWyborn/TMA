@@ -84,12 +84,11 @@ export default function CookieChestSection() {
             className="mt-8 inline-flex items-center gap-3"
             style={{
               color: "var(--paper)",
-              borderBottom: "1px solid var(--signal)",
+              borderBottom: "1px solid var(--paper-on-ink)",
               paddingBottom: "4px",
             }}
           >
-            Visit cookiechest.com{" "}
-            <span style={{ color: "var(--signal)" }}>→</span>
+            Visit cookiechest.com <span aria-hidden="true">→</span>
           </a>
         </motion.div>
       </div>

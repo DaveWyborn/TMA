@@ -206,9 +206,7 @@ export default function ContactModal({
                   : type === "call"
                   ? "Continue to calendar"
                   : "Send message"}
-                {!isSubmitting && (
-                  <span style={{ color: "var(--signal)" }}>→</span>
-                )}
+                {!isSubmitting && <span aria-hidden="true">→</span>}
               </button>
             </form>
           </>

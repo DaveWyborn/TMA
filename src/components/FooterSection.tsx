@@ -14,15 +14,19 @@ export default function FooterSection() {
     >
       <div className="max-w-5xl">
         <p className="brand-tag mb-10" style={{ color: "var(--paper-on-ink)" }}>
-          06 <span className="dot">·</span> HOW WE WORK
+          How we work
         </p>
 
         <div className="flex flex-wrap items-baseline gap-3 mb-16">
           {steps.map((s, i) => (
             <span key={s} className="flex items-baseline gap-3">
               <span
-                className="num-tag"
-                style={{ fontSize: "12px", color: "var(--paper-on-ink)" }}
+                className="num-mono"
+                style={{
+                  fontSize: "12px",
+                  color: "var(--paper-on-ink)",
+                  letterSpacing: "0.04em",
+                }}
               >
                 0{i + 1}
               </span>
@@ -36,7 +40,7 @@ export default function FooterSection() {
                 {s}
               </span>
               {i < steps.length - 1 && (
-                <span style={{ color: "var(--signal)" }}>—</span>
+                <span style={{ color: "var(--paper-on-ink)" }}>—</span>
               )}
             </span>
           ))}
