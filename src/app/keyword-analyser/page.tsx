@@ -5,7 +5,8 @@
 import { useState } from 'react';
 import Navbar from '../../components/NavBar';
 import Image from 'next/image';
-import Link from 'next/link';
+import ShareResults from '../../components/ShareResults';
+import HelpTooltip from '../../components/HelpTooltip';
 
 type KeywordResult = {
   tag: string;
@@ -13,8 +14,21 @@ type KeywordResult = {
   url2?: { count: number; snippets: string[] } | null;
 };
 
+type SummaryData = {
+  density: string;
+  totalOccurrences: number;
+  wordCount: number;
+  inURL: boolean;
+  inTitle: boolean;
+  inH1: boolean;
+  imageAltCount: number;
+};
+
 type Results = {
   tags: KeywordResult[];
+  url1Summary: SummaryData;
+  url2Summary?: SummaryData | null;
+  note?: string;
 };
 
 export default function KeywordAnalyserPage() {
@@ -63,6 +77,15 @@ export default function KeywordAnalyserPage() {
 
         <h1 className="meta-checker-heading">Keyword Analyser</h1>
 
+        <div className="mb-6 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
+          <p className="text-sm text-gray-300 leading-relaxed">
+            <strong className="text-white">What this tool does:</strong> Analyzes keyword usage across your page - density, placement in title/H1/URL, and distribution across headings and content. Compare against competitors.
+          </p>
+          <p className="text-xs text-gray-400 mt-2">
+            <strong>Why it matters:</strong> Strategic keyword placement signals page topic to search engines. Too little = missed opportunity. Too much = keyword stuffing penalty.
+          </p>
+        </div>
+
         <form onSubmit={handleSubmit} className="dark-form">
           <div>
             <label className="block mb-1">Keyword:</label>
@@ -103,7 +126,86 @@ export default function KeywordAnalyserPage() {
 
         {results && results.tags && (
   <div className="keyword-analyser-results">
-    <h2 className="text-xl font-semibold mb-2">Results</h2>
+    <h2 className="text-xl font-semibold mb-4 flex items-center">
+      Keyword Summary
+      <HelpTooltip text="Keyword density is the percentage of times your keyword appears compared to total words. Ideal range: 1-2% for primary keywords. Placement in URL, title, and H1 are critical ranking signals." />
+    </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div className="p-4 border border-gray-500 rounded bg-gray-900/30">
+        <h3 className="font-bold mb-3">URL 1</h3>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span>Keyword Density:</span>
+            <strong className="text-green-400">{results.url1Summary.density}</strong>
+          </div>
+          <div className="flex justify-between">
+            <span>Total Occurrences:</span>
+            <strong>{results.url1Summary.totalOccurrences}</strong>
+          </div>
+          <div className="flex justify-between">
+            <span>Total Words:</span>
+            <strong>{results.url1Summary.wordCount}</strong>
+          </div>
+          <div className="border-t border-gray-600 pt-2 mt-2">
+            <div className="flex justify-between">
+              <span>In URL:</span>
+              <strong>{results.url1Summary.inURL ? '✓ Yes' : '✗ No'}</strong>
+            </div>
+            <div className="flex justify-between">
+              <span>In Title:</span>
+              <strong>{results.url1Summary.inTitle ? '✓ Yes' : '✗ No'}</strong>
+            </div>
+            <div className="flex justify-between">
+              <span>In H1:</span>
+              <strong>{results.url1Summary.inH1 ? '✓ Yes' : '✗ No'}</strong>
+            </div>
+            <div className="flex justify-between">
+              <span>In Image Alts:</span>
+              <strong>{results.url1Summary.imageAltCount}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      {url2 && results.url2Summary && (
+        <div className="p-4 border border-gray-500 rounded bg-gray-900/30">
+          <h3 className="font-bold mb-3">URL 2</h3>
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span>Keyword Density:</span>
+              <strong className="text-green-400">{results.url2Summary.density}</strong>
+            </div>
+            <div className="flex justify-between">
+              <span>Total Occurrences:</span>
+              <strong>{results.url2Summary.totalOccurrences}</strong>
+            </div>
+            <div className="flex justify-between">
+              <span>Total Words:</span>
+              <strong>{results.url2Summary.wordCount}</strong>
+            </div>
+            <div className="border-t border-gray-600 pt-2 mt-2">
+              <div className="flex justify-between">
+                <span>In URL:</span>
+                <strong>{results.url2Summary.inURL ? '✓ Yes' : '✗ No'}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span>In Title:</span>
+                <strong>{results.url2Summary.inTitle ? '✓ Yes' : '✗ No'}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span>In H1:</span>
+                <strong>{results.url2Summary.inH1 ? '✓ Yes' : '✗ No'}</strong>
+              </div>
+              <div className="flex justify-between">
+                <span>In Image Alts:</span>
+                <strong>{results.url2Summary.imageAltCount}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    <h2 className="text-xl font-semibold mb-2 mt-8">Detailed Breakdown</h2>
     <table className="w-full border border-gray-300">
       <thead>
         <tr className="bg-gray-700 text-white">
@@ -144,6 +246,93 @@ export default function KeywordAnalyserPage() {
         ))}
       </tbody>
     </table>
+
+    {/* Recommendations */}
+    {!url2 && (
+      <>
+        <div className="mt-12 p-6 bg-blue-900/20 border border-blue-600 rounded-lg">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+            <span>💡</span> Recommended Next Steps
+          </h2>
+          <div className="space-y-3 text-sm">
+            {/* Check keyword density */}
+            {parseFloat(results.url1Summary.density) < 0.5 && (
+              <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
+                <strong className="text-yellow-400">⚠ Low Keyword Density</strong>
+                <p className="text-gray-300 mt-1">
+                  Your keyword density is {results.url1Summary.density}. Consider increasing usage naturally throughout your content. Aim for 1-2% for primary keywords.
+                </p>
+              </div>
+            )}
+            {parseFloat(results.url1Summary.density) > 3 && (
+              <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
+                <strong className="text-yellow-400">⚠ High Keyword Density</strong>
+                <p className="text-gray-300 mt-1">
+                  Your keyword density is {results.url1Summary.density}. This may appear as keyword stuffing. Consider reducing usage to 1-2%.
+                </p>
+              </div>
+            )}
+
+            {/* Check URL placement */}
+            {!results.url1Summary.inURL && (
+              <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
+                <strong className="text-yellow-400">⚠ Keyword Not in URL</strong>
+                <p className="text-gray-300 mt-1">
+                  Include your target keyword in the page URL for better SEO. URLs are a strong ranking signal.
+                </p>
+              </div>
+            )}
+
+            {/* Check title placement */}
+            {!results.url1Summary.inTitle && (
+              <div className="p-3 bg-red-900/20 border-l-4 border-red-500">
+                <strong className="text-red-400">✗ Keyword Not in Title</strong>
+                <p className="text-gray-300 mt-1">
+                  Your keyword should appear in the page title. This is critical for SEO - add it near the beginning for maximum impact.
+                </p>
+              </div>
+            )}
+
+            {/* Check H1 placement */}
+            {!results.url1Summary.inH1 && (
+              <div className="p-3 bg-red-900/20 border-l-4 border-red-500">
+                <strong className="text-red-400">✗ Keyword Not in H1</strong>
+                <p className="text-gray-300 mt-1">
+                  Include your target keyword in the H1 heading. This helps search engines understand your page topic.
+                </p>
+              </div>
+            )}
+
+            {/* Check image alt text */}
+            {results.url1Summary.imageAltCount === 0 && (
+              <div className="p-3 bg-blue-900/20 border-l-4 border-blue-500">
+                <strong className="text-blue-400">ℹ Image Alt Text</strong>
+                <p className="text-gray-300 mt-1">
+                  Consider adding your keyword to relevant image alt text. This improves image search visibility.
+                </p>
+              </div>
+            )}
+
+            {/* All good? */}
+            {results.url1Summary.inURL &&
+             results.url1Summary.inTitle &&
+             results.url1Summary.inH1 &&
+             parseFloat(results.url1Summary.density) >= 0.5 &&
+             parseFloat(results.url1Summary.density) <= 3 && (
+              <div className="p-3 bg-green-900/20 border-l-4 border-green-500">
+                <strong className="text-green-400">✓ Strong Keyword Optimization!</strong>
+                <p className="text-gray-300 mt-1">
+                  Your keyword placement is solid. Consider testing against competitors to identify additional opportunities.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Share Results */}
+        <ShareResults toolName="Keyword Analyser" scannedUrl={url1} />
+      </>
+    )}
   </div>
 )}
       </div>

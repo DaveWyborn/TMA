@@ -1,27 +1,23 @@
-import HeroSection from "@/components/HeroSection";
-import PromiseSection from "@/components/PromiseSection";
 import NavBar from "@/components/NavBar";
-import FooterSection from "@/components/FooterSection";
+import HeroSection from "@/components/HeroSection";
+import ServicesSection from "@/components/ServicesSection";
+import CookieChestSection from "@/components/CookieChestSection";
 import Testimonials from "@/components/Testimonials";
-import BuyNow from "@/components/BuyNow"; // 👈 new import
+import ContactSection from "@/components/ContactSection";
+import FooterSection from "@/components/FooterSection";
 
 export default function Home() {
   return (
     <main className="main-container">
       <NavBar />
       <HeroSection />
-
-      <section className="PromiseSection">
-        <PromiseSection />
-      </section>
+      <ServicesSection />
+      <CookieChestSection />
       <section id="testimonials" className="testimonials-section">
-        <Testimonials/>
+        <Testimonials />
       </section>
-      <BuyNow /> {/* 👈 New Buy Now section */}
-     
-      <FooterSection /> {/* 👈 Contact now stands on its own */}
-      
+      <ContactSection />
+      <FooterSection />
     </main>
   );
 }
-

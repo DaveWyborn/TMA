@@ -23,19 +23,19 @@ export default function FooterSection() {
         tracking, consent, and reporting clear — so you can stay focused on your business.
       </p>
 
-      {/* ✅ Process steps */}
+      {/* Process steps */}
       <div className="flex flex-col md:flex-row gap-4 mb-12">
         <span className="text-gray-400 text-sm uppercase tracking-wider">
           Discover
         </span>
         <span className="text-gray-400 text-sm uppercase tracking-wider">
-          &gt; Setup
+          &gt; Recommend
+        </span>
+        <span className="text-gray-400 text-sm uppercase tracking-wider">
+          &gt; Build
         </span>
         <span className="text-gray-400 text-sm uppercase tracking-wider">
           &gt; Monitor
-        </span>
-        <span className="text-gray-400 text-sm uppercase tracking-wider">
-          &gt; Report
         </span>
         <span className="text-gray-400 text-sm uppercase tracking-wider">
           &gt; Improve

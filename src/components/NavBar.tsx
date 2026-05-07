@@ -7,10 +7,10 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const sections = [
-    { id: "promise", label: "Promise" },
-    { id: "testimonials", label: "Testimonials" },
-    { id: "buy-now", label: "Book a Call" },
-    { id: "footer", label: "How We Operate" },
+    { id: "services", label: "Services", href: "#services" },
+    { id: "cookiechest", label: "CookieChest", href: "#cookiechest" },
+    { id: "seo-tools", label: "SEO Tools", href: "/seo-tools" },
+    { id: "contact", label: "Contact", href: "#contact" },
   ];
 
   return (
@@ -39,8 +39,8 @@ export default function NavBar() {
               {sections.map((section) => (
                 <li key={section.id}>
                   <a
-                    href={`#${section.id}`}
-                    className="text-gray-800 hover:text-blue-600"
+                    href={section.href}
+                    className="text-gray-800 hover:text-blue-600 block py-1 min-h-[44px] flex items-center"
                     onClick={() => setMenuOpen(false)}
                   >
                     {section.label}

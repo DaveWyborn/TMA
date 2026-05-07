@@ -38,6 +38,26 @@ export async function POST(req) {
       let hitLimit = false;
       const tagResults = {};
 
+      // Calculate keyword density
+      const bodyText = $('body').text().toLowerCase();
+      const words = bodyText.split(/\s+/).filter(w => w.length > 0);
+      const wordCount = words.length;
+      const keywordMatches = (bodyText.match(new RegExp(keywordLower, 'g')) || []).length;
+      const density = wordCount > 0 ? ((keywordMatches / wordCount) * 100).toFixed(2) : '0.00';
+
+      // Check keyword placement
+      const inURL = url.toLowerCase().includes(keywordLower);
+      const titleText = $('title').text().toLowerCase();
+      const inTitle = titleText.includes(keywordLower);
+      const h1Text = $('h1').first().text().toLowerCase();
+      const inH1 = h1Text.includes(keywordLower);
+
+      // Check images with keyword in alt text
+      const imageAltCount = $('img[alt]').filter((i, el) => {
+        const alt = $(el).attr('alt').toLowerCase();
+        return alt.includes(keywordLower);
+      }).length;
+
       for (const tag of TAGS) {
         let count = 0;
         let snippets = [];
@@ -68,7 +88,19 @@ export async function POST(req) {
         if (hitLimit) break;
       }
 
-      return { results: tagResults, hitLimit };
+      return {
+        results: tagResults,
+        hitLimit,
+        summary: {
+          density: density + '%',
+          totalOccurrences: keywordMatches,
+          wordCount,
+          inURL,
+          inTitle,
+          inH1,
+          imageAltCount
+        }
+      };
     } catch (err) {
       console.error(`Error processing ${url}:`, err.message || err);
       return null;
@@ -102,6 +134,8 @@ export async function POST(req) {
 
   return NextResponse.json({
     tags: combined,
+    url1Summary: url1Data.summary,
+    url2Summary: url2Data?.summary || null,
     ...(limitHit && { note: 'Limited to first 3,000 elements per page.' }),
   });
 }

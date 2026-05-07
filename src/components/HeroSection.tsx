@@ -29,18 +29,18 @@ export default function HeroSection() {
         className="hero-logo"
       />
 
-      {/* ✅ Stacked tagline */}
+      {/* Stacked tagline */}
       <div className="hero-tagline mt-4">
-        <h2 className="hero-heading">Stay compliant.</h2>
-        <h2 className="hero-heading">Track what matters.</h2>
+        <h2 className="hero-heading">Data you can trust.</h2>
+        <h2 className="hero-heading">Tracking you can rely on.</h2>
         <h2 className="hero-heading italic opacity-90">
-          Sleep better at night.
+          Built under one roof.
         </h2>
       </div>
 
-      {/* ✅ Animated down arrow */}
+      {/* Animated down arrow */}
       <motion.div
-        onClick={() => scrollToSection("promise")}
+        onClick={() => scrollToSection("services")}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 cursor-pointer"
         animate={{ y: [0, -5, 0] }}
         transition={{ repeat: Infinity, duration: 2 }}
