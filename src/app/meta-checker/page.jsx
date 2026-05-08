@@ -1,10 +1,7 @@
 'use client';
 
-// Meta Checker
-
 import { useState } from 'react';
-import Navbar from '../../components/NavBar';
-import Image from 'next/image';
+import ToolPageShell from '../../components/ToolPageShell';
 import ShareResults from '../../components/ShareResults';
 import HelpTooltip from '../../components/HelpTooltip';
 
@@ -19,7 +16,6 @@ export default function MetaCheckerPage() {
 
   async function handleSubmit(e, useStealthMode = false) {
     e.preventDefault();
-    console.log('🔍 Form submitted', useStealthMode ? '(Stealth Mode)' : '');
     setLoading(true);
     setBotBlocked(false);
     setResults(null);
@@ -32,7 +28,6 @@ export default function MetaCheckerPage() {
       });
 
       const data = await res.json();
-      console.log('✅ Final Results:', data);
 
       if (data.botBlocked) {
         setBotBlocked(true);
@@ -41,7 +36,7 @@ export default function MetaCheckerPage() {
         setResults(data);
       }
     } catch (err) {
-      console.error('❌ Fetch or parsing error:', err.message);
+      console.error('Fetch or parsing error:', err.message);
     } finally {
       setLoading(false);
     }
@@ -61,429 +56,523 @@ export default function MetaCheckerPage() {
   }
 
   return (
-    <>
-      <Navbar />
+    <ToolPageShell
+      eyebrow="SEO Tools / Meta Checker"
+      title="Meta Checker"
+      lede="Title, description, Open Graph, Twitter Cards, schema and the technical tags Google reads first. Run yours, optionally next to a competitor, and see the gap."
+    >
+      <section className="tool-intro">
+        <div>
+          <h3>What it does</h3>
+          <p>
+            Pulls every meta tag we audit — basic, social, technical and
+            schema — from your URL and a competitor&rsquo;s. Returns a
+            side-by-side comparison and flags missing fundamentals.
+          </p>
+        </div>
+        <div>
+          <h3>Why it matters</h3>
+          <p>
+            Meta tags are the cheapest fix in SEO. Missing or weak tags lose
+            click-through in search results and silently mangle every social
+            share. This is the first thing we check on every audit.
+          </p>
+        </div>
+      </section>
 
-      <div className="meta-checker-container">
-        <div className="flex flex-col items-center mb-6">
-          <Image
-            src="/images/TMA Light Logo Transparent.png"
-            alt="Tailor Made Analytics Logo"
-            width={200}
-            height={80}
-            priority
+      <form onSubmit={handleSubmit} className="tool-form">
+        <div>
+          <label className="field-label">Your URL</label>
+          <input
+            type="url"
+            value={myURL}
+            onChange={(e) => setMyURL(e.target.value)}
+            placeholder="https://yoursite.com/page"
+            required
+            className="field"
           />
         </div>
-        <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
-          🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
+
+        <div>
+          <label className="field-label">Competitor URL (optional)</label>
+          <input
+            type="url"
+            value={compURL}
+            onChange={(e) => setCompURL(e.target.value)}
+            placeholder="https://competitor.com/page"
+            className="field"
+          />
         </div>
 
-        <p className="mb-4 text-xs text-gray-300">
-          Note: Usage is logged for test purposes.
-        </p>
-
-        <h1 className="meta-checker-heading">SEO Meta Checker</h1>
-
-        <div className="mb-6 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
-          <p className="text-sm text-gray-300 leading-relaxed">
-            <strong className="text-white">What this tool does:</strong> Analyzes your page's meta tags, social sharing tags (Open Graph & Twitter Cards), technical SEO elements, and schema markup. Compare against competitors to identify gaps.
-          </p>
-          <p className="text-xs text-gray-400 mt-2">
-            <strong>Why it matters:</strong> Meta tags control how your page appears in search results and social media. Missing or poorly optimized tags mean lost clicks and engagement.
-          </p>
+        <div className="actions">
+          <button type="submit" className="btn-ink" disabled={loading}>
+            {loading ? 'Checking…' : 'Run check →'}
+          </button>
+          <button type="button" className="btn-ghost" onClick={handleReset}>
+            Reset
+          </button>
         </div>
+      </form>
 
-        <form onSubmit={handleSubmit} className="dark-form mb-8">
-          <div>
-            <label className="block mb-1">Your URL:</label>
+      {botBlocked && (
+        <div className="bot-blocked">
+          <p className="brand-tag" style={{ color: 'var(--signal)' }}>
+            Bot protection detected
+          </p>
+          <h3>The site is blocking automated requests.</h3>
+          <p style={{ fontSize: '14px', color: 'var(--ink-soft)' }}>
+            We can retry with a bot-friendly approach, but only if you have
+            permission to scan this site.
+          </p>
+          <label>
             <input
-              type="url"
-              value={myURL}
-              onChange={(e) => setMyURL(e.target.value)}
-              required
+              type="checkbox"
+              checked={hasPermission}
+              onChange={(e) => setHasPermission(e.target.checked)}
             />
-          </div>
-
-          <div>
-            <label className="block mb-1">Competitor URL (optional):</label>
-            <input
-              type="url"
-              value={compURL}
-              onChange={(e) => setCompURL(e.target.value)}
-              placeholder="Leave blank to check only your page"
-            />
-          </div>
-
-          <div className="flex gap-4 mt-4">
+            <span>I confirm I have permission from the site owner to scan this site.</span>
+          </label>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button
-              type="submit"
-              className="dark-button"
-              disabled={loading}
+              onClick={handleStealthRetry}
+              disabled={!hasPermission || loading}
+              className="btn-ink"
             >
-              {loading ? 'Checking...' : 'Compare'}
+              {loading ? 'Scanning…' : 'Retry with stealth mode →'}
             </button>
-
             <button
+              onClick={() => setBotBlocked(false)}
+              className="btn-ghost"
               type="button"
-              className="dark-button"
-              onClick={handleReset}
             >
-              Reset
+              Cancel
             </button>
           </div>
-        </form>
+        </div>
+      )}
 
-        {botBlocked && (
-          <div className="mt-6 p-6 bg-yellow-900/20 border-2 border-yellow-600 rounded-lg">
-            <h3 className="text-xl font-bold text-yellow-400 mb-3">⚠ Bot Protection Detected</h3>
-            <p className="text-sm text-gray-300 mb-4">
-              It looks like the page is blocking bots. We can try again using a bot-friendly approach, but we need to check you have permission to scan the site first.
-            </p>
-            <div className="mb-4">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={hasPermission}
-                  onChange={(e) => setHasPermission(e.target.checked)}
-                  className="mt-1 w-4 h-4"
-                />
-                <span className="text-sm text-gray-300">
-                  I confirm I have permission from the site owner to scan this site
+      {results && (
+        <div className="meta-checker-results">
+          <h2 className="tool-section-head">Meta tags</h2>
+          <table className="tool-table">
+            <thead>
+              <tr>
+                <th style={{ width: '24%' }}>Element</th>
+                <th>Your page</th>
+                {compURL && results.comp && <th>Competitor</th>}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="label">Title</td>
+                <td>{results.my.title}</td>
+                {compURL && results.comp && <td>{results.comp.title}</td>}
+              </tr>
+              <tr>
+                <td className="label">Meta description</td>
+                <td>{results.my.description}</td>
+                {compURL && results.comp && <td>{results.comp.description}</td>}
+              </tr>
+              <tr>
+                <td className="label">Meta keywords</td>
+                <td>{results.my.keywords}</td>
+                {compURL && results.comp && <td>{results.comp.keywords}</td>}
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 className="tool-section-head">Page overview</h2>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            style={{ marginBottom: '1rem' }}
+          >
+            <div className="tool-tile">
+              <h4>Your page</h4>
+              <div className="stat-row">
+                <span className="key">H1 tags</span>
+                <span className="val">
+                  {results.my.h1Count}
+                  <span
+                    className={`status-pip ${
+                      results.my.h1Count === 1
+                        ? 'good'
+                        : results.my.h1Count === 0
+                          ? 'bad'
+                          : 'warn'
+                    }`}
+                    style={{ marginLeft: '0.75rem' }}
+                  >
+                    {results.my.h1Count === 1
+                      ? 'OK'
+                      : results.my.h1Count === 0
+                        ? 'Missing'
+                        : 'Multiple'}
+                  </span>
                 </span>
-              </label>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={handleStealthRetry}
-                disabled={!hasPermission || loading}
-                className="px-6 py-2 bg-[var(--accent-soft)] text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Scanning...' : 'Scan with Stealth Mode'}
-              </button>
-              <button
-                onClick={() => setBotBlocked(false)}
-                className="px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
-        {results && (
-          <div className="meta-checker-results mt-12">
-            <h2 className="text-xl font-semibold mb-2">Meta Tags</h2>
-            <table className="w-full border border-gray-300 mb-6">
-              <thead>
-                <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
-                  <th className="border p-2 text-left">Element</th>
-                  <th className="border p-2 text-left">Your Page</th>
-                  {compURL && results.comp && <th className="border p-2 text-left">Competitor Page</th>}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border p-2">Title</td>
-                  <td className="border p-2">{results.my.title}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.title}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">Meta Description</td>
-                  <td className="border p-2">{results.my.description}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.description}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">Meta Keywords</td>
-                  <td className="border p-2">{results.my.keywords}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.keywords}</td>}
-                </tr>
-              </tbody>
-            </table>
-
-            <h2 className="text-xl font-semibold mb-4 mt-8">Page Overview</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <div className="p-4 border border-gray-500 rounded">
-                <h3 className="font-bold mb-2">Your Page</h3>
-                <ul className="space-y-1 text-sm">
-                  <li>H1 Tags: <strong>{results.my.h1Count}</strong> {results.my.h1Count === 1 ? '✓' : results.my.h1Count === 0 ? '⚠️ Missing' : '⚠️ Multiple'}</li>
-                  <li>H1 Text: {results.my.h1Text}</li>
-                  <li>Total Images: <strong>{results.my.imageCount}</strong></li>
-                  <li>Images without Alt: <strong>{results.my.imagesWithoutAlt}</strong> {results.my.imagesWithoutAlt > 0 ? '⚠️' : '✓'}</li>
-                </ul>
               </div>
-              {compURL && results.comp && (
-                <div className="p-4 border border-gray-500 rounded">
-                  <h3 className="font-bold mb-2">Competitor Page</h3>
-                  <ul className="space-y-1 text-sm">
-                    <li>H1 Tags: <strong>{results.comp.h1Count}</strong> {results.comp.h1Count === 1 ? '✓' : results.comp.h1Count === 0 ? '⚠️ Missing' : '⚠️ Multiple'}</li>
-                    <li>H1 Text: {results.comp.h1Text}</li>
-                    <li>Total Images: <strong>{results.comp.imageCount}</strong></li>
-                    <li>Images without Alt: <strong>{results.comp.imagesWithoutAlt}</strong> {results.comp.imagesWithoutAlt > 0 ? '⚠️' : '✓'}</li>
-                  </ul>
+              {results.my.h1Text && (
+                <div className="stat-row">
+                  <span className="key">H1 text</span>
+                  <span className="val" style={{ textAlign: 'right', maxWidth: '60%' }}>
+                    {results.my.h1Text}
+                  </span>
                 </div>
               )}
-            </div>
-
-            <h2 className="text-xl font-semibold mb-2 mt-8 flex items-center">
-              Open Graph Tags (Social Sharing)
-              <HelpTooltip text="Open Graph tags control how your page appears when shared on Facebook, LinkedIn, and other social platforms. Without them, platforms use generic text and images." />
-            </h2>
-            <table className="w-full border border-gray-300 mb-6">
-              <thead>
-                <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
-                  <th className="border p-2 text-left">Property</th>
-                  <th className="border p-2 text-left">Your Page</th>
-                  {compURL && results.comp && <th className="border p-2 text-left">Competitor Page</th>}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border p-2">og:title</td>
-                  <td className="border p-2">{results.my.ogTitle}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.ogTitle}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">og:description</td>
-                  <td className="border p-2">{results.my.ogDescription}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.ogDescription}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">og:image</td>
-                  <td className="border p-2 break-all text-xs">{results.my.ogImage}</td>
-                  {compURL && results.comp && <td className="border p-2 break-all text-xs">{results.comp.ogImage}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">og:type</td>
-                  <td className="border p-2">{results.my.ogType}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.ogType}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">og:url</td>
-                  <td className="border p-2 break-all text-xs">{results.my.ogUrl}</td>
-                  {compURL && results.comp && <td className="border p-2 break-all text-xs">{results.comp.ogUrl}</td>}
-                </tr>
-              </tbody>
-            </table>
-
-            <h2 className="text-xl font-semibold mb-2 mt-8 flex items-center">
-              Twitter Cards
-              <HelpTooltip text="Twitter Card tags determine how your content displays on Twitter/X. Large cards with images get significantly more engagement than plain text links." />
-            </h2>
-            <table className="w-full border border-gray-300 mb-6">
-              <thead>
-                <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
-                  <th className="border p-2 text-left">Property</th>
-                  <th className="border p-2 text-left">Your Page</th>
-                  {compURL && results.comp && <th className="border p-2 text-left">Competitor Page</th>}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border p-2">twitter:card</td>
-                  <td className="border p-2">{results.my.twitterCard}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.twitterCard}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">twitter:title</td>
-                  <td className="border p-2">{results.my.twitterTitle}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.twitterTitle}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">twitter:description</td>
-                  <td className="border p-2">{results.my.twitterDescription}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.twitterDescription}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">twitter:image</td>
-                  <td className="border p-2 break-all text-xs">{results.my.twitterImage}</td>
-                  {compURL && results.comp && <td className="border p-2 break-all text-xs">{results.comp.twitterImage}</td>}
-                </tr>
-              </tbody>
-            </table>
-
-            <h2 className="text-xl font-semibold mb-2 mt-8 flex items-center">
-              Technical SEO
-              <HelpTooltip text="Canonical URLs prevent duplicate content issues. Robots meta tags control indexing. Viewport settings ensure mobile responsiveness." />
-            </h2>
-            <table className="w-full border border-gray-300 mb-6">
-              <thead>
-                <tr style={{ background: 'var(--deep-purple)', color: 'var(--light-text)' }}>
-                  <th className="border p-2 text-left">Element</th>
-                  <th className="border p-2 text-left">Your Page</th>
-                  {compURL && results.comp && <th className="border p-2 text-left">Competitor Page</th>}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border p-2">Canonical URL</td>
-                  <td className="border p-2 break-all text-xs">{results.my.canonical}</td>
-                  {compURL && results.comp && <td className="border p-2 break-all text-xs">{results.comp.canonical}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">Robots Meta</td>
-                  <td className="border p-2">{results.my.robots}</td>
-                  {compURL && results.comp && <td className="border p-2">{results.comp.robots}</td>}
-                </tr>
-                <tr>
-                  <td className="border p-2">Viewport</td>
-                  <td className="border p-2 text-xs">{results.my.viewport}</td>
-                  {compURL && results.comp && <td className="border p-2 text-xs">{results.comp.viewport}</td>}
-                </tr>
-              </tbody>
-            </table>
-
-            <h2 className="text-xl font-semibold mb-2 mt-8 flex items-center">
-              Schema Summary
-              <HelpTooltip text="Schema markup is structured data that helps search engines understand your content type (article, product, organization, etc.). Can result in rich snippets in search results." />
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[{ label: 'Your Page', data: results.my.schemaSummary },
-                { label: 'Competitor Page', data: results.comp?.schemaSummary || [] }]
-                .filter(section => section.data && section.data.length > 0)
-                .map((section, idx) => (
-                  <div key={idx} className="p-4 border border-gray-500 rounded">
-                    <h3 className="font-bold text-lg mb-2">{section.label}</h3>
-                    {section.data.map((block, i) => (
-                      <div key={i} className="mb-3">
-                        <p className="font-semibold">Type: {block.type}</p>
-                        <ul className="pl-5 list-disc">
-                          {Object.entries(block).map(([key, val]) => (
-                            key !== 'type' ? <li key={key}><strong>{key}</strong>: {val}</li> : null
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                ))}
-            </div>
-
-
-          </div>
-        )}
-
-        {results && !compURL && (
-          <>
-            {/* Recommendations */}
-            <div className="mt-12 p-6 bg-blue-900/20 border border-blue-600 rounded-lg">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <span>💡</span> Recommended Next Steps
-              </h2>
-              <div className="space-y-3 text-sm">
-                {/* Check for missing/poor meta description */}
-                {(!results.my.description || results.my.description === 'None' || results.my.description.length < 50) && (
-                  <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
-                    <strong className="text-yellow-400">⚠ Meta Description</strong>
-                    <p className="text-gray-300 mt-1">
-                      {results.my.description === 'None'
-                        ? 'Add a meta description (150-160 characters) to improve click-through rates from search results.'
-                        : 'Your meta description is too short. Aim for 150-160 characters for optimal display in search results.'}
-                    </p>
-                  </div>
-                )}
-
-                {/* Check H1 count */}
-                {results.my.h1Count === 0 && (
-                  <div className="p-3 bg-red-900/20 border-l-4 border-red-500">
-                    <strong className="text-red-400">✗ Missing H1 Tag</strong>
-                    <p className="text-gray-300 mt-1">
-                      Add one H1 tag to your page. This is critical for SEO and should contain your primary keyword.
-                    </p>
-                  </div>
-                )}
-                {results.my.h1Count > 1 && (
-                  <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
-                    <strong className="text-yellow-400">⚠ Multiple H1 Tags</strong>
-                    <p className="text-gray-300 mt-1">
-                      You have {results.my.h1Count} H1 tags. Best practice is one per page. Consider restructuring as H2-H6.
-                    </p>
-                  </div>
-                )}
-
-                {/* Check Open Graph */}
-                {(results.my.ogTitle === 'None' || results.my.ogImage === 'None') && (
-                  <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
-                    <strong className="text-yellow-400">⚠ Social Sharing Tags</strong>
-                    <p className="text-gray-300 mt-1">
-                      Add Open Graph tags (og:title, og:description, og:image) to control how your page appears when shared on social media.
-                    </p>
-                  </div>
-                )}
-
-                {/* Check images without alt */}
-                {results.my.imagesWithoutAlt > 0 && (
-                  <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
-                    <strong className="text-yellow-400">⚠ Missing Alt Text</strong>
-                    <p className="text-gray-300 mt-1">
-                      {results.my.imagesWithoutAlt} image{results.my.imagesWithoutAlt > 1 ? 's are' : ' is'} missing alt text. Add descriptive alt text for accessibility and SEO.
-                    </p>
-                  </div>
-                )}
-
-                {/* Check canonical */}
-                {results.my.canonical === 'None' && (
-                  <div className="p-3 bg-blue-900/20 border-l-4 border-blue-500">
-                    <strong className="text-blue-400">ℹ Canonical URL</strong>
-                    <p className="text-gray-300 mt-1">
-                      Consider adding a canonical URL to prevent duplicate content issues if this page is accessible via multiple URLs.
-                    </p>
-                  </div>
-                )}
-
-                {/* All good? */}
-                {results.my.description && results.my.description !== 'None' && results.my.description.length >= 50 &&
-                 results.my.h1Count === 1 &&
-                 results.my.imagesWithoutAlt === 0 &&
-                 results.my.ogTitle !== 'None' && results.my.ogImage !== 'None' && (
-                  <div className="p-3 bg-green-900/20 border-l-4 border-green-500">
-                    <strong className="text-green-400">✓ Looking Good!</strong>
-                    <p className="text-gray-300 mt-1">
-                      Your page has solid meta tag fundamentals. Consider testing with competitors to identify improvement opportunities.
-                    </p>
-                  </div>
-                )}
+              <div className="stat-row">
+                <span className="key">Total images</span>
+                <span className="val">{results.my.imageCount}</span>
+              </div>
+              <div className="stat-row">
+                <span className="key">Images without alt</span>
+                <span className="val">
+                  {results.my.imagesWithoutAlt}
+                  <span
+                    className={`status-pip ${results.my.imagesWithoutAlt > 0 ? 'warn' : 'good'}`}
+                    style={{ marginLeft: '0.75rem' }}
+                  >
+                    {results.my.imagesWithoutAlt > 0 ? 'Action' : 'OK'}
+                  </span>
+                </span>
               </div>
             </div>
 
-            {/* Share Results */}
-            <ShareResults toolName="Meta Checker" scannedUrl={myURL} />
-          </>
-        )}
+            {compURL && results.comp && (
+              <div className="tool-tile">
+                <h4>Competitor</h4>
+                <div className="stat-row">
+                  <span className="key">H1 tags</span>
+                  <span className="val">{results.comp.h1Count}</span>
+                </div>
+                {results.comp.h1Text && (
+                  <div className="stat-row">
+                    <span className="key">H1 text</span>
+                    <span className="val" style={{ textAlign: 'right', maxWidth: '60%' }}>
+                      {results.comp.h1Text}
+                    </span>
+                  </div>
+                )}
+                <div className="stat-row">
+                  <span className="key">Total images</span>
+                  <span className="val">{results.comp.imageCount}</span>
+                </div>
+                <div className="stat-row">
+                  <span className="key">Images without alt</span>
+                  <span className="val">{results.comp.imagesWithoutAlt}</span>
+                </div>
+              </div>
+            )}
+          </div>
 
-      <div className="mt-10">
-              <button
-                className="text-sm text-[var(--accent-soft)] underline"
-                onClick={() => setShowLog(prev => !prev)}
-              >
-                {showLog ? 'Hide' : 'Show'} Changelog & Beta Notes
-              </button>
-              {showLog && (
-                <div className="mt-4 border border-gray-600 p-4 rounded text-sm text-gray-300 bg-black/20">
-                  <h3 className="text-lg font-bold mb-2">🧪 Meta Checker Beta</h3>
-                  <p><strong>Current Features:</strong></p>
-                  <ul className="list-disc pl-6 mb-3">
-                    <li>Basic meta tags (title, description)</li>
-                    <li>Open Graph tags for social sharing (Facebook, LinkedIn)</li>
-                    <li>Twitter Card tags</li>
-                    <li>Technical SEO (canonical, robots, viewport)</li>
-                    <li>Page overview (H1 count, images, alt text audit)</li>
-                    <li>Schema detection (WebSite, Organization, Article, FAQPage)</li>
-                    <li>Side-by-side competitor comparison</li>
-                  </ul>
-                  <p><strong>Coming Soon:</strong></p>
-                  <ul className="list-disc pl-6">
-                    <li>Schema validation</li>
-                    <li>PDF export</li>
-                    <li>Audit history</li>
-                  </ul>
-                  <p className="mt-4 italic text-xs">Built by Tailor Made Analytics — designed to help you see what your competitors aren't showing Google.</p>
+          <h2 className="tool-section-head">
+            Open Graph
+            <HelpTooltip text="Open Graph tags control how your page appears when shared on Facebook, LinkedIn and most other platforms. Without them, sharers see generic text and a guessed image." />
+          </h2>
+          <table className="tool-table">
+            <thead>
+              <tr>
+                <th style={{ width: '24%' }}>Property</th>
+                <th>Your page</th>
+                {compURL && results.comp && <th>Competitor</th>}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="label">og:title</td>
+                <td>{results.my.ogTitle}</td>
+                {compURL && results.comp && <td>{results.comp.ogTitle}</td>}
+              </tr>
+              <tr>
+                <td className="label">og:description</td>
+                <td>{results.my.ogDescription}</td>
+                {compURL && results.comp && <td>{results.comp.ogDescription}</td>}
+              </tr>
+              <tr>
+                <td className="label">og:image</td>
+                <td className="url-cell">{results.my.ogImage}</td>
+                {compURL && results.comp && <td className="url-cell">{results.comp.ogImage}</td>}
+              </tr>
+              <tr>
+                <td className="label">og:type</td>
+                <td>{results.my.ogType}</td>
+                {compURL && results.comp && <td>{results.comp.ogType}</td>}
+              </tr>
+              <tr>
+                <td className="label">og:url</td>
+                <td className="url-cell">{results.my.ogUrl}</td>
+                {compURL && results.comp && <td className="url-cell">{results.comp.ogUrl}</td>}
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 className="tool-section-head">
+            Twitter Cards
+            <HelpTooltip text="Twitter Card tags determine how your content displays on Twitter / X. Large image cards earn significantly more engagement than plain links." />
+          </h2>
+          <table className="tool-table">
+            <thead>
+              <tr>
+                <th style={{ width: '24%' }}>Property</th>
+                <th>Your page</th>
+                {compURL && results.comp && <th>Competitor</th>}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="label">twitter:card</td>
+                <td>{results.my.twitterCard}</td>
+                {compURL && results.comp && <td>{results.comp.twitterCard}</td>}
+              </tr>
+              <tr>
+                <td className="label">twitter:title</td>
+                <td>{results.my.twitterTitle}</td>
+                {compURL && results.comp && <td>{results.comp.twitterTitle}</td>}
+              </tr>
+              <tr>
+                <td className="label">twitter:description</td>
+                <td>{results.my.twitterDescription}</td>
+                {compURL && results.comp && <td>{results.comp.twitterDescription}</td>}
+              </tr>
+              <tr>
+                <td className="label">twitter:image</td>
+                <td className="url-cell">{results.my.twitterImage}</td>
+                {compURL && results.comp && <td className="url-cell">{results.comp.twitterImage}</td>}
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 className="tool-section-head">
+            Technical SEO
+            <HelpTooltip text="Canonical URLs prevent duplicate-content issues. Robots meta controls indexing. Viewport ensures mobile responsiveness." />
+          </h2>
+          <table className="tool-table">
+            <thead>
+              <tr>
+                <th style={{ width: '24%' }}>Element</th>
+                <th>Your page</th>
+                {compURL && results.comp && <th>Competitor</th>}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="label">Canonical</td>
+                <td className="url-cell">{results.my.canonical}</td>
+                {compURL && results.comp && (
+                  <td className="url-cell">{results.comp.canonical}</td>
+                )}
+              </tr>
+              <tr>
+                <td className="label">Robots meta</td>
+                <td>{results.my.robots}</td>
+                {compURL && results.comp && <td>{results.comp.robots}</td>}
+              </tr>
+              <tr>
+                <td className="label">Viewport</td>
+                <td className="url-cell">{results.my.viewport}</td>
+                {compURL && results.comp && (
+                  <td className="url-cell">{results.comp.viewport}</td>
+                )}
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 className="tool-section-head">
+            Schema summary
+            <HelpTooltip text="Schema markup is structured data that tells search engines what your content is — article, product, organisation, etc. Earns rich snippets in search results." />
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { label: 'Your page', data: results.my.schemaSummary },
+              { label: 'Competitor', data: results.comp?.schemaSummary || [] },
+            ]
+              .filter((section) => section.data && section.data.length > 0)
+              .map((section, idx) => (
+                <div key={idx} className="tool-tile">
+                  <h4>{section.label}</h4>
+                  {section.data.map((block, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        paddingTop: '0.75rem',
+                        borderTop: i > 0 ? '1px solid var(--hairline)' : 'none',
+                        marginTop: i > 0 ? '0.75rem' : 0,
+                      }}
+                    >
+                      <p
+                        className="label-mono"
+                        style={{
+                          color: 'var(--ink)',
+                          marginBottom: '0.5rem',
+                        }}
+                      >
+                        {block.type}
+                      </p>
+                      <ul style={{ fontSize: '13px', lineHeight: 1.55 }}>
+                        {Object.entries(block).map(([key, val]) =>
+                          key !== 'type' ? (
+                            <li key={key}>
+                              <span className="key" style={{ color: 'var(--muted)' }}>
+                                {key}:
+                              </span>{' '}
+                              <span>{val}</span>
+                            </li>
+                          ) : null
+                        )}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {results && !compURL && (
+        <>
+          <div className="recommendations">
+            <p className="brand-tag" style={{ marginBottom: '1.25rem' }}>
+              Recommended next steps
+            </p>
+
+            {(!results.my.description ||
+              results.my.description === 'None' ||
+              results.my.description.length < 50) && (
+              <div className="recommendation warn">
+                <p className="head">Meta description</p>
+                <p>
+                  {results.my.description === 'None'
+                    ? 'Add a meta description (150–160 characters) to lift click-through rates from search results.'
+                    : 'Your meta description is too short. Aim for 150–160 characters for full display in search.'}
+                </p>
+              </div>
+            )}
+
+            {results.my.h1Count === 0 && (
+              <div className="recommendation bad">
+                <p className="head">Missing H1</p>
+                <p>
+                  Add a single H1 to the page. This is critical for SEO — it
+                  should contain your primary keyword.
+                </p>
+              </div>
+            )}
+
+            {results.my.h1Count > 1 && (
+              <div className="recommendation warn">
+                <p className="head">Multiple H1 tags</p>
+                <p>
+                  You have {results.my.h1Count} H1 tags. Best practice is one
+                  per page — restructure additional ones as H2–H6.
+                </p>
+              </div>
+            )}
+
+            {(results.my.ogTitle === 'None' || results.my.ogImage === 'None') && (
+              <div className="recommendation warn">
+                <p className="head">Social sharing tags</p>
+                <p>
+                  Add Open Graph tags (og:title, og:description, og:image) to
+                  control how your page appears when shared on social.
+                </p>
+              </div>
+            )}
+
+            {results.my.imagesWithoutAlt > 0 && (
+              <div className="recommendation warn">
+                <p className="head">Missing alt text</p>
+                <p>
+                  {results.my.imagesWithoutAlt} image
+                  {results.my.imagesWithoutAlt > 1 ? 's are' : ' is'} missing
+                  alt text. Add descriptive alt copy for accessibility and SEO.
+                </p>
+              </div>
+            )}
+
+            {results.my.canonical === 'None' && (
+              <div className="recommendation info">
+                <p className="head">Canonical URL</p>
+                <p>
+                  Consider a canonical URL to prevent duplicate-content issues
+                  if this page is reachable via multiple paths.
+                </p>
+              </div>
+            )}
+
+            {results.my.description &&
+              results.my.description !== 'None' &&
+              results.my.description.length >= 50 &&
+              results.my.h1Count === 1 &&
+              results.my.imagesWithoutAlt === 0 &&
+              results.my.ogTitle !== 'None' &&
+              results.my.ogImage !== 'None' && (
+                <div className="recommendation good">
+                  <p className="head">Looking good</p>
+                  <p>
+                    Your fundamentals are solid. Run it again with a competitor
+                    URL to find sharper opportunities.
+                  </p>
                 </div>
               )}
-            </div>
+          </div>
 
+          <ShareResults toolName="Meta Checker" scannedUrl={myURL} />
+        </>
+      )}
 
+      <div style={{ marginTop: '4rem' }}>
+        <button
+          className="signal-link"
+          style={{
+            fontSize: '13px',
+            fontFamily: 'JetBrains Mono, ui-monospace, monospace',
+            letterSpacing: '0.06em',
+            textTransform: 'uppercase',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 0,
+          }}
+          onClick={() => setShowLog((prev) => !prev)}
+        >
+          {showLog ? 'Hide' : 'Show'} changelog &amp; beta notes
+        </button>
+        {showLog && (
+          <div
+            style={{
+              marginTop: '1.25rem',
+              padding: '1.5rem',
+              background: 'var(--surface)',
+              border: '1px solid var(--hairline)',
+              borderRadius: 'var(--radius)',
+              fontSize: '14px',
+              lineHeight: 1.55,
+              color: 'var(--ink)',
+            }}
+          >
+            <p className="brand-tag" style={{ marginBottom: '0.75rem' }}>
+              Meta Checker · Beta
+            </p>
+            <p style={{ marginBottom: '0.5rem' }}>
+              <strong>Current features:</strong>
+            </p>
+            <ul style={{ paddingLeft: '1.25rem', marginBottom: '1rem' }}>
+              <li>Basic meta (title, description)</li>
+              <li>Open Graph + Twitter Cards</li>
+              <li>Technical SEO (canonical, robots, viewport)</li>
+              <li>Page overview (H1 count, images, alt audit)</li>
+              <li>Schema detection (WebSite, Organization, Article, FAQPage)</li>
+              <li>Side-by-side competitor comparison</li>
+            </ul>
+            <p style={{ marginBottom: '0.5rem' }}>
+              <strong>Coming soon:</strong>
+            </p>
+            <ul style={{ paddingLeft: '1.25rem' }}>
+              <li>Schema validation</li>
+              <li>PDF export</li>
+              <li>Audit history</li>
+            </ul>
+          </div>
+        )}
       </div>
-
-
-    </>
+    </ToolPageShell>
   );
 }

@@ -1,10 +1,7 @@
 'use client';
 
-// Robots.txt & Sitemap Checker
-
 import { useState } from 'react';
-import Navbar from '../../components/NavBar';
-import Image from 'next/image';
+import ToolPageShell from '../../components/ToolPageShell';
 import ShareResults from '../../components/ShareResults';
 
 type SitemapStatus = {
@@ -27,7 +24,10 @@ export default function RobotsCheckerPage() {
   const [botBlocked, setBotBlocked] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>, useStealthMode = false) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>,
+    useStealthMode = false
+  ) {
     e.preventDefault();
     setLoading(true);
     setBotBlocked(false);
@@ -54,7 +54,7 @@ export default function RobotsCheckerPage() {
         robotsExists: false,
         robotsContent: null,
         sitemaps: [],
-        error: 'Failed to fetch results'
+        error: 'Failed to fetch results',
       });
     } finally {
       setLoading(false);
@@ -70,238 +70,271 @@ export default function RobotsCheckerPage() {
   }
 
   return (
-    <>
-      <Navbar />
+    <ToolPageShell
+      eyebrow="SEO Tools / Robots & Sitemap"
+      title="Robots & Sitemap Checker"
+      lede="Reads your robots.txt, displays it in full, then walks every sitemap reference and confirms each one returns a 200."
+    >
+      <section className="tool-intro">
+        <div>
+          <h3>What it does</h3>
+          <p>
+            Fetches the robots.txt at the domain root, extracts every sitemap
+            URL it references, then status-checks each sitemap to confirm it
+            actually exists.
+          </p>
+        </div>
+        <div>
+          <h3>Why it matters</h3>
+          <p>
+            Robots.txt is search engines&rsquo; first stop on your site. A
+            broken or missing sitemap reference can mean entire sections of
+            your site go undiscovered for months.
+          </p>
+        </div>
+      </section>
 
-      <div className="meta-checker-container">
-        <div className="flex flex-col items-center mb-6">
-          <Image
-            src="/images/TMA Light Logo Transparent.png"
-            alt="Tailor Made Analytics Logo"
-            width={200}
-            height={80}
-            priority
+      <form onSubmit={handleSubmit} className="tool-form">
+        <div>
+          <label className="field-label">Domain</label>
+          <input
+            type="text"
+            value={domain}
+            onChange={(e) => setDomain(e.target.value)}
+            required
+            placeholder="https://example.com"
+            className="field"
           />
-        </div>
-        <div className="bg-yellow-600 text-black p-2 text-center mb-4 rounded">
-          🚧 <strong>Beta:</strong> This tool is in early beta. Features may break, be removed, or change without warning.
-        </div>
-
-        <p className="mb-4 text-xs text-gray-300">
-          Note: Usage is logged for test purposes.
-        </p>
-
-        <h1 className="meta-checker-heading">Robots.txt & Sitemap Checker</h1>
-
-        <div className="mb-6 p-4 bg-gray-800/50 border border-gray-700 rounded-lg">
-          <p className="text-sm text-gray-300 leading-relaxed">
-            <strong className="text-white">What this tool does:</strong> Checks if your robots.txt file exists, displays its contents, extracts sitemap URLs, and verifies that sitemaps are accessible.
-          </p>
-          <p className="text-xs text-gray-400 mt-2">
-            <strong>Why it matters:</strong> Robots.txt guides search engine crawlers. Missing or broken sitemaps mean search engines may not discover all your pages. This affects indexing and rankings.
+          <p
+            className="label-mono"
+            style={{
+              marginTop: '0.4rem',
+              textTransform: 'none',
+              letterSpacing: '0.02em',
+              fontSize: '12px',
+            }}
+          >
+            Include the protocol (https://).
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="dark-form mb-8">
-          <div>
-            <label className="block mb-1">Domain:</label>
-            <input
-              type="text"
-              value={domain}
-              onChange={(e) => setDomain(e.target.value)}
-              required
-              placeholder="https://example.com"
-              className="w-full border p-2"
-            />
-            <p className="text-xs text-gray-400 mt-1">Enter full domain including https://</p>
-          </div>
-
-          <button type="submit" disabled={loading} className="dark-button">
-            {loading ? 'Checking...' : 'Check Robots.txt'}
+        <div className="actions">
+          <button type="submit" disabled={loading} className="btn-ink">
+            {loading ? 'Checking…' : 'Check robots.txt →'}
           </button>
-        </form>
+        </div>
+      </form>
 
-        {botBlocked && (
-          <div className="mt-6 p-6 bg-yellow-900/20 border-2 border-yellow-600 rounded-lg">
-            <h3 className="text-xl font-bold text-yellow-400 mb-3">⚠ Bot Protection Detected</h3>
-            <p className="text-sm text-gray-300 mb-4">
-              It looks like the page is blocking bots. We can try again using a bot-friendly approach, but we need to check you have permission to scan the site first.
-            </p>
-            <div className="mb-4">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={hasPermission}
-                  onChange={(e) => setHasPermission(e.target.checked)}
-                  className="mt-1 w-4 h-4"
-                />
-                <span className="text-sm text-gray-300">
-                  I confirm I have permission from the site owner to scan this site
-                </span>
-              </label>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={handleStealthRetry}
-                disabled={!hasPermission || loading}
-                className="px-6 py-2 bg-[var(--accent-soft)] text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Scanning...' : 'Scan with Stealth Mode'}
-              </button>
-              <button
-                onClick={() => setBotBlocked(false)}
-                className="px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
+      {botBlocked && (
+        <div className="bot-blocked">
+          <p className="brand-tag" style={{ color: 'var(--signal)' }}>
+            Bot protection detected
+          </p>
+          <h3>The site is blocking automated requests.</h3>
+          <p style={{ fontSize: '14px', color: 'var(--ink-soft)' }}>
+            We can retry with a bot-friendly approach, but only if you have
+            permission to scan this site.
+          </p>
+          <label>
+            <input
+              type="checkbox"
+              checked={hasPermission}
+              onChange={(e) => setHasPermission(e.target.checked)}
+            />
+            <span>I confirm I have permission from the site owner to scan this site.</span>
+          </label>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button
+              onClick={handleStealthRetry}
+              disabled={!hasPermission || loading}
+              className="btn-ink"
+              type="button"
+            >
+              {loading ? 'Scanning…' : 'Retry with stealth mode →'}
+            </button>
+            <button
+              onClick={() => setBotBlocked(false)}
+              className="btn-ghost"
+              type="button"
+            >
+              Cancel
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {results?.error && (
-          <div className="bg-red-900/30 border border-red-500 p-4 rounded mb-6">
-            <p className="text-red-300">{results.error}</p>
-          </div>
-        )}
+      {results?.error && (
+        <div className="recommendation bad" style={{ marginBottom: '2rem' }}>
+          <p className="head">Couldn&rsquo;t fetch</p>
+          <p>{results.error}</p>
+        </div>
+      )}
 
-        {results && !results.error && (
-          <div className="meta-checker-results">
-            {/* Robots.txt Status */}
-            <div className="mb-8 p-4 border border-gray-500 rounded">
-              <h2 className="text-xl font-semibold mb-4">Robots.txt Status</h2>
-              <div className="flex items-center gap-2 mb-4">
-                <span className={`text-2xl ${results.robotsExists ? 'text-green-400' : 'text-red-400'}`}>
-                  {results.robotsExists ? '✓' : '✗'}
-                </span>
-                <span className="text-lg">
-                  {results.robotsExists
-                    ? 'robots.txt file found'
-                    : 'robots.txt file not found'}
-                </span>
-              </div>
-
-              {results.robotsExists && results.robotsContent && (
-                <div>
-                  <h3 className="font-bold mb-2">File Contents:</h3>
-                  <pre className="bg-black/40 p-4 rounded text-xs overflow-x-auto max-h-96 overflow-y-auto border border-gray-600">
-                    {results.robotsContent}
-                  </pre>
-                </div>
-              )}
-
-              {!results.robotsExists && (
-                <div className="text-sm text-gray-300 mt-4 p-3 bg-yellow-900/20 border border-yellow-700 rounded">
-                  <p><strong>⚠ Warning:</strong> No robots.txt file found.</p>
-                  <p className="mt-2">
-                    A robots.txt file helps search engines understand which pages to crawl.
-                    Consider adding one at {domain}/robots.txt
-                  </p>
-                </div>
-              )}
+      {results && !results.error && (
+        <div>
+          <h2 className="tool-section-head">Robots.txt</h2>
+          <div className="tool-tile" style={{ marginBottom: '2rem' }}>
+            <div
+              className="flex items-center gap-3"
+              style={{ marginBottom: '1rem' }}
+            >
+              <span
+                className={`status-pip ${results.robotsExists ? 'good' : 'bad'}`}
+              >
+                {results.robotsExists ? 'Found' : 'Missing'}
+              </span>
+              <span style={{ fontSize: '15px', color: 'var(--ink)' }}>
+                {results.robotsExists
+                  ? 'robots.txt found at the domain root'
+                  : 'robots.txt not found'}
+              </span>
             </div>
 
-            {/* Sitemaps */}
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Sitemaps</h2>
-              {results.sitemaps.length > 0 ? (
-                <div className="space-y-3">
-                  {results.sitemaps.map((sitemap, i) => (
-                    <div
-                      key={i}
-                      className={`p-4 border rounded ${
-                        sitemap.exists
-                          ? 'border-green-500 bg-green-900/10'
-                          : 'border-red-500 bg-red-900/10'
-                      }`}
+            {results.robotsExists && results.robotsContent && (
+              <>
+                <p className="brand-tag" style={{ marginBottom: '0.5rem' }}>
+                  File contents
+                </p>
+                <pre className="tool-pre">{results.robotsContent}</pre>
+              </>
+            )}
+
+            {!results.robotsExists && (
+              <p style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.55 }}>
+                A robots.txt file helps search engines understand which pages
+                to crawl. Add one at <span className="tool-code">{domain}/robots.txt</span>.
+              </p>
+            )}
+          </div>
+
+          <h2 className="tool-section-head">Sitemaps</h2>
+          {results.sitemaps.length > 0 ? (
+            <div className="flex flex-col gap-2" style={{ marginBottom: '2rem' }}>
+              {results.sitemaps.map((sitemap, i) => (
+                <div
+                  key={i}
+                  className="tool-tile"
+                  style={{ padding: '1rem 1.25rem' }}
+                >
+                  <div
+                    className="flex items-start gap-3"
+                    style={{ flexWrap: 'wrap' }}
+                  >
+                    <span
+                      className={`status-pip ${sitemap.exists ? 'good' : 'bad'}`}
                     >
-                      <div className="flex items-start gap-3">
-                        <span className={`text-xl ${sitemap.exists ? 'text-green-400' : 'text-red-400'}`}>
-                          {sitemap.exists ? '✓' : '✗'}
-                        </span>
-                        <div className="flex-1">
-                          <p className="font-mono text-sm break-all">{sitemap.url}</p>
-                          <p className="text-xs text-gray-400 mt-1">
-                            Status: {sitemap.status} {sitemap.exists ? '(Accessible)' : '(Not Found)'}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                      {sitemap.exists ? `${sitemap.status} OK` : `${sitemap.status} Fail`}
+                    </span>
+                    <span
+                      className="url-cell"
+                      style={{ flex: 1, fontSize: '13px' }}
+                    >
+                      {sitemap.url}
+                    </span>
+                  </div>
                 </div>
-              ) : (
-                <div className="text-sm text-gray-300 p-4 bg-gray-900/30 border border-gray-600 rounded">
-                  <p>No sitemaps found in robots.txt file.</p>
-                  <p className="mt-2 text-xs">
-                    Add a sitemap to your robots.txt with: <code className="bg-black/40 px-1 py-0.5 rounded">Sitemap: https://yoursite.com/sitemap.xml</code>
+              ))}
+            </div>
+          ) : (
+            <div className="tool-tile" style={{ marginBottom: '2rem' }}>
+              <p style={{ fontSize: '14px', color: 'var(--ink-soft)', lineHeight: 1.55 }}>
+                No sitemaps referenced in robots.txt. Add a line like:{' '}
+                <span className="tool-code">
+                  Sitemap: https://yoursite.com/sitemap.xml
+                </span>
+              </p>
+            </div>
+          )}
+
+          <div
+            style={{
+              padding: '1.25rem 1.5rem',
+              background: 'var(--surface)',
+              border: '1px solid var(--hairline)',
+              borderRadius: 'var(--radius)',
+              marginBottom: '2rem',
+            }}
+          >
+            <p className="brand-tag" style={{ marginBottom: '0.75rem' }}>
+              About robots.txt
+            </p>
+            <ul
+              style={{
+                fontSize: '13px',
+                color: 'var(--ink-soft)',
+                lineHeight: 1.55,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.4rem',
+              }}
+            >
+              <li>Lives at the root of your domain (example.com/robots.txt).</li>
+              <li>Tells search engines which pages they can / cannot crawl.</li>
+              <li>Should reference your XML sitemap(s).</li>
+              <li>Not a security measure — don&rsquo;t use it to hide sensitive content.</li>
+            </ul>
+          </div>
+
+          <div className="recommendations">
+            <p className="brand-tag" style={{ marginBottom: '1.25rem' }}>
+              Recommended next steps
+            </p>
+
+            {!results.robotsExists && (
+              <div className="recommendation bad">
+                <p className="head">Missing robots.txt</p>
+                <p>
+                  Create a robots.txt at the domain root. At minimum it should
+                  reference your sitemap.
+                </p>
+              </div>
+            )}
+
+            {results.robotsExists && results.sitemaps.length === 0 && (
+              <div className="recommendation warn">
+                <p className="head">No sitemaps referenced</p>
+                <p>
+                  Add{' '}
+                  <span className="tool-code">
+                    Sitemap: https://yoursite.com/sitemap.xml
+                  </span>{' '}
+                  to robots.txt so search engines find every URL.
+                </p>
+              </div>
+            )}
+
+            {results.sitemaps.some((s) => !s.exists) && (
+              <div className="recommendation bad">
+                <p className="head">
+                  Inaccessible sitemap
+                  {results.sitemaps.filter((s) => !s.exists).length > 1 ? 's' : ''}
+                </p>
+                <p>
+                  {results.sitemaps.filter((s) => !s.exists).length} sitemap
+                  {results.sitemaps.filter((s) => !s.exists).length > 1 ? 's are' : ' is'}{' '}
+                  returning errors. Verify the URL
+                  {results.sitemaps.filter((s) => !s.exists).length > 1 ? 's' : ''} and
+                  that the sitemap files exist.
+                </p>
+              </div>
+            )}
+
+            {results.robotsExists &&
+              results.sitemaps.length > 0 &&
+              results.sitemaps.every((s) => s.exists) && (
+                <div className="recommendation good">
+                  <p className="head">Configured correctly</p>
+                  <p>
+                    Robots.txt exists and every sitemap is accessible. Submit
+                    your sitemap to Google Search Console to nudge indexing.
                   </p>
                 </div>
               )}
-            </div>
-
-            {/* Info Box */}
-            <div className="text-xs text-gray-400 p-3 bg-gray-900/30 rounded">
-              <p><strong>About robots.txt:</strong></p>
-              <ul className="list-disc pl-5 mt-2 space-y-1">
-                <li>Located at the root of your domain (e.g., example.com/robots.txt)</li>
-                <li>Tells search engines which pages they can/cannot crawl</li>
-                <li>Should reference your XML sitemap(s)</li>
-                <li>Not a security measure - do not rely on it to hide sensitive content</li>
-              </ul>
-            </div>
-
-            {/* Recommendations */}
-            <div className="mt-12 p-6 bg-blue-900/20 border border-blue-600 rounded-lg">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <span>💡</span> Recommended Next Steps
-              </h2>
-              <div className="space-y-3 text-sm">
-                {/* No robots.txt */}
-                {!results.robotsExists && (
-                  <div className="p-3 bg-red-900/20 border-l-4 border-red-500">
-                    <strong className="text-red-400">✗ Missing robots.txt</strong>
-                    <p className="text-gray-300 mt-1">
-                      Create a robots.txt file at your domain root. At minimum, it should reference your sitemap. This helps search engines discover your content efficiently.
-                    </p>
-                  </div>
-                )}
-
-                {/* No sitemaps */}
-                {results.robotsExists && results.sitemaps.length === 0 && (
-                  <div className="p-3 bg-yellow-900/20 border-l-4 border-yellow-500">
-                    <strong className="text-yellow-400">⚠ No Sitemaps Found</strong>
-                    <p className="text-gray-300 mt-1">
-                      Add your XML sitemap URL to robots.txt using: <code className="bg-black/40 px-1 py-0.5 rounded">Sitemap: https://yoursite.com/sitemap.xml</code>
-                    </p>
-                  </div>
-                )}
-
-                {/* Broken sitemaps */}
-                {results.sitemaps.some(s => !s.exists) && (
-                  <div className="p-3 bg-red-900/20 border-l-4 border-red-500">
-                    <strong className="text-red-400">✗ Inaccessible Sitemap{results.sitemaps.filter(s => !s.exists).length > 1 ? 's' : ''}</strong>
-                    <p className="text-gray-300 mt-1">
-                      {results.sitemaps.filter(s => !s.exists).length} sitemap{results.sitemaps.filter(s => !s.exists).length > 1 ? 's are' : ' is'} returning 404 errors. Verify the URL{results.sitemaps.filter(s => !s.exists).length > 1 ? 's are' : ' is'} correct and the sitemap{results.sitemaps.filter(s => !s.exists).length > 1 ? 's exist' : ' exists'}.
-                    </p>
-                  </div>
-                )}
-
-                {/* All good? */}
-                {results.robotsExists && results.sitemaps.length > 0 && results.sitemaps.every(s => s.exists) && (
-                  <div className="p-3 bg-green-900/20 border-l-4 border-green-500">
-                    <strong className="text-green-400">✓ robots.txt Configured Correctly!</strong>
-                    <p className="text-gray-300 mt-1">
-                      Your robots.txt file exists and all sitemaps are accessible. Ensure it is submitted to Google Search Console for optimal indexing.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Share Results */}
-            <ShareResults toolName="Robots.txt Checker" scannedUrl={domain} />
           </div>
-        )}
-      </div>
-    </>
+
+          <ShareResults toolName="Robots & Sitemap Checker" scannedUrl={domain} />
+        </div>
+      )}
+    </ToolPageShell>
   );
 }
