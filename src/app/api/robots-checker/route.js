@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
+import { checkAndIncrement } from '@/lib/rate-limit';
+import { resolveTier } from '@/lib/tier';
 
 export async function POST(req) {
+  const { tier, userId } = await resolveTier();
+  const rl = await checkAndIncrement(req, 'robots-checker', tier, userId);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'rate_limit', tier, limit: rl.limit, resetSeconds: rl.resetSeconds },
+      { status: 429 }
+    );
+  }
+
   const { domain, stealthMode = false } = await req.json();
 
   try {

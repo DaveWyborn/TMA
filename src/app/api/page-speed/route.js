@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
+import { checkAndIncrement } from '@/lib/rate-limit';
+import { resolveTier } from '@/lib/tier';
 
 export async function POST(req) {
+  const { tier, userId } = await resolveTier();
+  const rl = await checkAndIncrement(req, 'page-speed', tier, userId);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'rate_limit', tier, limit: rl.limit, resetSeconds: rl.resetSeconds },
+      { status: 429 }
+    );
+  }
+
   const { url } = await req.json();
 
   // Google PageSpeed Insights API - no key needed for basic usage (rate limited)

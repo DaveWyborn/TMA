@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ToolPageShell from '../../components/ToolPageShell';
 import ShareResults from '../../components/ShareResults';
+import { useToolGate } from '../../components/useToolGate';
 
 type DeviceResult = {
   score: number;
@@ -142,6 +143,7 @@ export default function PageSpeedPage() {
   const [url, setUrl] = useState('');
   const [results, setResults] = useState<PageSpeedResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const { handleRateLimit, notifyUsageChanged, modal } = useToolGate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -156,6 +158,13 @@ export default function PageSpeedPage() {
       });
 
       const data = await res.json();
+      notifyUsageChanged();
+
+      if (res.status === 429) {
+        handleRateLimit(data.tier || 'anon');
+        return;
+      }
+
       setResults(data);
     } catch (err) {
       console.error('Fetch error:', err);
@@ -175,6 +184,7 @@ export default function PageSpeedPage() {
       eyebrow="SEO Tools / Page Speed"
       title="Page Speed Checker"
       lede="Runs Google PageSpeed Insights on mobile and desktop. Returns the score, the three Core Web Vitals, and the top opportunities to fix."
+      tool="page-speed"
     >
       <section className="tool-intro">
         <div>
@@ -370,6 +380,7 @@ export default function PageSpeedPage() {
           <ShareResults toolName="Page Speed Checker" scannedUrl={url} />
         </div>
       )}
+      {modal}
     </ToolPageShell>
   );
 }

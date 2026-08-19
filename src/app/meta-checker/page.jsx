@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ToolPageShell from '../../components/ToolPageShell';
 import ShareResults from '../../components/ShareResults';
 import HelpTooltip from '../../components/HelpTooltip';
+import { useToolGate } from '../../components/useToolGate';
 
 export default function MetaCheckerPage() {
   const [myURL, setMyURL] = useState('');
@@ -13,6 +14,7 @@ export default function MetaCheckerPage() {
   const [showLog, setShowLog] = useState(false);
   const [botBlocked, setBotBlocked] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
+  const { handleRateLimit, notifyUsageChanged, modal } = useToolGate();
 
   async function handleSubmit(e, useStealthMode = false) {
     e.preventDefault();
@@ -28,6 +30,12 @@ export default function MetaCheckerPage() {
       });
 
       const data = await res.json();
+      notifyUsageChanged();
+
+      if (res.status === 429) {
+        handleRateLimit(data.tier || 'anon');
+        return;
+      }
 
       if (data.botBlocked) {
         setBotBlocked(true);
@@ -60,6 +68,7 @@ export default function MetaCheckerPage() {
       eyebrow="SEO Tools / Meta Checker"
       title="Meta Checker"
       lede="Title, description, Open Graph, Twitter Cards, schema and the technical tags Google reads first. Run yours, optionally next to a competitor, and see the gap."
+      tool="meta-checker"
     >
       <section className="tool-intro">
         <div>
@@ -573,6 +582,7 @@ export default function MetaCheckerPage() {
           </div>
         )}
       </div>
+      {modal}
     </ToolPageShell>
   );
 }

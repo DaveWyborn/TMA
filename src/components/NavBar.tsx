@@ -4,6 +4,9 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Wordmark from "./Wordmark";
+import { Show, UserButton } from "@clerk/nextjs";
+
+const clerkEnabled = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 const sections = [
   { label: "Services", href: "/#services" },
@@ -33,6 +36,18 @@ export default function NavBar() {
             {s.label}
           </Link>
         ))}
+        {clerkEnabled && (
+          <>
+            <Show when="signed-out">
+              <Link href="/sign-in" className="signal-link">
+                Sign in
+              </Link>
+            </Show>
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+          </>
+        )}
       </nav>
 
       {/* Mobile menu trigger */}
@@ -107,6 +122,28 @@ export default function NavBar() {
                   {s.label}
                 </Link>
               ))}
+              {clerkEnabled && (
+                <>
+                  <Show when="signed-out">
+                    <Link
+                      href="/sign-in"
+                      onClick={() => setMenuOpen(false)}
+                      className="display block py-4 hairline border-b"
+                      style={{ fontSize: "32px" }}
+                    >
+                      <span className="num-tag mr-4" style={{ fontSize: "14px" }}>
+                        0{sections.length + 1}
+                      </span>
+                      Sign in
+                    </Link>
+                  </Show>
+                  <Show when="signed-in">
+                    <div className="py-4">
+                      <UserButton />
+                    </div>
+                  </Show>
+                </>
+              )}
             </nav>
           </motion.div>
         )}

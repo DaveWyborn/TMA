@@ -4,6 +4,7 @@ import { useState } from 'react';
 import ToolPageShell from '../../components/ToolPageShell';
 import ShareResults from '../../components/ShareResults';
 import HelpTooltip from '../../components/HelpTooltip';
+import { useToolGate } from '../../components/useToolGate';
 
 type KeywordResult = {
   tag: string;
@@ -91,6 +92,7 @@ export default function KeywordAnalyserPage() {
   const [url2, setUrl2] = useState('');
   const [results, setResults] = useState<Results | null>(null);
   const [loading, setLoading] = useState(false);
+  const { handleRateLimit, notifyUsageChanged, modal } = useToolGate();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -103,6 +105,14 @@ export default function KeywordAnalyserPage() {
     });
 
     const data = await res.json();
+    notifyUsageChanged();
+
+    if (res.status === 429) {
+      handleRateLimit(data.tier || 'anon');
+      setLoading(false);
+      return;
+    }
+
     setResults(data);
     setLoading(false);
   }
@@ -112,6 +122,7 @@ export default function KeywordAnalyserPage() {
       eyebrow="SEO Tools / Keyword Analyser"
       title="Keyword Analyser"
       lede="Counts a keyword across the page and tells you whether it lands where it actually matters — URL, title, H1, alt text. Compare two URLs side-by-side."
+      tool="keyword-analyser"
     >
       <section className="tool-intro">
         <div>
@@ -337,6 +348,7 @@ export default function KeywordAnalyserPage() {
           )}
         </div>
       )}
+      {modal}
     </ToolPageShell>
   );
 }

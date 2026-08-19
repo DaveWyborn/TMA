@@ -1,7 +1,18 @@
 import { NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
+import { checkAndIncrement } from '@/lib/rate-limit';
+import { resolveTier } from '@/lib/tier';
 
 export async function POST(req) {
+  const { tier, userId } = await resolveTier();
+  const rl = await checkAndIncrement(req, 'meta-checker', tier, userId);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'rate_limit', tier, limit: rl.limit, resetSeconds: rl.resetSeconds },
+      { status: 429 }
+    );
+  }
+
   const { myURL, compURL, stealthMode = false } = await req.json();
 
   async function fetchMeta(url) {

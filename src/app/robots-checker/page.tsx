@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import ToolPageShell from '../../components/ToolPageShell';
 import ShareResults from '../../components/ShareResults';
+import { useToolGate } from '../../components/useToolGate';
 
 type SitemapStatus = {
   url: string;
@@ -23,6 +24,7 @@ export default function RobotsCheckerPage() {
   const [loading, setLoading] = useState(false);
   const [botBlocked, setBotBlocked] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
+  const { handleRateLimit, notifyUsageChanged, modal } = useToolGate();
 
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>,
@@ -41,6 +43,12 @@ export default function RobotsCheckerPage() {
       });
 
       const data = await res.json();
+      notifyUsageChanged();
+
+      if (res.status === 429) {
+        handleRateLimit(data.tier || 'anon');
+        return;
+      }
 
       if (data.botBlocked) {
         setBotBlocked(true);
@@ -74,6 +82,7 @@ export default function RobotsCheckerPage() {
       eyebrow="SEO Tools / Robots & Sitemap"
       title="Robots & Sitemap Checker"
       lede="Reads your robots.txt, displays it in full, then walks every sitemap reference and confirms each one returns a 200."
+      tool="robots-checker"
     >
       <section className="tool-intro">
         <div>
@@ -335,6 +344,7 @@ export default function RobotsCheckerPage() {
           <ShareResults toolName="Robots & Sitemap Checker" scannedUrl={domain} />
         </div>
       )}
+      {modal}
     </ToolPageShell>
   );
 }

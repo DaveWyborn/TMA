@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Orbitron, JetBrains_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Script from "next/script";
+
+const clerkConfigured =
+  !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+  !!process.env.CLERK_SECRET_KEY;
 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -28,7 +33,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
+  const tree = (
     <html lang="en" className={`${orbitron.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
@@ -64,4 +69,6 @@ export default function RootLayout({
       </body>
     </html>
   );
+
+  return clerkConfigured ? <ClerkProvider>{tree}</ClerkProvider> : tree;
 }
