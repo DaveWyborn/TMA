@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { motion, AnimatePresence } from "framer-motion";
 
 export type LimitTier = "anon" | "free" | "paid";
@@ -71,7 +73,7 @@ export default function LimitReachedModal({
             </p>
             <div className="flex gap-3 mt-6">
               {tier === "anon" && (
-                <a
+                <Link
                   href="/sign-up"
                   className="signal-link"
                   style={{
@@ -85,9 +87,9 @@ export default function LimitReachedModal({
                   }}
                 >
                   Sign up free
-                </a>
+                </Link>
               )}
-              <a
+              <Link
                 href="/#contact"
                 className="signal-link"
                 style={{
@@ -101,7 +103,7 @@ export default function LimitReachedModal({
                 }}
               >
                 Get in touch
-              </a>
+              </Link>
               <button
                 onClick={onClose}
                 style={{

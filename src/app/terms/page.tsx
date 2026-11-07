@@ -3,6 +3,7 @@ import NavBar from "../../components/NavBar";
 import FooterSection from "../../components/FooterSection";
 
 export const metadata = {
+  alternates: { canonical: "/terms" },
   title: "Terms & Conditions | Tailor Made Analytics",
   description:
     "Standard Terms & Conditions for all services provided by Tailor Made Analytics.",

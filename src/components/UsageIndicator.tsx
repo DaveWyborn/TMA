@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useEffect, useState } from "react";
 
 type ToolName =
@@ -65,12 +67,12 @@ export default function UsageIndicator({ tool }: { tool: ToolName }) {
       {usage.tier === "anon" && (
         <>
           {" · "}
-          <a
+          <Link
             href="/sign-up"
             style={{ color: "var(--signal)", textDecoration: "underline" }}
           >
             Sign up for 5×
-          </a>
+          </Link>
         </>
       )}
     </div>

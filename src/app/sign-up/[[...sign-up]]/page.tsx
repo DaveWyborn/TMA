@@ -2,6 +2,7 @@ import { SignUp } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
 
 export const metadata = {
+  robots: { index: false, follow: false },
   title: "Sign up | Tailor Made Analytics",
 };
 

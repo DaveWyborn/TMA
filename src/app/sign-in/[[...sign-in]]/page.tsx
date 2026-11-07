@@ -2,6 +2,7 @@ import { SignIn } from "@clerk/nextjs";
 import NavBar from "@/components/NavBar";
 
 export const metadata = {
+  robots: { index: false, follow: false },
   title: "Sign in | Tailor Made Analytics",
 };
 

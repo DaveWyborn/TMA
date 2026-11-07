@@ -3,6 +3,7 @@ import NavBar from '../../components/NavBar';
 import FooterSection from '../../components/FooterSection';
 
 export const metadata = {
+  alternates: { canonical: "/seo-tools" },
   title: 'SEO Tools | Tailor Made Analytics',
   description:
     'Free, no-login SEO tools — meta tags, keyword usage, page speed and robots/sitemap checks. Built by an analytics studio for marketers and agencies.',

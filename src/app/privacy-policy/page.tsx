@@ -4,6 +4,7 @@ import NavBar from "../../components/NavBar";
 import FooterSection from "../../components/FooterSection";
 
 export const metadata = {
+  alternates: { canonical: "/privacy-policy" },
   title: "Privacy Policy | Tailor Made Analytics",
   description: "How Tailor Made Analytics collects, uses and protects your data.",
 };
